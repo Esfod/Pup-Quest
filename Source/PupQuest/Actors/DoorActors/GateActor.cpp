@@ -17,7 +17,7 @@ void AGateActor::BeginPlay()
 	DoorOpenSpeed = 5.f;
 	DoorCloseSpeed = 7.5;
 	
-	Initial = GetOwner()->GetActorLocation().Z;
+	Initial = GetActorLocation().Z;
 	Current = Initial;
 	MoveLength += Initial;
 }
@@ -34,11 +34,11 @@ void AGateActor::OpenDoor(float DeltaTime)
 	Super::OpenDoor(DeltaTime);
 	if(bOpenDoor)
 	{
-			Current = FMath::Lerp(Current, MoveLength, DeltaTime * DoorOpenSpeed); //Open Door
+		Current = FMath::Lerp(Current, MoveLength, DeltaTime * DoorOpenSpeed); //Open Door
 	}
 	else
 	{
-			Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Open Door
+		Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Open Door
 	}
 	FVector DoorLocation = GetActorLocation();
 	DoorLocation.Z = Current;

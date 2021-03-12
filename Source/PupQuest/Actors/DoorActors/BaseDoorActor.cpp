@@ -9,7 +9,7 @@ ABaseDoorActor::ABaseDoorActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh Component"));
+	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeh Component"));
 	RootComponent = StaticMeshComp;
 }
 
@@ -19,7 +19,7 @@ void ABaseDoorActor::BeginPlay()
 	
 }
 
-// Called every frame
+
 void ABaseDoorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -29,9 +29,9 @@ void ABaseDoorActor::Tick(float DeltaTime)
 bool ABaseDoorActor::CheckTorchHolder()
 {
 	TArray<AActor*> OverlappingActors;
-	if(TorchHolderActor)
+	/*if(TorchHolderMeshComponent)
 	{
-		TorchHolderActor->GetOverlappingActors(OverlappingActors);
+		TorchHolderMeshComponent->GetOverlappingActors(OverlappingActors);
 		for(AActor* Actor : OverlappingActors)
 		{
 			UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
@@ -41,11 +41,11 @@ bool ABaseDoorActor::CheckTorchHolder()
 				return true;
 			}
 		}
-	}
+	}*/
 	return false;
 }
 
 void ABaseDoorActor::OpenDoor(float DeltaTime)
 {
-	//adde universale lyder og effekter
+	//add universale lyder og effekter
 }

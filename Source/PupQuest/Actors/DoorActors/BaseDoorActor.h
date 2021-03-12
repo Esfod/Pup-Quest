@@ -11,12 +11,12 @@ class PUPQUEST_API ABaseDoorActor : public AActor
 {
 	GENERATED_BODY()
 private:
-	UPROPERTY(EditAnywhere, Category = "Components")
-	UStaticMeshComponent* StaticMeshComp {nullptr};
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* StaticMeshComp { nullptr };
 
-	UPROPERTY(EditAnywhere, Category= "Components")
-	AActor* TorchHolderActor {nullptr};
-	
+	UPROPERTY(EditAnywhere, Category= "Componets")
+	UStaticMeshComponent* TorchHolderMeshComponent { nullptr };
+
 protected:
 
 
