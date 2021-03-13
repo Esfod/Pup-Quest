@@ -6,16 +6,23 @@
 #include "GameFramework/Actor.h"
 #include "BaseDoorActor.generated.h"
 
+class ATriggerVolume;
+
 UCLASS()
 class PUPQUEST_API ABaseDoorActor : public AActor
 {
 	GENERATED_BODY()
+	
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* StaticMeshComp { nullptr };
-
+/*
 	UPROPERTY(EditAnywhere, Category= "Componets")
-	AActor* TorchHolderMeshComponent { nullptr };
+	AActor* TorchHolder { nullptr };
+	
+	UPROPERTY(EditAnywhere, Category= "Componets")
+	ATriggerVolume* PressurePlate{ nullptr };
+*/
 
 protected:
 
