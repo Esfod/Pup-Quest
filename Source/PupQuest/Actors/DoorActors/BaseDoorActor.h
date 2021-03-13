@@ -15,7 +15,7 @@ private:
 	UStaticMeshComponent* StaticMeshComp { nullptr };
 
 	UPROPERTY(EditAnywhere, Category= "Componets")
-	UStaticMeshComponent* TorchHolderMeshComponent { nullptr };
+	AActor* TorchHolderMeshComponent { nullptr };
 
 protected:
 
