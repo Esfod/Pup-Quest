@@ -31,7 +31,7 @@ bool ABaseDoorActor::CheckTorchHolder()
 		{
 			UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
 
-			if(Actor->IsA(AMainCharacter::StaticClass()))//Debug uses Player to test
+			if(Actor->IsA(AMainCharacter::StaticClass()) || Actor->IsA(ABaseItemActor::StaticClass()))//Debug uses Player to test
 			{
 				return true;
 			}
