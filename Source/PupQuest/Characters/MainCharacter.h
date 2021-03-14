@@ -6,27 +6,31 @@
 #include "BaseCharacter.h"
 #include "MainCharacter.generated.h"
 
+class USpringArmComponent;
+class UCameraComponent;
+class UBoxComponent;
 
 UCLASS()
 class PUPQUEST_API AMainCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* SpringArmComponent { nullptr };
 
-		/** Camera boom positioning the camera behind the character */
-		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class USpringArmComponent* CameraBoom;
-
-	/** Follow camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class UCameraComponent* FollowCamera;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+		UCameraComponent* PlayerCameraComponent { nullptr };
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component", meta = (AllowPrivateAccess = "true"))
+	UBoxComponent* HitBox {nullptr};
 
 public:
 	AMainCharacter();
 
 	/** Returns CameraBoom subobject **/
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	FORCEINLINE  USpringArmComponent* GetSpringArmComponent() const { return SpringArmComponent; }
 	/** Returns FollowCamera subobject **/
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	FORCEINLINE  UCameraComponent* GetPlayerCameraComponent() const { return PlayerCameraComponent; }
 
 
 protected:
@@ -38,17 +42,7 @@ protected:
 
 	void Interact();
 
-	
-
-<<<<<<< Updated upstream
-
-=======
-public:
-	AMainCharacter();
-
-protected:
-
-	void Interact();
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	//class ULineTrace* LineTraceComp;
 
@@ -65,9 +59,7 @@ protected:
 
 	virtual void BeginPlay() override;
 
-protected:
 	// APawn interface
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
->>>>>>> Stashed changes
+
 };

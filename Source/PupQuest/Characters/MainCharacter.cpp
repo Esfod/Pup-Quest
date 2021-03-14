@@ -2,53 +2,52 @@
 
 
 #include "MainCharacter.h"
-#include "HeadMountedDisplayFunctionLibrary.h"
-#include "Components/CapsuleComponent.h"
+#include "GameFramework/Controller.h"
+#include "Camera/CameraComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Components/BoxComponent.h"
+//#include "TorchActor.h"
+#include "Net/UnrealNetwork.h"
 
-<<<<<<< Updated upstream
-//AMainCharacter::AMainCharacter()
-//{
-//	// Set size for collision capsule
-//	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-//
-//	// Don't rotate when the controller rotates. Let that just affect the camera.
-//	bUseControllerRotationPitch = false;
-//	bUseControllerRotationYaw = false;
-//	bUseControllerRotationRoll = false;
-//
-//	// Configure character movement
-//	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
-//	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
-//
-//	// Create a camera boom (pulls in towards the player if there is a collision)
-//	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-//	CameraBoom->SetupAttachment(RootComponent);
-//	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
-//	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
-//
-//	// Create a follow camera
-//	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-//	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-//	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-//}
+AMainCharacter::AMainCharacter()
+{
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
+	SpringArmComponent->SetupAttachment(RootComponent);
+	SpringArmComponent->bDoCollisionTest = false;
+	SpringArmComponent->bInheritYaw = false;
 
-//void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
-//{
-//	// Set up gameplay key bindings
-//	check(PlayerInputComponent);
-//	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-//	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-//
-//	PlayerInputComponent->BindAxis("MoveForward", this, &AMainCharacter::MoveForward);
-//	PlayerInputComponent->BindAxis("MoveRight", this, &AMainCharacter::MoveRight);
+	PlayerCameraComponent = CreateDefaultSubobject<UCameraComponent>("Player Camera Component");
+	PlayerCameraComponent->SetupAttachment(SpringArmComponent);
+
+
+	HitBox = CreateDefaultSubobject<UBoxComponent>("Player Hit Box");
+	HitBox->SetupAttachment(RootComponent);
+	HitBox->InitBoxExtent(FVector(50.f,50.f,50.f));
+	HitBox->SetGenerateOverlapEvents(false);
+//Fredirsh
+//// Set size for collision capsule
+//GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+//LineTraceComp = CreateDefaultSubobject<ULineTrace>("LineTraceComponent");
+}
+
+void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+{
+	check(PlayerInputComponent);
+
+	PlayerInputComponent->BindAxis("MoveForward", this, &AMainCharacter::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &AMainCharacter::MoveRight);
 //	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
-//	////PlayerInputComponent->BindAction("Iteract", IE_Pressed, this, &AMainCharacter::Onrep_WeaponAttachToHand);
-//}
+//	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Onrep_WeaponAttachToHand);
 
-//void AMainCharacter::BeginPlay() {
-//	Super::BeginPlay();
-//
-//}
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Onrep_ItemAttachToHand);
+
+}
+
+void AMainCharacter::BeginPlay() {
+	Super::BeginPlay();
+
+}
 
 void AMainCharacter::MoveForward(float Value)
 {
@@ -77,41 +76,10 @@ void AMainCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
-=======
-#include "Components/InputComponent.h"
-#include "GameFramework/Controller.h"
-//#include "TorchActor.h"
-#include "GameFramework/SpringArmComponent.h"
-#include "Net/UnrealNetwork.h"
-
-AMainCharacter::AMainCharacter() {
-
-	//// Set size for collision capsule
-	//GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-
-
-
-
-	//LineTraceComp = CreateDefaultSubobject<ULineTrace>("LineTraceComponent");
 }
 
-void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	check(PlayerInputComponent);
-
-
-
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
-	PlayerInputComponent->BindAction("Iteract", IE_Pressed, this, &AMainCharacter::Onrep_ItemAttachToHand);
-}
-
-void AMainCharacter::BeginPlay() {
-	Super::BeginPlay();
-
-
-}
-
-void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
 //	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 //	DOREPLIFETIME(AMainCharacter, Item);
 //	/*DOREPLIFETIME(AAttachableWall, Weapon);*/
@@ -125,7 +93,8 @@ void AMainCharacter::Onrep_ItemAttachToHand()
 //	}
 }
 
-void AMainCharacter::Interact() {
+void AMainCharacter::Interact()
+{
 //	FVector Start = GetMesh()->GetBoneLocation(FName("joint2"));
 //	FVector End = Start + this->GetActorRotation().Vector() * 150.0f;
 //	AActor* Actor = LineTraceComp->LineTraceSingle(Start, End, true);
@@ -154,5 +123,5 @@ void AMainCharacter::Interact() {
 //			}
 //		}*/
 //	}
->>>>>>> Stashed changes
+
 }
