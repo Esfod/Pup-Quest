@@ -2,7 +2,10 @@
 
 
 #include "MainCharacter.h"
+#include "HeadMountedDisplayFunctionLibrary.h"
+#include "Components/CapsuleComponent.h"
 
+<<<<<<< Updated upstream
 //AMainCharacter::AMainCharacter()
 //{
 //	// Set size for collision capsule
@@ -74,4 +77,82 @@ void AMainCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+=======
+#include "Components/InputComponent.h"
+#include "GameFramework/Controller.h"
+//#include "TorchActor.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Net/UnrealNetwork.h"
+
+AMainCharacter::AMainCharacter() {
+
+	//// Set size for collision capsule
+	//GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+
+
+
+
+	//LineTraceComp = CreateDefaultSubobject<ULineTrace>("LineTraceComponent");
+}
+
+void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+{
+	check(PlayerInputComponent);
+
+
+
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
+	PlayerInputComponent->BindAction("Iteract", IE_Pressed, this, &AMainCharacter::Onrep_ItemAttachToHand);
+}
+
+void AMainCharacter::BeginPlay() {
+	Super::BeginPlay();
+
+
+}
+
+void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
+//	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+//	DOREPLIFETIME(AMainCharacter, Item);
+//	/*DOREPLIFETIME(AAttachableWall, Weapon);*/
+}
+
+void AMainCharacter::Onrep_ItemAttachToHand()
+{
+//	if (Item) {
+//		Item->SetActorEnableCollision(false);
+//		Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("MainSocket"));
+//	}
+}
+
+void AMainCharacter::Interact() {
+//	FVector Start = GetMesh()->GetBoneLocation(FName("joint2"));
+//	FVector End = Start + this->GetActorRotation().Vector() * 150.0f;
+//	AActor* Actor = LineTraceComp->LineTraceSingle(Start, End, true);
+//
+//	if (Actor) {
+//		UE_LOG(LogTemp, Warning, TEXT("Actor is %s"), *Actor->GetName());
+//		if (holdingItem == false) {
+//			if (ATorchActor* TorchHit = Cast<ATorchActor>(Actor)) {
+//				Item = TorchHit;
+//				holdingItem = true;
+//				Onrep_ItemAttachToHand();
+//				UE_LOG(LogTemp, Warning, TEXT("Weapon picked up"));
+//			}
+//		}
+//		/*else {
+//			if (AMyDoor* Door = Cast<AMyDoor>(Actor)) {
+//				UE_LOG(LogTemp, Warning, TEXT("Open door"));
+//			}*/
+//			/*if (ASpiderWeb* Web = Cast<ASpiderWeb>(Actor)) {
+//				UE_LOG(LogTemp, Warning, TEXT("Burn web"));
+//				Web->Destroy();
+//			}*/
+//			/*if (AAttachableWall* Wall = Cast<AAttachableWall>(Actor)) {
+//				UE_LOG(LogTemp, Warning, TEXT("Attach torch to wall"));
+//				Onrep_WeaponAttachToWall();
+//			}
+//		}*/
+//	}
+>>>>>>> Stashed changes
 }

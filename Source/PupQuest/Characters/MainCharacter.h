@@ -6,9 +6,7 @@
 #include "BaseCharacter.h"
 #include "MainCharacter.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class PUPQUEST_API AMainCharacter : public ABaseCharacter
 {
@@ -42,5 +40,34 @@ protected:
 
 	
 
+<<<<<<< Updated upstream
 
+=======
+public:
+	AMainCharacter();
+
+protected:
+
+	void Interact();
+
+	//class ULineTrace* LineTraceComp;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<class ATorchActor> TorchClass;
+
+	bool holdingItem = false;
+
+	UPROPERTY(ReplicatedUsing = OnRep_ItemAttachToHand)
+		class ATorchActor* Item;
+
+	UFUNCTION()
+		void Onrep_ItemAttachToHand();
+
+	virtual void BeginPlay() override;
+
+protected:
+	// APawn interface
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	// End of APawn interface
+>>>>>>> Stashed changes
 };
