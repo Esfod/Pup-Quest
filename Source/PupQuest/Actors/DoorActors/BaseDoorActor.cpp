@@ -3,6 +3,7 @@
 
 #include "BaseDoorActor.h"
 #include "PupQuest/Actors/ItemsActor/BaseItemActor.h"
+#include "PupQuest/Characters/MainCharacter.h"
 
 // Sets default values
 ABaseDoorActor::ABaseDoorActor()
@@ -11,6 +12,12 @@ ABaseDoorActor::ABaseDoorActor()
 
 	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeh Component"));
 	RootComponent = StaticMeshComp;
+}
+
+void ABaseDoorActor::BeginPlay()
+{
+	Super::BeginPlay();
+	
 }
 
 bool ABaseDoorActor::CheckTorchHolder()
@@ -24,7 +31,7 @@ bool ABaseDoorActor::CheckTorchHolder()
 		{
 			UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
 
-			if(Actor->IsA(ABaseItemActor::StaticClass()))
+			if(Actor->IsA(AMainCharacter::StaticClass()))//Debug uses Player to test
 			{
 				return true;
 			}

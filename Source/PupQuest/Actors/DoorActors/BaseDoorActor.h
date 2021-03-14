@@ -27,7 +27,8 @@ private:
     */
 
 protected:
-
+	UPROPERTY(EditAnywhere,Category="Variables")
+	float MoveLength{300.f};
 
 	UPROPERTY(EditAnywhere,Category="Variables")
 	float DoorOpenSpeed{5.f};
@@ -40,6 +41,8 @@ protected:
 	bool bOpenDoor;
 	
 	bool CheckTorchHolder();
+	
+	virtual void BeginPlay() override;
 	
 	virtual void OpenDoor(float DeltaTime);
 	
