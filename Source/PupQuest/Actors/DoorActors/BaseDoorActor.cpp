@@ -13,23 +13,10 @@ ABaseDoorActor::ABaseDoorActor()
 	RootComponent = StaticMeshComp;
 }
 
-void ABaseDoorActor::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-
-void ABaseDoorActor::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 bool ABaseDoorActor::CheckTorchHolder()
 {
 	TArray<AActor*> OverlappingActors;
-	/*
+	
 	if(TorchHolder)
 	{
 		TorchHolder->GetOverlappingActors(OverlappingActors);
@@ -43,7 +30,7 @@ bool ABaseDoorActor::CheckTorchHolder()
 			}
 		}
 	}
-	*/
+	
 	return false;
 }
 

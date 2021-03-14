@@ -13,9 +13,6 @@ AGateActor::AGateActor()
 void AGateActor::BeginPlay()
 {
 	Super::BeginPlay();
-
-	DoorOpenSpeed = 5.f;
-	DoorCloseSpeed = 7.5;
 	
 	Initial = GetActorLocation().Z;
 	Current = Initial;
