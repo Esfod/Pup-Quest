@@ -8,7 +8,6 @@
 
 class USpringArmComponent;
 class UCameraComponent;
-class UBoxComponent;
 
 UCLASS()
 class PUPQUEST_API AMainCharacter : public ABaseCharacter
@@ -21,8 +20,7 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 		UCameraComponent* PlayerCameraComponent { nullptr };
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component", meta = (AllowPrivateAccess = "true"))
-	UBoxComponent* HitBox {nullptr};
+
 
 public:
 	AMainCharacter();

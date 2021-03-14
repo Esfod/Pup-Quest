@@ -5,7 +5,6 @@
 #include "GameFramework/Controller.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Components/BoxComponent.h"
 //#include "TorchActor.h"
 #include "Net/UnrealNetwork.h"
 
@@ -20,10 +19,7 @@ AMainCharacter::AMainCharacter()
 	PlayerCameraComponent->SetupAttachment(SpringArmComponent);
 
 
-	HitBox = CreateDefaultSubobject<UBoxComponent>("Player Hit Box");
-	HitBox->SetupAttachment(RootComponent);
-	HitBox->InitBoxExtent(FVector(50.f,50.f,50.f));
-	HitBox->SetGenerateOverlapEvents(false);
+
 //Fredirsh
 //// Set size for collision capsule
 //GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
