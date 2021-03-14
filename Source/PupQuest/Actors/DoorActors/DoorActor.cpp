@@ -1,34 +1,35 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GateActor.h"
+#include "DoorActor.h"
 
-
-
-AGateActor::AGateActor()
+ADoorActor::ADoorActor()
 {
-	PrimaryActorTick.bCanEverTick = true;	
 }
 
-void AGateActor::BeginPlay()
+void ADoorActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Initial = GetActorLocation().Z;
+	Initial = GetActorRotation().Yaw;
 	Current = Initial;
 	MoveLength += Initial;
 }
 
-void AGateActor::Tick(float DeltaTime)
+
+void ADoorActor::Tick(float DeltaTime)
 {
-	bOpenDoor = CheckTorchHolder();
+	Super::Tick(DeltaTime);
 	
+	bOpenDoor = CheckTorchHolder();
+
 	OpenDoor(DeltaTime);
 }
 
-void AGateActor::OpenDoor(float DeltaTime)
+void ADoorActor::OpenDoor(float DeltaTime)
 {
 	Super::OpenDoor(DeltaTime);
+
 	if(bOpenDoor)
 	{
 		Current = FMath::Lerp(Current, MoveLength, DeltaTime * DoorOpenSpeed); //Open Door
@@ -37,8 +38,7 @@ void AGateActor::OpenDoor(float DeltaTime)
 	{
 		Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Open Door
 	}
-	
-	FVector DoorLocation = GetActorLocation();
-	DoorLocation.Z = Current;
-	SetActorLocation(DoorLocation);
+	FRotator DoorRotation = GetActorRotation();
+	DoorRotation.Yaw = Current;
+	SetActorRotation(DoorRotation);
 }

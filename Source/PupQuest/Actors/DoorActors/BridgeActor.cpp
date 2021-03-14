@@ -1,34 +1,34 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GateActor.h"
+#include "BridgeActor.h"
 
-
-
-AGateActor::AGateActor()
+ABridgeActor::ABridgeActor()
 {
-	PrimaryActorTick.bCanEverTick = true;	
 }
 
-void AGateActor::BeginPlay()
+void ABridgeActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Initial = GetActorLocation().Z;
+	Initial = GetActorRotation().Pitch;
 	Current = Initial;
 	MoveLength += Initial;
 }
 
-void AGateActor::Tick(float DeltaTime)
+void ABridgeActor::Tick(float DeltaTime)
 {
-	bOpenDoor = CheckTorchHolder();
+	Super::Tick(DeltaTime);
 	
+	bOpenDoor = CheckTorchHolder();
+
 	OpenDoor(DeltaTime);
 }
 
-void AGateActor::OpenDoor(float DeltaTime)
+void ABridgeActor::OpenDoor(float DeltaTime)
 {
 	Super::OpenDoor(DeltaTime);
+
 	if(bOpenDoor)
 	{
 		Current = FMath::Lerp(Current, MoveLength, DeltaTime * DoorOpenSpeed); //Open Door
@@ -37,8 +37,7 @@ void AGateActor::OpenDoor(float DeltaTime)
 	{
 		Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Open Door
 	}
-	
-	FVector DoorLocation = GetActorLocation();
-	DoorLocation.Z = Current;
-	SetActorLocation(DoorLocation);
+	FRotator DoorRotation = GetActorRotation();
+	DoorRotation.Pitch = Current;
+	SetActorRotation(DoorRotation);
 }

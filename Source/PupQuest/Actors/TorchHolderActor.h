@@ -15,12 +15,15 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* StaticMeshComp { nullptr };
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* TorchPlacementPoint { nullptr };
 
 protected:
 	virtual void BeginPlay() override;
 
 public:
+	
 	ATorchHolderActor();
+
+	FVector GetTorchPlacementPoint();
 };
