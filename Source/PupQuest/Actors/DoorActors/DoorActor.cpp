@@ -20,6 +20,7 @@ void ADoorActor::BeginPlay()
 void ADoorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
 	bOpenDoor = CheckTorchHolder();
 
 	OpenDoor(DeltaTime);
@@ -37,7 +38,7 @@ void ADoorActor::OpenDoor(float DeltaTime)
 	{
 		Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Open Door
 	}
-	FRotator DoorRoatation = GetActorRotation();
-	DoorRoatation.Yaw = Current;
-	SetActorRotation(DoorRoatation);
+	FRotator DoorRotation = GetActorRotation();
+	DoorRotation.Yaw = Current;
+	SetActorRotation(DoorRotation);
 }
