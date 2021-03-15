@@ -18,7 +18,7 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 
 		/** Camera boom positioning the camera behind the character */
 		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-		USpringArmComponent* CameraBoom;
+		USpringArmComponent* SpringArmComponent;
 
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
@@ -26,12 +26,6 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 
 public:
 	AMainCharacter();
-
-	/** Returns CameraBoom subobject **/
-	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	/** Returns FollowCamera subobject **/
-	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-
 
 protected:
 	/** Called for forwards/backward input */
