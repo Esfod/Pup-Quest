@@ -8,7 +8,6 @@
 
 class USpringArmComponent;
 class UCameraComponent;
-class ULineTrace;
 class ATorchActor;
 
 UCLASS()
@@ -22,15 +21,10 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComp { nullptr };
 
-
-	AActor* CheckHitBoxPickUp();
-	AActor* CheckHitBoxPlacment();
-	AActor* CheckHitBoxAttack();
-	//hello
-
 	public:
 	AMainCharacter();
 
+	void DropItem();
 
 	protected:
 	/** Called for forwards/backward input */
@@ -39,22 +33,26 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 	/** Called for side to side input */
 	void MoveRight(float Value);
 
-	void Interact();
-
-	ULineTrace* LineTraceComp;
+	void StartInteract();
+	void StopInteract();
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ATorchActor> ItemClass;
 
 	bool holdingItem = false;
 
-	UPROPERTY(ReplicatedUsing = OnRep_ItemAttachToHand)
+	UPROPERTY(ReplicatedUsing = ItemAttachToHand)
 	ATorchActor* Item;
 
 	UFUNCTION()
-        void Onrep_ItemAttachToHand();
+        void ItemAttachToHand();
 
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+		void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
+			bool bFromSweep, const FHitResult& SweepResult);
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
