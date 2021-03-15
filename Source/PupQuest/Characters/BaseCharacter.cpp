@@ -11,17 +11,17 @@ ABaseCharacter::ABaseCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
+	HitBox->InitBoxExtent(FVector(80.f, 80.f, 100.f));
 	HitBox->SetupAttachment(RootComponent);
 	HitBox->SetGenerateOverlapEvents(false);
+
 }
 
 // Called when the game starts or when spawned
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	TArray<AActor*> OverlappingActors;
-	HitBox->GetOverlappingActors(OverlappingActors);
-
+	
 }
 
 // Called every frame
@@ -30,7 +30,6 @@ void ABaseCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-
 // Called to bind functionality to input
 void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
