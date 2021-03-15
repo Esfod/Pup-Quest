@@ -16,21 +16,20 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
-		/** Camera boom positioning the camera behind the character */
-		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-		USpringArmComponent* CameraBoom;
-
-	/** Follow camera */
+private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-		UCameraComponent* FollowCamera;
+		USpringArmComponent* SpringArm { nullptr };
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+		UCameraComponent* CameraComp { nullptr };
+
+
+	AActor* CheckHitBoxPickUp();
+	AActor* CheckHitBoxPlacment();
+	AActor* CheckHitBoxAttack();
+
 
 public:
 	AMainCharacter();
-
-	/** Returns CameraBoom subobject **/
-	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	/** Returns FollowCamera subobject **/
-	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 
 protected:
@@ -41,8 +40,6 @@ protected:
 	void MoveRight(float Value);
 
 	void Interact();
-
-protected:
 
 	ULineTrace* LineTraceComp;
 
@@ -59,7 +56,6 @@ protected:
 
 	virtual void BeginPlay() override;
 
-protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
