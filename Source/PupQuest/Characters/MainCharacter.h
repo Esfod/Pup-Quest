@@ -16,23 +16,23 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
-private:
+	private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-		USpringArmComponent* SpringArm { nullptr };
+	USpringArmComponent* SpringArm { nullptr };
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-		UCameraComponent* CameraComp { nullptr };
+	UCameraComponent* CameraComp { nullptr };
 
 
 	AActor* CheckHitBoxPickUp();
 	AActor* CheckHitBoxPlacment();
 	AActor* CheckHitBoxAttack();
-//hello
+	//hello
 
-public:
+	public:
 	AMainCharacter();
 
 
-protected:
+	protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 
@@ -44,15 +44,15 @@ protected:
 	ULineTrace* LineTraceComp;
 
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<class ATorchActor> ItemClass;
+	TSubclassOf<class ATorchActor> ItemClass;
 
 	bool holdingItem = false;
 
 	UPROPERTY(ReplicatedUsing = OnRep_ItemAttachToHand)
-		ATorchActor* Item;
+	ATorchActor* Item;
 
 	UFUNCTION()
-		void Onrep_ItemAttachToHand();
+        void Onrep_ItemAttachToHand();
 
 	virtual void BeginPlay() override;
 

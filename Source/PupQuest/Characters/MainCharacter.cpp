@@ -140,20 +140,18 @@ void AMainCharacter::Interact()
 AActor* AMainCharacter::CheckHitBoxPickUp()
 {
 	TArray<AActor*> OverlappingActors;
-	
-	
-		HitBox->GetOverlappingActors(OverlappingActors);
-		for(AActor* Actor : OverlappingActors)
-		{
-			UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
+	HitBox->GetOverlappingActors(OverlappingActors);
+	for(AActor* Actor : OverlappingActors)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
 
-			if(Actor->IsA(ATorchActor::StaticClass()))
-			{
-				return Actor;
-			}
+		if(Actor->IsA(ATorchActor::StaticClass()))
+		{
+			return Actor;
 		}
+	}
 	
-		return nullptr;
+	return nullptr;
 }
 
 AActor* CheckHitBoxPlacment()
