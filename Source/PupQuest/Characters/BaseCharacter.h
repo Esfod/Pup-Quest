@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
-class UBoxComponent;
 
 UCLASS()
 class PUPQUEST_API ABaseCharacter : public ACharacter
@@ -13,8 +12,7 @@ class PUPQUEST_API ABaseCharacter : public ACharacter
 	GENERATED_BODY()
 private:
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component", meta = (AllowPrivateAccess = "true"))
-	UBoxComponent* HitBox {nullptr};
+
 
 protected:
 	// Called when the game starts or when spawned

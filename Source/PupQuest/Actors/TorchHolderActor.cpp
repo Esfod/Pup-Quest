@@ -14,11 +14,6 @@ ATorchHolderActor::ATorchHolderActor()
 	TorchPlacementPoint->SetupAttachment(RootComponent);
 }
 
-FVector ATorchHolderActor::GetTorchPlacementPoint()
-{
-	return TorchPlacementPoint->GetComponentLocation();
-}
-
 void ATorchHolderActor::BeginPlay()
 {
 	Super::BeginPlay();

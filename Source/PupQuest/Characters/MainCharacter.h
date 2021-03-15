@@ -6,29 +6,27 @@
 #include "BaseCharacter.h"
 #include "MainCharacter.generated.h"
 
-class USpringArmComponent;
-class UCameraComponent;
 
 UCLASS()
 class PUPQUEST_API AMainCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* SpringArmComponent { nullptr };
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-		UCameraComponent* PlayerCameraComponent { nullptr };
-	
+		/** Camera boom positioning the camera behind the character */
+		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		class USpringArmComponent* CameraBoom;
 
+	/** Follow camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		class UCameraComponent* FollowCamera;
 
 public:
 	AMainCharacter();
 
 	/** Returns CameraBoom subobject **/
-	FORCEINLINE  USpringArmComponent* GetSpringArmComponent() const { return SpringArmComponent; }
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
-	FORCEINLINE  UCameraComponent* GetPlayerCameraComponent() const { return PlayerCameraComponent; }
+	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 
 protected:
@@ -40,9 +38,9 @@ protected:
 
 	void Interact();
 
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+protected:
 
-	//class ULineTrace* LineTraceComp;
+	class ULineTrace* LineTraceComp;
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class ATorchActor> TorchClass;
@@ -57,7 +55,8 @@ protected:
 
 	virtual void BeginPlay() override;
 
+protected:
 	// APawn interface
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
-
 };
