@@ -9,8 +9,8 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
-#include "LineTrace.h"
-#include "TorchActor.h"
+#include "PupQuest/ActorComponent/LineTrace.h"
+#include "PupQuest/Actors/ItemsActor/TorchActor.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Net/UnrealNetwork.h"
 
