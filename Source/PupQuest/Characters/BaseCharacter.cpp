@@ -2,6 +2,7 @@
 
 
 #include "BaseCharacter.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -9,6 +10,10 @@ ABaseCharacter::ABaseCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	HitBox = CreateDefaultSubobject<UBoxComponent>("HitBox");
+	HitBox->InitBoxExtent(FVector(10.f, 10.f, 10.f));
+	HitBox->SetupAttachment(RootComponent);
+	HitBox->SetGenerateOverlapEvents(false);
 }
 
 // Called when the game starts or when spawned

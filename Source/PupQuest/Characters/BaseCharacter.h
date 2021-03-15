@@ -6,12 +6,15 @@
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
+class UBoxComponent;
+
 UCLASS()
 class PUPQUEST_API ABaseCharacter : public ACharacter
 {
 	GENERATED_BODY()
 private:
-	
+
+	UBoxComponent* HitBox { nullptr };
 
 
 protected:
