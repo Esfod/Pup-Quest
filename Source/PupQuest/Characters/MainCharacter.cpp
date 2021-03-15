@@ -8,15 +8,14 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/BoxComponent.h"
 
 #include "GameFramework/Controller.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
-#include "PupQuest/ActorComponent/LineTrace.h"
 #include "PupQuest/Actors/SpiderWebActor.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
 #include "PupQuest/Actors/TorchHolderActor.h"
-//#include "EnemyBaseCharacter.h"
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
@@ -30,11 +29,16 @@ AMainCharacter::AMainCharacter()
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>("Spring Arm");
 	SpringArm->SetupAttachment(RootComponent);
+	SpringArm->SetRelativeRotation(FRotator(0.f, -30.f, 15.f));
+	SpringArm->bDoCollisionTest = false;
+	SpringArm->bInheritYaw = false;
 
 	CameraComp  = CreateDefaultSubobject<UCameraComponent>("Camera Component");
 	CameraComp->SetupAttachment(SpringArm);
 
-	LineTraceComp = CreateDefaultSubobject<ULineTrace>("LineTraceComponent");
+	HitBox->SetRelativeLocation(FVector(70.f,0.f, 0.f));
+
+	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlap);
 }
 
 void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -43,8 +47,11 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMainCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMainCharacter::MoveRight);
-	
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
+
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::StartInteract);
+	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AMainCharacter::StopInteract);
+
+	PlayerInputComponent->BindAction("Drop", IE_Pressed, this, &AMainCharacter::DropItem);
 }
 
 void AMainCharacter::BeginPlay()
@@ -89,107 +96,61 @@ void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	/*DOREPLIFETIME(AAttachableWall, Weapon);*/
 }
 
-void AMainCharacter::Onrep_ItemAttachToHand()
+void AMainCharacter::ItemAttachToHand()
 {
 	if (Item) 
 	{
 		Item->SetActorEnableCollision(false);
 		Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("MainSocket"));
+		holdingItem = true;
 	}
 }
 
+void AMainCharacter::DropItem() {
+	FVector Location = GetOwner()->GetActorLocation();
+	Item->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	Item->SetActorEnableCollision(true);
+	Item->SetActorLocation(Location);
+	holdingItem = false;
+}
 
-void AMainCharacter::Interact() 
+void AMainCharacter::StartInteract() {
+	UE_LOG(LogTemp, Warning, TEXT("Interact!"));
+	HitBox->SetGenerateOverlapEvents(true);
+}
+
+void AMainCharacter::StopInteract() {
+	UE_LOG(LogTemp, Warning, TEXT("Stop Interact!"));
+	HitBox->SetGenerateOverlapEvents(false);
+}
+
+void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
+	bool bFromSweep, const FHitResult& SweepResult)
 {
-	FVector Start = GetMesh()->GetBoneLocation(FName("joint2"));
-	FVector End = Start + this->GetActorRotation().Vector() * 150.0f;
-	AActor* Actor = LineTraceComp->LineTraceSingle(Start, End, true);
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
 
-	if (Actor)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Actor is %s"), *Actor->GetName());
-		if (holdingItem == false) {
-			if (ATorchActor* TorchHit = Cast<ATorchActor>(Actor)) {
-				Item = TorchHit;
-				holdingItem = true;
-				Onrep_ItemAttachToHand();
-				UE_LOG(LogTemp, Warning, TEXT("Weapon picked up"));
-			}
+	if (holdingItem == false) {
+		if (OtherActor->IsA(ATorchActor::StaticClass()))
+		{
+			ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
+			Item = TorchHit;
+
+			ItemAttachToHand();
+			UE_LOG(LogTemp, Warning, TEXT("Weapon picked up"));
 		}
-		else {
-		/*	if (AMyDoor* Door = Cast<AMyDoor>(Actor)) {
-				UE_LOG(LogTemp, Warning, TEXT("Open door"));
-			}*/
-			if (ASpiderWebActor* Web = Cast<ASpiderWebActor>(Actor)) {
-				UE_LOG(LogTemp, Warning, TEXT("Burn web"));
-				Web->Destroy();
-			}
-			if (ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(Actor)) {
-				UE_LOG(LogTemp, Warning, TEXT("Place Torch"));
-
-			}
-
-			/*if (AAttachableWall* Wall = Cast<AAttachableWall>(Actor)) {
-				UE_LOG(LogTemp, Warning, TEXT("Attach torch to wall"));
-				Onrep_WeaponAttachToWall();
-			}*/
+	}else {
+		if (OtherActor->IsA(ATorchHolderActor::StaticClass())) {
+			ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(OtherActor);
+			Item->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+			Item->SetActorEnableCollision(true);
+			Item->SetActorLocation(TorchHolder->GetTorchPlacementPoint());
+			holdingItem = false;
+		}
+		if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {
+			ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
+			UE_LOG(LogTemp, Warning, TEXT("Burn web"));
+			Web->Destroy();
 		}
 	}
-}
-
-AActor* AMainCharacter::CheckHitBoxPickUp()
-{
-	TArray<AActor*> OverlappingActors;
-	HitBox->GetOverlappingActors(OverlappingActors);
-	for(AActor* Actor : OverlappingActors)
-	{
-		UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
-
-		if(Actor->IsA(ATorchActor::StaticClass()))
-		{
-			return Actor;
-		}
-	}
-	
-	return nullptr;
-}
-
-AActor* CheckHitBoxPlacment()
-{
-	/*TArray<AActor*> OverlappingActors;
-	
-	if(HitBox)
-	{
-		HitBox->GetOverlappingActors(OverlappingActors);
-		for(AActor* Actor : OverlappingActors)
-		{
-			UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
-
-			if(Actor->IsA(ATorchActor::StaticClass()))
-			{
-				return Actor;
-			}
-		}
-	}*/
-		return nullptr;
-}
-
-AActor* CheckHitBoxAttack()
-{
-	/*TArray<AActor*> OverlappingActors;
-	
-	if(HitBox)
-	{
-		HitBox->GetOverlappingActors(OverlappingActors);
-		for(AActor* Actor : OverlappingActors)
-		{
-			UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
-
-			if(Actor->IsA(AEnemyBaseCharacter::StaticClass()))
-			{
-				return Actor;
-			}
-		}
-	}*/
-	return nullptr;
 }

@@ -23,4 +23,6 @@ protected:
 
 public:
 	ATorchHolderActor();
+	
+	FVector GetTorchPlacementPoint();
 };

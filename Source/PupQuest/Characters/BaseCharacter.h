@@ -17,10 +17,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	UBoxComponent* HitBox { nullptr };
+
+
 public:
 	ABaseCharacter();
-	
+
+	UBoxComponent* HitBox { nullptr };
+		
+
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
