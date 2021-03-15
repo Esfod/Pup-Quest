@@ -2,16 +2,22 @@
 
 
 #include "MainCharacter.h"
+
 #include "HeadMountedDisplayFunctionLibrary.h"
+
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+
 #include "GameFramework/Controller.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Camera/CameraComponent.h"
+
 #include "PupQuest/ActorComponent/LineTrace.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
+
 #include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
+
 #include "Net/UnrealNetwork.h"
 
 AMainCharacter::AMainCharacter()
@@ -31,18 +37,16 @@ AMainCharacter::AMainCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
-	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+	CameraBoom->SetRelativeRotation(FRotator(45.f,45.f,0.f));
+	CameraBoom->TargetArmLength = 1200.0f;	// The camera follows at this distance behind the character	
+	CameraBoom->bUsePawnControlRotation = true;	// Rotate the arm based on the controller
+	CameraBoom->bInheritYaw = false;	// Ignore Yaw rotations - since we want a fixed camera
+	CameraBoom->bDoCollisionTest = false;	 
 
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
-
-
-
-
 
 	LineTraceComp = CreateDefaultSubobject<ULineTrace>("LineTraceComponent");
 }
@@ -51,20 +55,16 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 {
 //	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMainCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMainCharacter::MoveRight);
+	
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
 	////PlayerInputComponent->BindAction("Iteract", IE_Pressed, this, &AMainCharacter::Onrep_WeaponAttachToHand);
 
-
-
-
 }
 
-void AMainCharacter::BeginPlay() {
+void AMainCharacter::BeginPlay()
+{
 	Super::BeginPlay();
 }
 
@@ -99,7 +99,8 @@ void AMainCharacter::MoveRight(float Value)
 
 
 
-void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
+void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AMainCharacter, Item);
 	/*DOREPLIFETIME(AAttachableWall, Weapon);*/
@@ -118,7 +119,8 @@ void AMainCharacter::Interact() {
 	FVector End = Start + this->GetActorRotation().Vector() * 150.0f;
 	AActor* Actor = LineTraceComp->LineTraceSingle(Start, End, true);
 
-	if (Actor) {
+	if (Actor)
+	{
 		UE_LOG(LogTemp, Warning, TEXT("Actor is %s"), *Actor->GetName());
 		if (holdingItem == false) {
 			if (ATorchActor* TorchHit = Cast<ATorchActor>(Actor)) {
