@@ -18,6 +18,7 @@
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/BoxComponent.h"
 
 #include "Net/UnrealNetwork.h"
 
@@ -61,12 +62,12 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
 	////PlayerInputComponent->BindAction("Iteract", IE_Pressed, this, &AMainCharacter::Onrep_WeaponAttachToHand);
-
 }
 
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
 }
 
 void AMainCharacter::MoveForward(float Value)
@@ -97,7 +98,6 @@ void AMainCharacter::MoveRight(float Value)
 		AddMovementInput(Direction, Value);
 	}
 }
-
 
 
 void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
