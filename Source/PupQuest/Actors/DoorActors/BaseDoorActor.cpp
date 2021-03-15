@@ -44,7 +44,8 @@ bool ABaseDoorActor::CheckTorchHolder()
 		}
 	}
 	*/
-	return false;
+	
+		return false;
 }
 
 void ABaseDoorActor::OpenDoor(float DeltaTime)

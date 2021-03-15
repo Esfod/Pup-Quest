@@ -12,16 +12,12 @@ UCLASS()
 class PUPQUEST_API ABaseCharacter : public ACharacter
 {
 	GENERATED_BODY()
-private:
-
-
-
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	UBoxComponent* HitBox{ nullptr };
-
+	
+	UBoxComponent* HitBox { nullptr };
 public:
 	ABaseCharacter();
 	
