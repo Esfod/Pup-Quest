@@ -3,9 +3,6 @@
 
 #include "MainCharacter.h"
 
-#include "HeadMountedDisplayFunctionLibrary.h"
-
-#include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/BoxComponent.h"
