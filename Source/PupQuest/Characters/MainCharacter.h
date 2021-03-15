@@ -38,19 +38,9 @@ protected:
 
 	void Interact();
 
-	
-
-<<<<<<< Updated upstream
-
-=======
-public:
-	AMainCharacter();
-
 protected:
 
-	void Interact();
-
-	//class ULineTrace* LineTraceComp;
+	class ULineTrace* LineTraceComp;
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class ATorchActor> TorchClass;
@@ -69,5 +59,4 @@ protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
->>>>>>> Stashed changes
 };
