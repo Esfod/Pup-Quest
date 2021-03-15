@@ -16,18 +16,23 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
-		/** Camera boom positioning the camera behind the character */
-		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-		USpringArmComponent* SpringArmComponent;
-
-	/** Follow camera */
+	private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-		UCameraComponent* FollowCamera;
+	USpringArmComponent* SpringArm { nullptr };
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* CameraComp { nullptr };
 
-public:
+
+	AActor* CheckHitBoxPickUp();
+	AActor* CheckHitBoxPlacment();
+	AActor* CheckHitBoxAttack();
+	//hello
+
+	public:
 	AMainCharacter();
 
-protected:
+
+	protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 
@@ -36,24 +41,21 @@ protected:
 
 	void Interact();
 
-protected:
-
 	ULineTrace* LineTraceComp;
 
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<class ATorchActor> ItemClass;
+	TSubclassOf<class ATorchActor> ItemClass;
 
 	bool holdingItem = false;
 
 	UPROPERTY(ReplicatedUsing = OnRep_ItemAttachToHand)
-		ATorchActor* Item;
+	ATorchActor* Item;
 
 	UFUNCTION()
-		void Onrep_ItemAttachToHand();
+        void Onrep_ItemAttachToHand();
 
 	virtual void BeginPlay() override;
 
-protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
