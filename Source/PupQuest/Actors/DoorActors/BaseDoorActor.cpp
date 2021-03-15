@@ -62,7 +62,7 @@ bool ABaseDoorActor::CheckTorchHolder(const AActor* a)
 		{
 			if(Actor->IsA(ATorchActor::StaticClass()) || Actor->IsA(AMainCharacter::StaticClass()))
 			{
-				UE_LOG(LogTemp,Warning,TEXT("åpne dør"));
+				//UE_LOG(LogTemp,Warning,TEXT("åpne dør"));
 				return true;
 			}
 		}
@@ -73,14 +73,14 @@ bool ABaseDoorActor::CheckTorchHolder(const AActor* a)
 bool ABaseDoorActor::CheckTorchHolder(const AActor* a, const AActor* b)
 {
 	TArray<AActor*> OverlappingActors;
-	UE_LOG(LogTemp,Warning,TEXT("hello from check torchholder 2"), );
+	//UE_LOG(LogTemp,Warning,TEXT("hello from check torchholder 2"), );
 	int x {0};
 	a->GetOverlappingActors(OverlappingActors);
 	for(AActor* Actor : OverlappingActors)
 	{
 		if(Actor->IsA(ATorchActor::StaticClass()))
 		{
-			UE_LOG(LogTemp,Warning,TEXT("Torch 1 er klar"));
+			//UE_LOG(LogTemp,Warning,TEXT("Torch 1 er klar"));
 			x++;
 		}
 	}
@@ -90,7 +90,7 @@ bool ABaseDoorActor::CheckTorchHolder(const AActor* a, const AActor* b)
 	{
 		if(Actor->IsA(ATorchActor::StaticClass()))
 		{
-			UE_LOG(LogTemp,Warning,TEXT("Torch 2 er klar"));
+			//UE_LOG(LogTemp,Warning,TEXT("Torch 2 er klar"));
 			x++;
 		}
 	}
