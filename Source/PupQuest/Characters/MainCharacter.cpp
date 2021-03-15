@@ -4,51 +4,69 @@
 #include "MainCharacter.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/InputComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "GameFramework/Controller.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Camera/CameraComponent.h"
+#include "PupQuest/ActorComponent/LineTrace.h"
+#include "PupQuest/Actors/ItemsActor/TorchActor.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Net/UnrealNetwork.h"
 
-<<<<<<< Updated upstream
-//AMainCharacter::AMainCharacter()
-//{
-//	// Set size for collision capsule
-//	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-//
-//	// Don't rotate when the controller rotates. Let that just affect the camera.
-//	bUseControllerRotationPitch = false;
-//	bUseControllerRotationYaw = false;
-//	bUseControllerRotationRoll = false;
-//
-//	// Configure character movement
-//	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
-//	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
-//
-//	// Create a camera boom (pulls in towards the player if there is a collision)
-//	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-//	CameraBoom->SetupAttachment(RootComponent);
-//	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
-//	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
-//
-//	// Create a follow camera
-//	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-//	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-//	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-//}
+AMainCharacter::AMainCharacter()
+{
+	// Set size for collision capsule
+	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
-//void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
-//{
+	// Don't rotate when the controller rotates. Let that just affect the camera.
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+
+	// Configure character movement
+	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
+
+	// Create a camera boom (pulls in towards the player if there is a collision)
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	CameraBoom->SetupAttachment(RootComponent);
+	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
+	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+
+	// Create a follow camera
+	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
+	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
+	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+
+
+
+
+
+	LineTraceComp = CreateDefaultSubobject<ULineTrace>("LineTraceComponent");
+}
+
+void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+{
 //	// Set up gameplay key bindings
-//	check(PlayerInputComponent);
-//	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-//	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-//
-//	PlayerInputComponent->BindAxis("MoveForward", this, &AMainCharacter::MoveForward);
-//	PlayerInputComponent->BindAxis("MoveRight", this, &AMainCharacter::MoveRight);
-//	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
-//	////PlayerInputComponent->BindAction("Iteract", IE_Pressed, this, &AMainCharacter::Onrep_WeaponAttachToHand);
-//}
+	check(PlayerInputComponent);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
-//void AMainCharacter::BeginPlay() {
-//	Super::BeginPlay();
-//
-//}
+	PlayerInputComponent->BindAxis("MoveForward", this, &AMainCharacter::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &AMainCharacter::MoveRight);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
+	////PlayerInputComponent->BindAction("Iteract", IE_Pressed, this, &AMainCharacter::Onrep_WeaponAttachToHand);
+
+
+
+
+}
+
+void AMainCharacter::BeginPlay() {
+	Super::BeginPlay();
+}
 
 void AMainCharacter::MoveForward(float Value)
 {
@@ -77,82 +95,52 @@ void AMainCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
-=======
-#include "Components/InputComponent.h"
-#include "GameFramework/Controller.h"
-//#include "TorchActor.h"
-#include "GameFramework/SpringArmComponent.h"
-#include "Net/UnrealNetwork.h"
-
-AMainCharacter::AMainCharacter() {
-
-	//// Set size for collision capsule
-	//GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-
-
-
-
-	//LineTraceComp = CreateDefaultSubobject<ULineTrace>("LineTraceComponent");
 }
 
-void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
-{
-	check(PlayerInputComponent);
 
-
-
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
-	PlayerInputComponent->BindAction("Iteract", IE_Pressed, this, &AMainCharacter::Onrep_ItemAttachToHand);
-}
-
-void AMainCharacter::BeginPlay() {
-	Super::BeginPlay();
-
-
-}
 
 void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
-//	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-//	DOREPLIFETIME(AMainCharacter, Item);
-//	/*DOREPLIFETIME(AAttachableWall, Weapon);*/
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AMainCharacter, Item);
+	/*DOREPLIFETIME(AAttachableWall, Weapon);*/
 }
 
 void AMainCharacter::Onrep_ItemAttachToHand()
 {
-//	if (Item) {
-//		Item->SetActorEnableCollision(false);
-//		Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("MainSocket"));
-//	}
+	if (Item) {
+		Item->SetActorEnableCollision(false);
+		Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("MainSocket"));
+	}
 }
 
 void AMainCharacter::Interact() {
-//	FVector Start = GetMesh()->GetBoneLocation(FName("joint2"));
-//	FVector End = Start + this->GetActorRotation().Vector() * 150.0f;
-//	AActor* Actor = LineTraceComp->LineTraceSingle(Start, End, true);
-//
-//	if (Actor) {
-//		UE_LOG(LogTemp, Warning, TEXT("Actor is %s"), *Actor->GetName());
-//		if (holdingItem == false) {
-//			if (ATorchActor* TorchHit = Cast<ATorchActor>(Actor)) {
-//				Item = TorchHit;
-//				holdingItem = true;
-//				Onrep_ItemAttachToHand();
-//				UE_LOG(LogTemp, Warning, TEXT("Weapon picked up"));
-//			}
-//		}
-//		/*else {
-//			if (AMyDoor* Door = Cast<AMyDoor>(Actor)) {
-//				UE_LOG(LogTemp, Warning, TEXT("Open door"));
-//			}*/
-//			/*if (ASpiderWeb* Web = Cast<ASpiderWeb>(Actor)) {
-//				UE_LOG(LogTemp, Warning, TEXT("Burn web"));
-//				Web->Destroy();
-//			}*/
-//			/*if (AAttachableWall* Wall = Cast<AAttachableWall>(Actor)) {
-//				UE_LOG(LogTemp, Warning, TEXT("Attach torch to wall"));
-//				Onrep_WeaponAttachToWall();
-//			}
-//		}*/
-//	}
->>>>>>> Stashed changes
+	FVector Start = GetMesh()->GetBoneLocation(FName("joint2"));
+	FVector End = Start + this->GetActorRotation().Vector() * 150.0f;
+	AActor* Actor = LineTraceComp->LineTraceSingle(Start, End, true);
+
+	if (Actor) {
+		UE_LOG(LogTemp, Warning, TEXT("Actor is %s"), *Actor->GetName());
+		if (holdingItem == false) {
+			if (ATorchActor* TorchHit = Cast<ATorchActor>(Actor)) {
+				Item = TorchHit;
+				holdingItem = true;
+				Onrep_ItemAttachToHand();
+				UE_LOG(LogTemp, Warning, TEXT("Weapon picked up"));
+			}
+		}
+		/*else {
+			if (AMyDoor* Door = Cast<AMyDoor>(Actor)) {
+				UE_LOG(LogTemp, Warning, TEXT("Open door"));
+			}*/
+			/*if (ASpiderWeb* Web = Cast<ASpiderWeb>(Actor)) {
+				UE_LOG(LogTemp, Warning, TEXT("Burn web"));
+				Web->Destroy();
+			}*/
+			/*if (AAttachableWall* Wall = Cast<AAttachableWall>(Actor)) {
+				UE_LOG(LogTemp, Warning, TEXT("Attach torch to wall"));
+				Onrep_WeaponAttachToWall();
+			}
+		}*/
+	}
+
 }
