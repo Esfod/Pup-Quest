@@ -5,7 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MainCharacter.h"
 
-AEnemyBaseCharacter::EnemyBaseCharacter()
+AEnemyBaseCharacter::AEnemyBaseCharacter()
 {
 }
 
@@ -26,10 +26,10 @@ void AEnemyBaseCharacter::Tick(float DeltaTime)
 void AEnemyBaseCharacter::WalkAndRotateTowardsMainCharacter()
 {
 	FVector VectorTowardsPlayer = MainCharacter->GetActorLocation() - GetActorLocation();
-	FRotator RotationTowardsPlayer = VectorTowardsPlayer.Rotation;
+	FRotator RotationTowardsPlayer = VectorTowardsPlayer.Rotation();
 	
-	SetActorRotation(VectorTowardsPlayer);
-	AddMovementInput(Direction, Value);
+	SetActorRotation(RotationTowardsPlayer);
+	AddMovementInput(VectorTowardsPlayer, 1);
 }
 
 float AEnemyBaseCharacter::RetrunDistanceToMainCharacter()

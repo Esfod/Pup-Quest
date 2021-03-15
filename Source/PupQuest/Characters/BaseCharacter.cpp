@@ -10,12 +10,11 @@ ABaseCharacter::ABaseCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	HitBox = CreateDefaultSubobject<UBoxComponent>("HitBox");
-	HitBox->InitBoxExtent(FVector(10.f, 10.f, 10.f));
+	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
+	HitBox->InitBoxExtent(FVector(80.f, 80.f, 100.f));
 	HitBox->SetupAttachment(RootComponent);
 	HitBox->SetGenerateOverlapEvents(false);
 
-	//HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlap);
 }
 
 // Called when the game starts or when spawned
@@ -31,7 +30,6 @@ void ABaseCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-
 // Called to bind functionality to input
 void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

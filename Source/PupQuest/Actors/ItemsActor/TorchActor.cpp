@@ -8,6 +8,7 @@ ATorchActor::ATorchActor()
 {
 MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
 RootComponent = MeshComp;
+
 }
 
 void ATorchActor::BeginPlay()
