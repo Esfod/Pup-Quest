@@ -13,9 +13,6 @@ AGateActor::AGateActor()
 void AGateActor::BeginPlay()
 {
 	Super::BeginPlay();
-
-	DoorOpenSpeed = 5.f;
-	DoorCloseSpeed = 7.5;
 	
 	Initial = GetActorLocation().Z;
 	Current = Initial;
@@ -40,6 +37,7 @@ void AGateActor::OpenDoor(float DeltaTime)
 	{
 		Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Open Door
 	}
+	
 	FVector DoorLocation = GetActorLocation();
 	DoorLocation.Z = Current;
 	SetActorLocation(DoorLocation);

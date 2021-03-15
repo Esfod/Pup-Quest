@@ -13,11 +13,6 @@ UCLASS()
 class PUPQUEST_API AGateActor : public ABaseDoorActor
 {
 	GENERATED_BODY()
-private:
-	UPROPERTY(EditAnywhere,Category="Variables")
-	float MoveLength{300.f};
-
-	
 	
 protected:
 	AGateActor();

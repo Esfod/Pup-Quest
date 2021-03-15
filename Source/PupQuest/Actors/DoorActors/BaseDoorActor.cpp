@@ -3,6 +3,7 @@
 
 #include "BaseDoorActor.h"
 #include "PupQuest/Actors/ItemsActor/BaseItemActor.h"
+#include "PupQuest/Characters/MainCharacter.h"
 
 // Sets default values
 ABaseDoorActor::ABaseDoorActor()
@@ -19,17 +20,10 @@ void ABaseDoorActor::BeginPlay()
 	
 }
 
-
-void ABaseDoorActor::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 bool ABaseDoorActor::CheckTorchHolder()
 {
 	TArray<AActor*> OverlappingActors;
-	/*
+	
 	if(TorchHolder)
 	{
 		TorchHolder->GetOverlappingActors(OverlappingActors);
@@ -37,13 +31,13 @@ bool ABaseDoorActor::CheckTorchHolder()
 		{
 			UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
 
-			if(Actor->IsA(ABaseItemActor::StaticClass()))
+			if(Actor->IsA(AMainCharacter::StaticClass()) || Actor->IsA(ABaseItemActor::StaticClass()))//Debug uses Player to test
 			{
 				return true;
 			}
 		}
 	}
-	*/
+	
 	return false;
 }
 
