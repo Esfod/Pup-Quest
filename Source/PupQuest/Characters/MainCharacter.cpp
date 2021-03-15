@@ -15,40 +15,24 @@
 #include "PupQuest/ActorComponent/LineTrace.h"
 #include "PupQuest/Actors/SpiderWebActor.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
+#include "PupQuest/Actors/TorchHolderActor.h"
+//#include "EnemyBaseCharacter.h"
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
-#include "Components/BoxComponent.h"
 
 #include "Net/UnrealNetwork.h"
 
 AMainCharacter::AMainCharacter()
 {
-	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-
-	// Don't rotate when the controller rotates. Let that just affect the camera.
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
-	bUseControllerRotationRoll = false;
-
-	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.f, 0.0f); // ...at this rotation rate
 
-	// Create a camera boom (pulls in towards the player if there is a collision)
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->SetRelativeRotation(FRotator(45.f,45.f,0.f));
-	CameraBoom->TargetArmLength = 1200.0f;	// The camera follows at this distance behind the character	
-	CameraBoom->bUsePawnControlRotation = true;	// Rotate the arm based on the controller
-	CameraBoom->bInheritYaw = false;	// Ignore Yaw rotations - since we want a fixed camera
-	CameraBoom->bDoCollisionTest = false;	 
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>("Spring Arm");
+	SpringArm->SetupAttachment(RootComponent);
 
-	// Create a follow camera
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+	CameraComp  = CreateDefaultSubobject<UCameraComponent>("Camera Component");
+	CameraComp->SetupAttachment(SpringArm);
 
 	LineTraceComp = CreateDefaultSubobject<ULineTrace>("LineTraceComponent");
 }
@@ -61,7 +45,6 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMainCharacter::MoveRight);
 	
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
-	////PlayerInputComponent->BindAction("Iteract", IE_Pressed, this, &AMainCharacter::Onrep_WeaponAttachToHand);
 }
 
 void AMainCharacter::BeginPlay()
@@ -99,7 +82,6 @@ void AMainCharacter::MoveRight(float Value)
 	}
 }
 
-
 void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -109,13 +91,16 @@ void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 
 void AMainCharacter::Onrep_ItemAttachToHand()
 {
-	if (Item) {
+	if (Item) 
+	{
 		Item->SetActorEnableCollision(false);
 		Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("MainSocket"));
 	}
 }
 
-void AMainCharacter::Interact() {
+
+void AMainCharacter::Interact() 
+{
 	FVector Start = GetMesh()->GetBoneLocation(FName("joint2"));
 	FVector End = Start + this->GetActorRotation().Vector() * 150.0f;
 	AActor* Actor = LineTraceComp->LineTraceSingle(Start, End, true);
@@ -139,11 +124,72 @@ void AMainCharacter::Interact() {
 				UE_LOG(LogTemp, Warning, TEXT("Burn web"));
 				Web->Destroy();
 			}
+			if (ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(Actor)) {
+				UE_LOG(LogTemp, Warning, TEXT("Place Torch"));
+
+			}
+
 			/*if (AAttachableWall* Wall = Cast<AAttachableWall>(Actor)) {
 				UE_LOG(LogTemp, Warning, TEXT("Attach torch to wall"));
 				Onrep_WeaponAttachToWall();
 			}*/
 		}
 	}
+}
 
+AActor* AMainCharacter::CheckHitBoxPickUp()
+{
+	TArray<AActor*> OverlappingActors;
+	HitBox->GetOverlappingActors(OverlappingActors);
+	for(AActor* Actor : OverlappingActors)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
+
+		if(Actor->IsA(ATorchActor::StaticClass()))
+		{
+			return Actor;
+		}
+	}
+	
+	return nullptr;
+}
+
+AActor* CheckHitBoxPlacment()
+{
+	/*TArray<AActor*> OverlappingActors;
+	
+	if(HitBox)
+	{
+		HitBox->GetOverlappingActors(OverlappingActors);
+		for(AActor* Actor : OverlappingActors)
+		{
+			UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
+
+			if(Actor->IsA(ATorchActor::StaticClass()))
+			{
+				return Actor;
+			}
+		}
+	}*/
+		return nullptr;
+}
+
+AActor* CheckHitBoxAttack()
+{
+	/*TArray<AActor*> OverlappingActors;
+	
+	if(HitBox)
+	{
+		HitBox->GetOverlappingActors(OverlappingActors);
+		for(AActor* Actor : OverlappingActors)
+		{
+			UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
+
+			if(Actor->IsA(AEnemyBaseCharacter::StaticClass()))
+			{
+				return Actor;
+			}
+		}
+	}*/
+	return nullptr;
 }
