@@ -16,16 +16,20 @@ class PUPQUEST_API ABaseDoorActor : public AActor
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* StaticMeshComp { nullptr };
-/*
-	UPROPERTY(EditAnywhere, Category= "Componets")
-	AActor* TorchHolder { nullptr };
+
+	UPROPERTY(EditAnywhere, Category= "Variables")
+	bool bTorchHolder { true };
 	
-	UPROPERTY(EditAnywhere, Category= "Componets")
-	ATriggerVolume* PressurePlate{ nullptr };
-*/
 
 protected:
+	UPROPERTY(EditAnywhere, Category = "Componets")
+	const AActor* TorchHolder1 { nullptr };
 
+	UPROPERTY(EditAnywhere, Category = "Componets")
+	const AActor* TorchHolder2 { nullptr };
+	
+	UPROPERTY(EditAnywhere,Category="Variables")
+	float MoveLength{300.f};
 
 	UPROPERTY(EditAnywhere,Category="Variables")
 	float DoorOpenSpeed{5.f};
@@ -36,9 +40,13 @@ protected:
 	float Current;
 	float Initial;
 	bool bOpenDoor;
-	
+
+	int32 TypeOfDoor { 0 };
+
 	virtual void BeginPlay() override;
-	bool CheckTorchHolder();
+
+	bool CheckTorchHolder(const AActor* a);
+	bool CheckTorchHolder(const AActor* a, const AActor* b);
 	
 	virtual void OpenDoor(float DeltaTime);
 	

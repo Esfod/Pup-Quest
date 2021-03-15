@@ -4,8 +4,6 @@
 #include "MainCharacter.h"
 
 #include "HeadMountedDisplayFunctionLibrary.h"
-
-#include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 
@@ -28,13 +26,13 @@ AMainCharacter::AMainCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.f, 0.0f); // ...at this rotation rate
 
-	SpringArm = CreateDefaultSubobject<USpringArmComponent>("Spring Arm");
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(RootComponent);
 
-	CameraComp  = CreateDefaultSubobject<UCameraComponent>("Camera Component");
+	CameraComp  = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera Component"));
 	CameraComp->SetupAttachment(SpringArm);
 
-	LineTraceComp = CreateDefaultSubobject<ULineTrace>("LineTraceComponent");
+	LineTraceComp = CreateDefaultSubobject<ULineTrace>(TEXT("LineTraceComponent"));
 }
 
 void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -140,7 +138,7 @@ void AMainCharacter::Interact()
 AActor* AMainCharacter::CheckHitBoxPickUp()
 {
 	TArray<AActor*> OverlappingActors;
-	HitBox->GetOverlappingActors(OverlappingActors);
+	//HitBox->GetOverlappingActors(OverlappingActors);
 	for(AActor* Actor : OverlappingActors)
 	{
 		UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());

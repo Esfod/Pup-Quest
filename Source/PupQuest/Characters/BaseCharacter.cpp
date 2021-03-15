@@ -10,8 +10,7 @@ ABaseCharacter::ABaseCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	HitBox = CreateDefaultSubobject<UBoxComponent>("HitBox");
-	HitBox->InitBoxExtent(FVector(10.f, 10.f, 10.f));
+	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
 	HitBox->SetupAttachment(RootComponent);
 	HitBox->SetGenerateOverlapEvents(false);
 }
@@ -20,7 +19,9 @@ ABaseCharacter::ABaseCharacter()
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	TArray<AActor*> OverlappingActors;
+	HitBox->GetOverlappingActors(OverlappingActors);
+
 }
 
 // Called every frame

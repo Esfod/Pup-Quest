@@ -20,3 +20,7 @@ void ATorchHolderActor::BeginPlay()
 	
 }
 
+FVector ATorchHolderActor::GetTorchPlacementPoint()
+{
+	return TorchPlacementPoint->GetComponentLocation();
+}
