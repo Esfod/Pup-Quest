@@ -14,6 +14,8 @@ ABaseCharacter::ABaseCharacter()
 	HitBox->InitBoxExtent(FVector(10.f, 10.f, 10.f));
 	HitBox->SetupAttachment(RootComponent);
 	HitBox->SetGenerateOverlapEvents(false);
+
+	//HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlap);
 }
 
 // Called when the game starts or when spawned
