@@ -4,18 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "BaseDoorActor.h"
-#include "GateActor.generated.h"
+#include "BridgeActor.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PUPQUEST_API AGateActor : public ABaseDoorActor
+class PUPQUEST_API ABridgeActor : public ABaseDoorActor
 {
 	GENERATED_BODY()
-
 protected:
-	AGateActor();
+	ABridgeActor();
 	
 	virtual void BeginPlay() override;
 
