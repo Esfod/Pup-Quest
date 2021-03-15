@@ -47,7 +47,7 @@ protected:
 	ULineTrace* LineTraceComp;
 
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<class ATorchActor> TorchClass;
+		TSubclassOf<class ATorchActor> ItemClass;
 
 	bool holdingItem = false;
 

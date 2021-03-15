@@ -13,6 +13,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "PupQuest/ActorComponent/LineTrace.h"
+#include "PupQuest/Actors/SpiderWebActor.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
 
 #include "GameFramework/SpringArmComponent.h"
@@ -130,19 +131,19 @@ void AMainCharacter::Interact() {
 				UE_LOG(LogTemp, Warning, TEXT("Weapon picked up"));
 			}
 		}
-		/*else {
-			if (AMyDoor* Door = Cast<AMyDoor>(Actor)) {
+		else {
+		/*	if (AMyDoor* Door = Cast<AMyDoor>(Actor)) {
 				UE_LOG(LogTemp, Warning, TEXT("Open door"));
 			}*/
-			/*if (ASpiderWeb* Web = Cast<ASpiderWeb>(Actor)) {
+			if (ASpiderWebActor* Web = Cast<ASpiderWebActor>(Actor)) {
 				UE_LOG(LogTemp, Warning, TEXT("Burn web"));
 				Web->Destroy();
-			}*/
+			}
 			/*if (AAttachableWall* Wall = Cast<AAttachableWall>(Actor)) {
 				UE_LOG(LogTemp, Warning, TEXT("Attach torch to wall"));
 				Onrep_WeaponAttachToWall();
-			}
-		}*/
+			}*/
+		}
 	}
 
 }
