@@ -3,6 +3,7 @@
 
 #include "BaseDoorActor.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
+#include "PupQuest/Characters/MainCharacter.h"
 
 // Sets default values
 ABaseDoorActor::ABaseDoorActor()
@@ -32,7 +33,7 @@ void ABaseDoorActor::BeginPlay()
 	}
 	else if (TorchHolder1)
 	{
-		UE_LOG(LogTemp,Warning,TEXT("one torche"));
+		UE_LOG(LogTemp,Warning,TEXT("one torch"));
 		TypeOfDoor = 2;
 	}
 }
@@ -54,16 +55,14 @@ void ABaseDoorActor::Tick(float DeltaTime)
 bool ABaseDoorActor::CheckTorchHolder(const AActor* a)
 {
 	TArray<AActor*> OverlappingActors;
-	UE_LOG(LogTemp,Warning,TEXT("hello from check torchholder 1"), );
 	if(a)
 	{
 		a->GetOverlappingActors(OverlappingActors);
 		for(AActor* Actor : OverlappingActors)
 		{
-			UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
-
-			if(Actor->IsA(ATorchActor::StaticClass()))
+			if(Actor->IsA(ATorchActor::StaticClass()) || Actor->IsA(AMainCharacter::StaticClass()))
 			{
+				UE_LOG(LogTemp,Warning,TEXT("åpne dør"));
 				return true;
 			}
 		}
@@ -79,10 +78,9 @@ bool ABaseDoorActor::CheckTorchHolder(const AActor* a, const AActor* b)
 	a->GetOverlappingActors(OverlappingActors);
 	for(AActor* Actor : OverlappingActors)
 	{
-		UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
-
 		if(Actor->IsA(ATorchActor::StaticClass()))
 		{
+			UE_LOG(LogTemp,Warning,TEXT("Torch 1 er klar"));
 			x++;
 		}
 	}
@@ -90,10 +88,9 @@ bool ABaseDoorActor::CheckTorchHolder(const AActor* a, const AActor* b)
 	b->GetOverlappingActors(OverlappingActors);
 	for(AActor* Actor : OverlappingActors)
 	{
-		UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
-
 		if(Actor->IsA(ATorchActor::StaticClass()))
 		{
+			UE_LOG(LogTemp,Warning,TEXT("Torch 2 er klar"));
 			x++;
 		}
 	}

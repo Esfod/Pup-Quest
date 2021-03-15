@@ -19,7 +19,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category= "Variables")
 	bool bTorchHolder { true };
-	
+
+	bool CheckTorchHolder(const AActor* a);
+	bool CheckTorchHolder(const AActor* a, const AActor* b);
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Componets")
@@ -44,9 +46,6 @@ protected:
 	int32 TypeOfDoor { 0 };
 
 	virtual void BeginPlay() override;
-
-	bool CheckTorchHolder(const AActor* a);
-	bool CheckTorchHolder(const AActor* a, const AActor* b);
 	
 	virtual void OpenDoor(float DeltaTime);
 	
