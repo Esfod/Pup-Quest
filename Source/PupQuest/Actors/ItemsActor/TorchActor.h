@@ -14,6 +14,8 @@ class PUPQUEST_API ATorchActor : public ABaseItemActor
 public:
 
 	ATorchActor();
+	
+	bool bTorchLit = false;
 
 protected:
 	UPROPERTY(EditAnywhere)

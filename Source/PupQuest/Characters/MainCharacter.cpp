@@ -16,11 +16,10 @@
 #include "PupQuest/Actors/SpiderWebActor.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
 #include "PupQuest/Actors/TorchHolderActor.h"
+#include "PupQuest/Actors/BrazierActor.h"
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
-
-#include "Net/UnrealNetwork.h"
 
 AMainCharacter::AMainCharacter()
 {
@@ -39,6 +38,7 @@ AMainCharacter::AMainCharacter()
 	HitBox->SetRelativeLocation(FVector(70.f,0.f, 0.f));
 
 	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlap);
+
 }
 
 void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -89,13 +89,6 @@ void AMainCharacter::MoveRight(float Value)
 	}
 }
 
-void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(AMainCharacter, Item);
-	/*DOREPLIFETIME(AAttachableWall, Weapon);*/
-}
-
 void AMainCharacter::ItemAttachToHand()
 {
 	if (Item) 
@@ -115,12 +108,12 @@ void AMainCharacter::DropItem() {
 }
 
 void AMainCharacter::StartInteract() {
-	UE_LOG(LogTemp, Warning, TEXT("Interact!"));
+	//UE_LOG(LogTemp, Warning, TEXT("Interact!"));
 	HitBox->SetGenerateOverlapEvents(true);
 }
 
 void AMainCharacter::StopInteract() {
-	UE_LOG(LogTemp, Warning, TEXT("Stop Interact!"));
+	//UE_LOG(LogTemp, Warning, TEXT("Stop Interact!"));
 	HitBox->SetGenerateOverlapEvents(false);
 }
 
@@ -128,16 +121,21 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
+	
 
 	if (holdingItem == false) {
 		if (OtherActor->IsA(ATorchActor::StaticClass()))
 		{
 			ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
 			Item = TorchHit;
+			bTorchLit = Item->bTorchLit;
+
+			UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), bTorchLit ? TEXT("true") : TEXT("false"));
 
 			ItemAttachToHand();
-			UE_LOG(LogTemp, Warning, TEXT("Weapon picked up"));
+
+			UE_LOG(LogTemp, Warning, TEXT("Item picked up"));
 		}
 	}else {
 		if (OtherActor->IsA(ATorchHolderActor::StaticClass())) {
@@ -147,10 +145,46 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 			Item->SetActorLocation(TorchHolder->GetTorchPlacementPoint());
 			holdingItem = false;
 		}
-		if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {
-			ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
-			UE_LOG(LogTemp, Warning, TEXT("Burn web"));
-			Web->Destroy();
+		if (bTorchLit == true) {
+			if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {
+				ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
+				UE_LOG(LogTemp, Warning, TEXT("Burn web"));
+				Web->Destroy();
+			}
 		}
+	}
+
+	if (OtherActor->IsA(ABrazierActor::StaticClass())) {
+		ABrazierActor* Brazier = Cast<ABrazierActor>(OtherActor);
+		UBrazier = Brazier;
+		bBrazierLit = UBrazier->bBrazierActorLit;
+		UE_LOG(LogTemp, Warning, TEXT("Brazier lit is %s"), bBrazierLit ? TEXT("true") : TEXT("false"));
+		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), bTorchLit ? TEXT("true") : TEXT("false"));
+		if (holdingItem == true) {
+			if (bBrazierLit == true) {
+				if (bTorchLit == true) {
+					UE_LOG(LogTemp, Warning, TEXT("Brazier and torch is already lit"));
+				}
+				else {
+					bTorchLit = true;
+					UE_LOG(LogTemp, Warning, TEXT("Torch is now lit"));
+				}
+			}
+			else {
+				if (bTorchLit == true) {
+					bTorchLit = true;
+					UE_LOG(LogTemp, Warning, TEXT("Brazier is now lit"));
+				}
+				else {
+					UE_LOG(LogTemp, Warning, TEXT("Your Torch has to be lit to light the brazier"));
+				}
+			}
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("You are not holding a torch"));
+		}
+
+
+
 	}
 }

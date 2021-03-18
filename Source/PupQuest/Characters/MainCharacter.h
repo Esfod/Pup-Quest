@@ -9,6 +9,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class ATorchActor;
+class ABrazierActor;
 
 UCLASS()
 class PUPQUEST_API AMainCharacter : public ABaseCharacter
@@ -41,8 +42,16 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 
 	bool holdingItem = false;
 
-	UPROPERTY(ReplicatedUsing = ItemAttachToHand)
+	UPROPERTY()
 	ATorchActor* Item;
+	bool bTorchLit;
+
+
+	UPROPERTY()
+		ABrazierActor* UBrazier;
+	bool bBrazierLit;
+
+
 
 	UFUNCTION()
         void ItemAttachToHand();
