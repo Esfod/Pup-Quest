@@ -39,7 +39,9 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ATorchActor> ItemClass;
-	bool holdingItem = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
+	bool HoldingTorch = false;
 
 	UPROPERTY()
 	ATorchActor* Item;

@@ -95,7 +95,7 @@ void AMainCharacter::ItemAttachToHand()
 	{
 		Item->SetActorEnableCollision(false);
 		Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("MainSocket"));
-		holdingItem = true;
+		HoldingTorch = true;
 		UE_LOG(LogTemp, Warning, TEXT("Item picked up"));
 	}
 }
@@ -105,7 +105,7 @@ void AMainCharacter::DropItem() {
 	Item->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	Item->SetActorEnableCollision(true);
 	Item->SetActorLocation(Location);
-	holdingItem = false;
+	HoldingTorch = false;
 }
 
 void ATorchActor::StartTorchFlame() {
@@ -132,7 +132,7 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 {
 	//UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
 		
-	if (holdingItem == false) {
+	if (HoldingTorch == false) {
 			if (OtherActor->IsA(ATorchActor::StaticClass()))
 			{
 				ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
@@ -148,12 +148,17 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 		}
 	else {
 		if (OtherActor->IsA(ATorchHolderActor::StaticClass())) {
+			if (bTorchLit == true) {
 				ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(OtherActor);
 				Item->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 				Item->SetActorEnableCollision(true);
 				Item->SetActorLocation(TorchHolder->GetTorchPlacementPoint());
-				holdingItem = false;
+				HoldingTorch = false;
 			}
+			else {
+				UE_LOG(LogTemp, Warning, TEXT("Door will not open because the torch is not lit"));
+			}
+		}
 		if (bTorchLit == true) {
 				if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {
 					ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
@@ -169,7 +174,7 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 		bBrazierLit = UBrazier->bBrazierActorLit;
 		UE_LOG(LogTemp, Warning, TEXT("Brazier lit is %s"), bBrazierLit ? TEXT("true") : TEXT("false"));
 		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), bTorchLit ? TEXT("true") : TEXT("false"));
-		if (holdingItem == true) {
+		if (HoldingTorch == true) {
 			if (bBrazierLit == true) {
 				if (bTorchLit == true) {
 					UE_LOG(LogTemp, Warning, TEXT("Brazier and torch is already lit"));
