@@ -11,7 +11,7 @@ ABaseCharacter::ABaseCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
-	HitBox->InitBoxExtent(FVector(80.f, 80.f, 100.f));
+	HitBox->InitBoxExtent(FVector(50.f, 50.f, 70.f));
 	HitBox->SetupAttachment(RootComponent);
 	HitBox->SetGenerateOverlapEvents(false);
 

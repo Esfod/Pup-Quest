@@ -39,19 +39,16 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ATorchActor> ItemClass;
-
 	bool holdingItem = false;
 
 	UPROPERTY()
 	ATorchActor* Item;
 	bool bTorchLit;
 
-
 	UPROPERTY()
-		ABrazierActor* UBrazier;
+	ABrazierActor* UBrazier;
+
 	bool bBrazierLit;
-
-
 
 	UFUNCTION()
         void ItemAttachToHand();
@@ -62,6 +59,9 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 		void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 			bool bFromSweep, const FHitResult& SweepResult);
+
+	bool Interacting = false;
+
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

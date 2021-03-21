@@ -15,11 +15,15 @@ public:
 	// Sets default values for this actor's properties
 	ABrazierActor();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bBrazierActorLit = false;
 
+	UFUNCTION()
+		void StartBrazierFlame();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
 
 protected:
 	UPROPERTY(EditAnywhere)
