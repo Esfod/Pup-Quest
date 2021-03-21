@@ -22,6 +22,7 @@ protected:
 public:
 	ABaseCharacter();
 
+	UPROPERTY(EditAnywhere)
 	UBoxComponent* HitBox { nullptr };
 		
 
