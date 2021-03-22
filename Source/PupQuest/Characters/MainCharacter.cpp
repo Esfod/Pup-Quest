@@ -29,13 +29,7 @@ AMainCharacter::AMainCharacter()
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>("Spring Arm");
 	SpringArm->SetupAttachment(RootComponent);
-<<<<<<< HEAD
-	SpringArm->SetRelativeRotation(FRotator(0.f, -30.f, 15.f));
 	SpringArm->bDoCollisionTest = false;
-	SpringArm->bInheritYaw = false;
-=======
-	SpringArm->bDoCollisionTest = false;
->>>>>>> 3a514b27d2dcd0e6e41a0d72bebb677828549891
 
 	CameraComp  = CreateDefaultSubobject<UCameraComponent>("Camera Component");
 	CameraComp->SetupAttachment(SpringArm);
