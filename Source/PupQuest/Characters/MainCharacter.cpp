@@ -3,9 +3,6 @@
 
 #include "MainCharacter.h"
 
-#include "HeadMountedDisplayFunctionLibrary.h"
-
-#include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/BoxComponent.h"
@@ -29,7 +26,9 @@ AMainCharacter::AMainCharacter()
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>("Spring Arm");
 	SpringArm->SetupAttachment(RootComponent);
+	SpringArm->SetRelativeRotation(FRotator(0.f, -30.f, 15.f));
 	SpringArm->bDoCollisionTest = false;
+	SpringArm->bInheritYaw = false;
 
 	CameraComp  = CreateDefaultSubobject<UCameraComponent>("Camera Component");
 	CameraComp->SetupAttachment(SpringArm);
