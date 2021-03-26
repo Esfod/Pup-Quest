@@ -13,11 +13,10 @@
 #include "PupQuest/Actors/SpiderWebActor.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
 #include "PupQuest/Actors/TorchHolderActor.h"
+#include "PupQuest/Actors/BrazierActor.h"
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
-
-#include "Net/UnrealNetwork.h"
 
 AMainCharacter::AMainCharacter()
 {
@@ -36,6 +35,7 @@ AMainCharacter::AMainCharacter()
 	HitBox->SetRelativeLocation(FVector(70.f,0.f, 0.f));
 
 	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlap);
+	//HitBox->SetGenerateOverlapEvents(true);
 }
 
 void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -86,20 +86,14 @@ void AMainCharacter::MoveRight(float Value)
 	}
 }
 
-void AMainCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(AMainCharacter, Item);
-	/*DOREPLIFETIME(AAttachableWall, Weapon);*/
-}
-
 void AMainCharacter::ItemAttachToHand()
 {
 	if (Item) 
 	{
 		Item->SetActorEnableCollision(false);
 		Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("MainSocket"));
-		holdingItem = true;
+		HoldingTorch = true;
+		UE_LOG(LogTemp, Warning, TEXT("Item picked up"));
 	}
 }
 
@@ -108,7 +102,15 @@ void AMainCharacter::DropItem() {
 	Item->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	Item->SetActorEnableCollision(true);
 	Item->SetActorLocation(Location);
-	holdingItem = false;
+	HoldingTorch = false;
+}
+
+void ATorchActor::StartTorchFlame() {
+	UE_LOG(LogTemp, Warning, TEXT("Torch is now lit"));
+}
+
+void ABrazierActor::StartBrazierFlame() {
+	UE_LOG(LogTemp, Warning, TEXT("Brazier is now lit"));
 }
 
 void AMainCharacter::StartInteract() {
@@ -125,29 +127,74 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
+		
+	if (HoldingTorch == false) {
+			if (OtherActor->IsA(ATorchActor::StaticClass()))
+			{
+				ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
+				Item = TorchHit;
+				bTorchLit = Item->bTorchLit;
 
-	if (holdingItem == false) {
-		if (OtherActor->IsA(ATorchActor::StaticClass()))
-		{
-			ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
-			Item = TorchHit;
+				UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), bTorchLit ? TEXT("true") : TEXT("false"));
 
-			ItemAttachToHand();
-			UE_LOG(LogTemp, Warning, TEXT("Weapon picked up"));
+				ItemAttachToHand();
+
+				
+			}
 		}
-	}else {
+	else {
 		if (OtherActor->IsA(ATorchHolderActor::StaticClass())) {
-			ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(OtherActor);
-			Item->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-			Item->SetActorEnableCollision(true);
-			Item->SetActorLocation(TorchHolder->GetTorchPlacementPoint());
-			holdingItem = false;
+			if (bTorchLit == true) {
+				ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(OtherActor);
+				Item->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+				Item->SetActorEnableCollision(true);
+				Item->SetActorLocation(TorchHolder->GetTorchPlacementPoint());
+				HoldingTorch = false;
+			}
+			else {
+				UE_LOG(LogTemp, Warning, TEXT("Door will not open because the torch is not lit"));
+			}
 		}
-		if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {
-			ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
-			UE_LOG(LogTemp, Warning, TEXT("Burn web"));
-			Web->Destroy();
+		if (bTorchLit == true) {
+				if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {
+					ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
+					UE_LOG(LogTemp, Warning, TEXT("Burn web"));
+					Web->SetActorHiddenInGame(true);
+					Web->SetActorEnableCollision(false);
+					//functon(Web);
+				}
+			}
+	}
+
+	if (OtherActor->IsA(ABrazierActor::StaticClass())) {
+		ABrazierActor* Brazier = Cast<ABrazierActor>(OtherActor);
+		UBrazier = Brazier;
+		bBrazierLit = UBrazier->bBrazierActorLit;
+		UE_LOG(LogTemp, Warning, TEXT("Brazier lit is %s"), bBrazierLit ? TEXT("true") : TEXT("false"));
+		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), bTorchLit ? TEXT("true") : TEXT("false"));
+		if (HoldingTorch == true) {
+			if (bBrazierLit == true) {
+				if (bTorchLit == true) {
+					UE_LOG(LogTemp, Warning, TEXT("Brazier and torch is already lit"));
+				}
+				else {
+					bTorchLit = true;
+					Item->ATorchActor::StartTorchFlame();
+				}
+			}
+			else {
+				if (bTorchLit == true) {
+					UBrazier->ABrazierActor::StartBrazierFlame();
+					bBrazierLit = true;
+				}
+				else {
+					UE_LOG(LogTemp, Warning, TEXT("Your Torch has to be lit to light the brazier"));
+				}
+			}
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("You are not holding a torch"));
 		}
 	}
 }

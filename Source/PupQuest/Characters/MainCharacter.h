@@ -9,6 +9,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class ATorchActor;
+class ABrazierActor;
 
 UCLASS()
 class PUPQUEST_API AMainCharacter : public ABaseCharacter
@@ -39,10 +40,17 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ATorchActor> ItemClass;
 
-	bool holdingItem = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
+	bool HoldingTorch = false;
 
-	UPROPERTY(ReplicatedUsing = ItemAttachToHand)
+	UPROPERTY()
 	ATorchActor* Item;
+	bool bTorchLit;
+
+	UPROPERTY()
+	ABrazierActor* UBrazier;
+
+	bool bBrazierLit;
 
 	UFUNCTION()
         void ItemAttachToHand();
@@ -53,6 +61,9 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 		void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 			bool bFromSweep, const FHitResult& SweepResult);
+
+	bool Interacting = false;
+
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

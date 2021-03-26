@@ -14,10 +14,17 @@ class PUPQUEST_API ATorchActor : public ABaseItemActor
 public:
 
 	ATorchActor();
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
+	bool bTorchLit = true;
 
+	UFUNCTION()
+		void StartTorchFlame();
 protected:
 	UPROPERTY(EditAnywhere)
 		class UStaticMeshComponent* MeshComp;
+
+
 
 protected:
 	// Called when the game starts or when spawned
