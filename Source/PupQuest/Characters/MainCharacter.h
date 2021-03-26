@@ -24,6 +24,9 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 
 	FVector MoveForwardVector;
 	FVector MoveRightVector;
+
+	UPROPERTY(EditAnywhere)
+	float RotateSpeed = 30.f;
 public:
 	AMainCharacter();
 

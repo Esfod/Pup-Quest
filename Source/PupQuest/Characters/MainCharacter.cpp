@@ -75,8 +75,12 @@ void AMainCharacter::MoveRight(float Value)
 
 void AMainCharacter::RotatePlayerTowardsWalkDirection()
 {
+	float InitialYaw = GetMesh()->GetRelativeRotation().Yaw;
     FVector MoveDirection = MoveForwardVector + MoveRightVector;
-	GetMesh()->SetRelativeRotation(MoveDirection.Rotation());
+	float RotateToYaw = MoveDirection.Rotation().Yaw;
+	float CurrentYaw = FMath::Lerp(InitialYaw, RotateToYaw, GetWorld()->DeltaTimeSeconds*RotateSpeed);
+	
+	GetMesh()->SetRelativeRotation(FRotator(0.f,CurrentYaw,0.f));
 }
 
 void AMainCharacter::ItemAttachToHand()
