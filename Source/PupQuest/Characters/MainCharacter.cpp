@@ -163,7 +163,9 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 				if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {
 					ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
 					UE_LOG(LogTemp, Warning, TEXT("Burn web"));
-					Web->Destroy();
+					Web->SetActorHiddenInGame(true);
+					Web->SetActorEnableCollision(false);
+					//functon(Web);
 				}
 			}
 	}
