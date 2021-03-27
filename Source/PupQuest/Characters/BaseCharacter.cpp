@@ -12,7 +12,7 @@ ABaseCharacter::ABaseCharacter()
 
 	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
 	HitBox->InitBoxExtent(FVector(50.f, 50.f, 70.f));
-	HitBox->SetupAttachment(RootComponent);
+	HitBox->SetupAttachment(GetMesh());
 	HitBox->SetGenerateOverlapEvents(false);
 
 }
