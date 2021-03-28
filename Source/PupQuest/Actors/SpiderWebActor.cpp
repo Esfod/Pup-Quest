@@ -25,8 +25,4 @@ void ASpiderWebActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-void ASpiderWebActor::BurnWeb() {
-	SetActorHiddenInGame(true);
-	SetActorEnableCollision(false);
-	UE_LOG(LogTemp, Warning, TEXT("Burn web"));
-}
+
