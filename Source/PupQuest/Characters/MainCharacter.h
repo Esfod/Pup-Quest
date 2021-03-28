@@ -22,27 +22,18 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComp { nullptr };
 
-	FVector MoveForwardVector;
-	FVector MoveRightVector;
-
-	UPROPERTY(EditAnywhere)
-	float RotateSpeed = 30.f;
-public:
+	public:
 	AMainCharacter();
 
 	void DropItem();
 
-protected:
-	virtual void BeginPlay() override;
-
-	virtual void Tick(float DeltaTime) override;
-
+	protected:
+	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 
+	/** Called for side to side input */
 	void MoveRight(float Value);
 
-	void RotatePlayerTowardsWalkDirection();
-	
 	void StartInteract();
 	void StopInteract();
 
@@ -64,7 +55,7 @@ protected:
 	UFUNCTION()
         void ItemAttachToHand();
 
-
+	virtual void BeginPlay() override;
 
 	UFUNCTION()
 		void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,

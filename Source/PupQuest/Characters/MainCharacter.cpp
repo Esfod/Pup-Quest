@@ -20,6 +20,9 @@
 
 AMainCharacter::AMainCharacter()
 {
+	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.f, 0.0f); // ...at this rotation rate
+
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>("Spring Arm");
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->SetRelativeRotation(FRotator(0.f, -30.f, 15.f));
@@ -32,7 +35,6 @@ AMainCharacter::AMainCharacter()
 	HitBox->SetRelativeLocation(FVector(70.f,0.f, 0.f));
 
 	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlap);
-	
 	//HitBox->SetGenerateOverlapEvents(true);
 }
 
@@ -52,35 +54,36 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-}
 
-void AMainCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	if(MoveForwardVector.X != 0 || MoveRightVector.Y != 0)
-		RotatePlayerTowardsWalkDirection();
 }
 
 void AMainCharacter::MoveForward(float Value)
 {
-	AddMovementInput(GetActorForwardVector(), Value);
-	MoveForwardVector = GetActorForwardVector() * Value;
+	if ((Controller != nullptr) && (Value != 0.0f))
+	{
+		// find out which way is forward
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// get forward vector
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		AddMovementInput(Direction, Value);
+	}
 }
 
 void AMainCharacter::MoveRight(float Value)
 {
-	AddMovementInput(GetActorRightVector(), Value);
-	MoveRightVector = GetActorRightVector() * Value;
-}
+	if ((Controller != nullptr) && (Value != 0.0f))
+	{
+		// find out which way is right
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-void AMainCharacter::RotatePlayerTowardsWalkDirection()
-{
-	float InitialYaw = GetMesh()->GetRelativeRotation().Yaw;
-    FVector MoveDirection = MoveForwardVector + MoveRightVector;
-	float RotateToYaw = MoveDirection.Rotation().Yaw;
-	float CurrentYaw = FMath::Lerp(InitialYaw, RotateToYaw, GetWorld()->DeltaTimeSeconds*RotateSpeed);
-	
-	GetMesh()->SetRelativeRotation(FRotator(0.f,CurrentYaw,0.f));
+		// get right vector 
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		// add movement in that direction
+		AddMovementInput(Direction, Value);
+	}
 }
 
 void AMainCharacter::ItemAttachToHand()
