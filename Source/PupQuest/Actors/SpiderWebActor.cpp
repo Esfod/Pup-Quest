@@ -2,7 +2,6 @@
 
 
 #include "SpiderWebActor.h"
-//#include "MainCharacter.h"
 #include "Components/BoxComponent.h"
 
 
@@ -12,7 +11,7 @@ ASpiderWebActor::ASpiderWebActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	HitBoxWeb = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBoxWeb"));
+HitBoxWeb = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBoxWeb"));
 	HitBoxWeb->InitBoxExtent(FVector(50.f, 50.f, 50.f));
 	HitBoxWeb->SetupAttachment(RootComponent);
 
@@ -51,17 +50,12 @@ void ASpiderWebActor::BeginOverlapWeb(UPrimitiveComponent* OverlappedComponent, 
 	bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Web detects %s"), *OtherActor->GetName());
-	
+	UE_LOG(LogTemp, Warning, TEXT("Sup"));
 
-	if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {//&&OtherActor != this for å ikke telle med seg selv
+	//if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {//&&OtherActor != this for å ikke telle med seg selv
 		//BurnWeb();
-		UE_LOG(LogTemp, Warning, TEXT("Web"));
-	}
-
-	/*if (OtherActor->IsA(AMainCharacter::StaticClass())) {
-		UE_LOG(LogTemp, Warning, TEXT("character"));
-	}*/
-
+		
+	//}
 	//HitBoxWeb->SetGenerateOverlapEvents(false);
 }
 

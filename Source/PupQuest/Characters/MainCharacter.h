@@ -9,7 +9,6 @@
 class USpringArmComponent;
 class UCameraComponent;
 class ATorchActor;
-class APlankActor;
 class ABrazierActor;
 
 UCLASS()
@@ -31,9 +30,7 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 public:
 	AMainCharacter();
 
-	void DropTorch();
-
-	void DropPlank();
+	void DropItem();
 
 protected:
 	virtual void BeginPlay() override;
@@ -53,17 +50,10 @@ protected:
 	TSubclassOf<class ATorchActor> ItemClass;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
-	bool bHoldingTorch = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
-		bool bHoldingPlank = false;
+	bool HoldingTorch = false;
 
 	UPROPERTY()
-		APlankActor* Plank;
-
-	UPROPERTY()
-	ATorchActor* Torch;
-
+	ATorchActor* Item;
 	bool bTorchLit;
 
 	UPROPERTY()
@@ -71,14 +61,9 @@ protected:
 
 	bool bBrazierLit;
 
-	
-
-
 	UFUNCTION()
-        void TorchAttachToHand();
+        void ItemAttachToHand();
 
-	UFUNCTION()
-		void PlankAttachToHand();
 
 
 	UFUNCTION()
