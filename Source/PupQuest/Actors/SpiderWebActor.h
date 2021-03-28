@@ -7,6 +7,7 @@
 #include "SpiderWebActor.generated.h"
 
 class UBoxComponent;
+class AMainCharacter;
 
 UCLASS()
 class PUPQUEST_API ASpiderWebActor : public AActor
