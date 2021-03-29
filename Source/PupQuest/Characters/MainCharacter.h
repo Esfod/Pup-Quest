@@ -71,7 +71,7 @@ protected:
 
 	bool bBrazierLit;
 
-	
+	bool pickupItem = false;//So you don't pick up something you just dropped
 
 
 	UFUNCTION()

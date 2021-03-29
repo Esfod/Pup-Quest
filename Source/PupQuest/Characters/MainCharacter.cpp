@@ -92,6 +92,7 @@ void AMainCharacter::TorchAttachToHand()
 		Torch->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("MainSocket"));
 		bHoldingTorch = true;
 		UE_LOG(LogTemp, Warning, TEXT("Torch picked up"));
+		pickupItem = false;
 	}
 }
 
@@ -102,12 +103,13 @@ void AMainCharacter::PlankAttachToHand()
 		Plank->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("plank socket"));
 		bHoldingPlank = true;
 		UE_LOG(LogTemp, Warning, TEXT("Plank picked up"));
+		pickupItem = false;
 	}
 }
 
 void AMainCharacter::DropTorch() {
 	if (bHoldingTorch == true) {
-		FVector Location = GetMesh()->GetComponentLocation();
+		FVector Location = Torch->GetActorLocation() + FVector(100.f, 0.f, 0.f);
 		Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		Torch->SetActorEnableCollision(true);
 		Torch->SetActorLocation(Location);
@@ -118,7 +120,7 @@ void AMainCharacter::DropTorch() {
 
 void AMainCharacter::DropPlank() {
 	if (bHoldingPlank == true) {
-		FVector Location = GetMesh()->GetComponentLocation();
+		FVector Location = GetMesh()->GetComponentLocation() + FVector(100.f, 0.f, 0.f);
 		Plank->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		Plank->SetActorEnableCollision(true);
 		Plank->SetActorLocation(Location);
@@ -138,6 +140,7 @@ void ABrazierActor::StartBrazierFlame() {
 void AMainCharacter::StartInteract() {
 	//UE_LOG(LogTemp, Warning, TEXT("Interact!"));
 	HitBox->SetGenerateOverlapEvents(true);
+	pickupItem = true;
 }
 
 void AMainCharacter::StopInteract() {
@@ -190,7 +193,7 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 				}
 		}
 
-		if (OtherActor->IsA(APlankActor::StaticClass()))
+		if (OtherActor->IsA(APlankActor::StaticClass()) && pickupItem == true)
 		{
 			DropTorch();
 			APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
@@ -201,7 +204,7 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	}
 
 	if (bHoldingPlank == true) {
-		if (OtherActor->IsA(ATorchActor::StaticClass()))
+		if (OtherActor->IsA(ATorchActor::StaticClass()) && pickupItem == true)
 		{
 			DropPlank();
 
