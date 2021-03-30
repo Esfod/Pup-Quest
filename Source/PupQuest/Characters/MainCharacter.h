@@ -49,9 +49,6 @@ protected:
 	void StartInteract();
 	void StopInteract();
 
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class ATorchActor> ItemClass;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bHoldingTorch = false;
 
