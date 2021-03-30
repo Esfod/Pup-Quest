@@ -9,6 +9,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class ATorchActor;
+class APlankActor;
 class ABrazierActor;
 
 UCLASS()
@@ -22,18 +23,29 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComp { nullptr };
 
-	public:
+	FVector MoveForwardVector;
+	FVector MoveRightVector;
+
+	UPROPERTY(EditAnywhere)
+	float RotateSpeed = 30.f;
+public:
 	AMainCharacter();
 
-	void DropItem();
+	void DropTorch();
 
-	protected:
-	/** Called for forwards/backward input */
+	void DropPlank();
+
+protected:
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
+
 	void MoveForward(float Value);
 
-	/** Called for side to side input */
 	void MoveRight(float Value);
 
+	void RotatePlayerTowardsWalkDirection();
+	
 	void StartInteract();
 	void StopInteract();
 
@@ -41,10 +53,17 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 	TSubclassOf<class ATorchActor> ItemClass;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
-	bool HoldingTorch = false;
+	bool bHoldingTorch = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
+		bool bHoldingPlank = false;
 
 	UPROPERTY()
-	ATorchActor* Item;
+		APlankActor* Plank;
+
+	UPROPERTY()
+	ATorchActor* Torch;
+
 	bool bTorchLit;
 
 	UPROPERTY()
@@ -52,10 +71,15 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 
 	bool bBrazierLit;
 
-	UFUNCTION()
-        void ItemAttachToHand();
+	bool pickupItem = false;//So you don't pick up something you just dropped
 
-	virtual void BeginPlay() override;
+
+	UFUNCTION()
+        void TorchAttachToHand();
+
+	UFUNCTION()
+		void PlankAttachToHand();
+
 
 	UFUNCTION()
 		void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,

@@ -12,6 +12,7 @@
 
 #include "PupQuest/Actors/SpiderWebActor.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
+#include "PupQuest/Actors/ItemsActor/PlankActor.h"
 #include "PupQuest/Actors/TorchHolderActor.h"
 #include "PupQuest/Actors/BrazierActor.h"
 
@@ -20,9 +21,6 @@
 
 AMainCharacter::AMainCharacter()
 {
-	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.f, 0.0f); // ...at this rotation rate
-
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>("Spring Arm");
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->SetRelativeRotation(FRotator(0.f, -30.f, 15.f));
@@ -35,7 +33,7 @@ AMainCharacter::AMainCharacter()
 	HitBox->SetRelativeLocation(FVector(70.f,0.f, 0.f));
 
 	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlap);
-	//HitBox->SetGenerateOverlapEvents(true);
+	
 }
 
 void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -48,61 +46,87 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::StartInteract);
 	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AMainCharacter::StopInteract);
 
-	PlayerInputComponent->BindAction("Drop", IE_Pressed, this, &AMainCharacter::DropItem);
+	PlayerInputComponent->BindAction("Drop", IE_Pressed, this, &AMainCharacter::DropTorch);
+	PlayerInputComponent->BindAction("Drop", IE_Pressed, this, &AMainCharacter::DropPlank);
 }
 
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+}
 
+void AMainCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if(MoveForwardVector.X != 0 || MoveRightVector.Y != 0)
+		RotatePlayerTowardsWalkDirection();
 }
 
 void AMainCharacter::MoveForward(float Value)
 {
-	if ((Controller != nullptr) && (Value != 0.0f))
-	{
-		// find out which way is forward
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// get forward vector
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		AddMovementInput(Direction, Value);
-	}
+	AddMovementInput(GetActorForwardVector(), Value);
+	MoveForwardVector = GetActorForwardVector() * Value;
 }
 
 void AMainCharacter::MoveRight(float Value)
 {
-	if ((Controller != nullptr) && (Value != 0.0f))
-	{
-		// find out which way is right
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// get right vector 
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		// add movement in that direction
-		AddMovementInput(Direction, Value);
-	}
+	AddMovementInput(GetActorRightVector(), Value);
+	MoveRightVector = GetActorRightVector() * Value;
 }
 
-void AMainCharacter::ItemAttachToHand()
+void AMainCharacter::RotatePlayerTowardsWalkDirection()
 {
-	if (Item) 
+	float InitialYaw = GetMesh()->GetRelativeRotation().Yaw;
+    FVector MoveDirection = MoveForwardVector + MoveRightVector;
+	float RotateToYaw = MoveDirection.Rotation().Yaw;
+	float CurrentYaw = FMath::Lerp(InitialYaw, RotateToYaw, GetWorld()->DeltaTimeSeconds*RotateSpeed);
+	
+	GetMesh()->SetRelativeRotation(FRotator(0.f,CurrentYaw,0.f));
+}
+
+void AMainCharacter::TorchAttachToHand()
+{
+	if (Torch) 
 	{
-		Item->SetActorEnableCollision(false);
-		Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("MainSocket"));
-		HoldingTorch = true;
-		UE_LOG(LogTemp, Warning, TEXT("Item picked up"));
+		Torch->SetActorEnableCollision(false);
+		Torch->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("MainSocket"));
+		bHoldingTorch = true;
+		UE_LOG(LogTemp, Warning, TEXT("Torch picked up"));
+		pickupItem = false;
 	}
 }
 
-void AMainCharacter::DropItem() {
-	FVector Location = GetOwner()->GetActorLocation();
-	Item->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	Item->SetActorEnableCollision(true);
-	Item->SetActorLocation(Location);
-	HoldingTorch = false;
+void AMainCharacter::PlankAttachToHand()
+{
+	if (Plank) {
+		Plank->SetActorEnableCollision(false);
+		Plank->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("plank socket"));
+		bHoldingPlank = true;
+		UE_LOG(LogTemp, Warning, TEXT("Plank picked up"));
+		pickupItem = false;
+	}
+}
+
+void AMainCharacter::DropTorch() {
+	if (bHoldingTorch == true) {
+		FVector Location = Torch->GetActorLocation() + FVector(100.f, 0.f, 0.f);
+		Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		Torch->SetActorEnableCollision(true);
+		Torch->SetActorLocation(Location);
+		bHoldingTorch = false;
+		UE_LOG(LogTemp, Warning, TEXT("Torch dropped"));
+	}
+}
+
+void AMainCharacter::DropPlank() {
+	if (bHoldingPlank == true) {
+		FVector Location = GetMesh()->GetComponentLocation() + FVector(100.f, 0.f, 0.f);
+		Plank->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		Plank->SetActorEnableCollision(true);
+		Plank->SetActorLocation(Location);
+		bHoldingPlank = false;
+		UE_LOG(LogTemp, Warning, TEXT("Plank dropped"));
+	}
 }
 
 void ATorchActor::StartTorchFlame() {
@@ -114,12 +138,13 @@ void ABrazierActor::StartBrazierFlame() {
 }
 
 void AMainCharacter::StartInteract() {
-	UE_LOG(LogTemp, Warning, TEXT("Interact!"));
+	//UE_LOG(LogTemp, Warning, TEXT("Interact!"));
 	HitBox->SetGenerateOverlapEvents(true);
+	pickupItem = true;
 }
 
 void AMainCharacter::StopInteract() {
-	UE_LOG(LogTemp, Warning, TEXT("Stop Interact!"));
+	//UE_LOG(LogTemp, Warning, TEXT("Stop Interact!"));
 	HitBox->SetGenerateOverlapEvents(false);
 }
 
@@ -128,29 +153,32 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	bool bFromSweep, const FHitResult& SweepResult)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
-		
-	if (HoldingTorch == false) {
+
+	if (bHoldingTorch == false && bHoldingPlank == false) {
 			if (OtherActor->IsA(ATorchActor::StaticClass()))
 			{
 				ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
-				Item = TorchHit;
-				bTorchLit = Item->bTorchLit;
+				Torch = TorchHit;
+				bTorchLit = Torch->bTorchLit;
+				TorchAttachToHand();
 
 				UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), bTorchLit ? TEXT("true") : TEXT("false"));
 
-				ItemAttachToHand();
-
-				
 			}
+			if (OtherActor->IsA(APlankActor::StaticClass()))
+				{
+				APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
+				Plank = PlankHit;
+				PlankAttachToHand();			}
 		}
-	else {
+	else if (bHoldingTorch == true) {
 		if (OtherActor->IsA(ATorchHolderActor::StaticClass())) {
 			if (bTorchLit == true) {
 				ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(OtherActor);
-				Item->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-				Item->SetActorEnableCollision(true);
-				Item->SetActorLocation(TorchHolder->GetTorchPlacementPoint());
-				HoldingTorch = false;
+				Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+				Torch->SetActorEnableCollision(true);
+				Torch->SetActorLocation(TorchHolder->GetTorchPlacementPoint());
+				bHoldingTorch = false;
 			}
 			else {
 				UE_LOG(LogTemp, Warning, TEXT("Door will not open because the torch is not lit"));
@@ -159,13 +187,37 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 		if (bTorchLit == true) {
 				if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {
 					ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
-					UE_LOG(LogTemp, Warning, TEXT("Burn web"));
-					Web->SetActorHiddenInGame(true);
-					Web->SetActorEnableCollision(false);
-					//functon(Web);
+					//Web->BurnWeb();
+					UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
+					//Web->HitBoxWeb->SetGenerateOverlapEvents(true);
 				}
-			}
+		}
+
+		if (OtherActor->IsA(APlankActor::StaticClass()) && pickupItem == true)
+		{
+			DropTorch();
+			APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
+			Plank = PlankHit;
+			PlankAttachToHand();
+		}
+
 	}
+
+	if (bHoldingPlank == true) {
+		if (OtherActor->IsA(ATorchActor::StaticClass()) && pickupItem == true)
+		{
+			DropPlank();
+
+			ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
+			Torch = TorchHit;
+			bTorchLit = Torch->bTorchLit;
+			TorchAttachToHand();
+
+			//UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), bTorchLit ? TEXT("true") : TEXT("false"));
+
+		}
+	}
+
 
 	if (OtherActor->IsA(ABrazierActor::StaticClass())) {
 		ABrazierActor* Brazier = Cast<ABrazierActor>(OtherActor);
@@ -173,14 +225,14 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 		bBrazierLit = UBrazier->bBrazierActorLit;
 		UE_LOG(LogTemp, Warning, TEXT("Brazier lit is %s"), bBrazierLit ? TEXT("true") : TEXT("false"));
 		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), bTorchLit ? TEXT("true") : TEXT("false"));
-		if (HoldingTorch == true) {
+		if (bHoldingTorch == true) {
 			if (bBrazierLit == true) {
 				if (bTorchLit == true) {
 					UE_LOG(LogTemp, Warning, TEXT("Brazier and torch is already lit"));
 				}
 				else {
 					bTorchLit = true;
-					Item->ATorchActor::StartTorchFlame();
+					Torch->ATorchActor::StartTorchFlame();
 				}
 			}
 			else {
