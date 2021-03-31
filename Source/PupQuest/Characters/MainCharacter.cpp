@@ -215,8 +215,9 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 				if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {//Hvis det er spider web
 					ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
 					//Web->BurnWeb();
-					UE_LOG(LogTemp, Warning, TEXT("player detects %s"), *OtherActor->GetName());
+					//UE_LOG(LogTemp, Warning, TEXT("player detects %s"), *OtherActor->GetName());
 					Web->HitBoxWeb->SetGenerateOverlapEvents(true);
+					//Web->BurnWeb();
 				}
 		}
 
