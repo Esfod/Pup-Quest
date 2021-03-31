@@ -250,3 +250,9 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 		}
 	}
 }
+
+void AMainCharacter::OnDeath()
+{
+	Super::OnDeath();
+	
+}
