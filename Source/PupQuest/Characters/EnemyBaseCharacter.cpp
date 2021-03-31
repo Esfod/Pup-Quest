@@ -19,21 +19,4 @@ void AEnemyBaseCharacter::BeginPlay()
 void AEnemyBaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (MainCharacter && RetrunDistanceToMainCharacter() < WalkRange)
-	{
-		WalkAndRotateTowardsMainCharacter();
-	}
-}
-void AEnemyBaseCharacter::WalkAndRotateTowardsMainCharacter()
-{
-	FVector VectorTowardsPlayer = MainCharacter->GetActorLocation() - GetActorLocation();
-	FRotator RotationTowardsPlayer = VectorTowardsPlayer.Rotation();
-	
-	SetActorRotation(RotationTowardsPlayer);
-	AddMovementInput(VectorTowardsPlayer, 1);
-}
-
-float AEnemyBaseCharacter::RetrunDistanceToMainCharacter()
-{
-	return FVector::Dist(MainCharacter->GetActorLocation(), GetActorLocation());
 }

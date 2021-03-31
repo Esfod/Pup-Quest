@@ -3,6 +3,7 @@
 
 #include "BaseCharacter.h"
 #include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -36,8 +37,29 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	DamageToApply = FMath::Min(Health, DamageToApply);
+	Health -= DamageToApply;
+	UE_LOG(LogTemp,Warning,TEXT("Health left is %f"), Health);
+	if(IsCharacterDead())
+	{
+		DetachFromControllerPendingDestroy();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+	return DamageToApply;
+}
+
+
 void ABaseCharacter::HandleDeath()
 {
 	//unviersal death and sound
 	
+}
+
+bool ABaseCharacter::IsCharacterDead() const
+{
+	if(Health == 0.f) return true;
+    	return false;
 }
