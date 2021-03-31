@@ -37,6 +37,8 @@ public:
 
 	void PlacePlank();
 
+	bool InTriggerBox = false;
+
 protected:
 	virtual void BeginPlay() override;
 
