@@ -20,3 +20,8 @@ void AEnemyBaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
+
+void AEnemyBaseCharacter::Attack()
+{
+	UE_LOG(LogTemp,Warning,TEXT("Attack"));
+}
