@@ -48,6 +48,8 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAction("Drop", IE_Pressed, this, &AMainCharacter::DropTorch);
 	PlayerInputComponent->BindAction("Drop", IE_Pressed, this, &AMainCharacter::DropPlank);
+
+	PlayerInputComponent->BindAction("Place", IE_Pressed, this, &AMainCharacter::PlacePlank);
 }
 
 void AMainCharacter::BeginPlay()
@@ -129,6 +131,23 @@ void AMainCharacter::DropPlank() {
 	}
 }
 
+void AMainCharacter::PlacePlank() {
+	//GetMesh()->GetComponentLocation() + FVector(100.f, 0.f, 0.f);
+	if (bHoldingPlank == true) {
+		//FVector PlaceLocation = GetMesh()->GetComponentLocation() + FVector(100.f, 0.f, 0.f);//Bestemmer lokasjonen planken skal bli droppet
+		FVector PlaceLocation = FVector(10310.0f, 9430.0f, 500.0f);
+		Plank->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach planken fra main character
+		Plank->SetActorEnableCollision(true);//Skrur på collision igjen
+		Plank->SetActorLocation(PlaceLocation);//Plasserer planken på drop lokasjonen
+		Plank->SetActorScale3D(FVector( 0.25, 0.25, 0.25));
+		Plank->SetActorRotation(FQuat(FRotator(270.f, 0.f, 0.f)));
+		Plank->SetActorRotation(FQuat(FRotator(0.f, 90.f, -90.f)));
+
+		bHoldingPlank = false;
+		UE_LOG(LogTemp, Warning, TEXT("Plank placed"));
+	}
+}
+
 void ATorchActor::StartTorchFlame() {
 	UE_LOG(LogTemp, Warning, TEXT("Torch is now lit"));
 }
@@ -169,6 +188,11 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 				{
 				APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
 				Plank = PlankHit;
+
+				/*if (Plank->IsHidden() == true) {
+					Plank->SetActorHiddenInGame(false);
+					UE_LOG(LogTemp, Warning, TEXT("visible"));
+				}*/
 				PlankAttachToHand();			
 			}
 	}
@@ -189,9 +213,9 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 		if (bTorchLit == true) {//Hvis torch er lit
 				if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {//Hvis det er spider web
 					ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
-					Web->BurnWeb();
-					UE_LOG(LogTemp, Warning, TEXT("hello %s"), *OtherActor->GetName());
-					//Web->HitBoxWeb->SetGenerateOverlapEvents(true);
+					//Web->BurnWeb();
+					UE_LOG(LogTemp, Warning, TEXT("player detects %s"), *OtherActor->GetName());
+					Web->HitBoxWeb->SetGenerateOverlapEvents(true);
 				}
 		}
 

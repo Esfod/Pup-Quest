@@ -35,6 +35,8 @@ public:
 
 	void DropPlank();
 
+	void PlacePlank();
+
 protected:
 	virtual void BeginPlay() override;
 

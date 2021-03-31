@@ -15,6 +15,7 @@ ASpiderWebActor::ASpiderWebActor()
 	HitBoxWeb = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBoxWeb"));
 	HitBoxWeb->InitBoxExtent(FVector(50.f, 50.f, 50.f));
 	HitBoxWeb->SetupAttachment(RootComponent);
+	HitBoxWeb->SetGenerateOverlapEvents(false);
 
 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
@@ -50,19 +51,24 @@ void ASpiderWebActor::BeginOverlapWeb(UPrimitiveComponent* OverlappedComponent, 
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult& SweepResult)
 {
+	/*FVector Move = HitBoxWeb->GetComponentLocation() += FVector(0.f, -100.f, 0.f);*/
+	//HitBoxWeb->SetLocation(Move);
+
+
 	UE_LOG(LogTemp, Warning, TEXT("Web detects %s"), *OtherActor->GetName());
 	
 
 	if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {//&&OtherActor != this for å ikke telle med seg selv
-		//BurnWeb();
+		ASpiderWebActor* SpiderWeb = Cast<ASpiderWebActor>(OtherActor);
+		SpiderWeb->BurnWeb();
 		UE_LOG(LogTemp, Warning, TEXT("Web"));
 	}
 
 	/*if (OtherActor->IsA(AMainCharacter::StaticClass())) {
 		UE_LOG(LogTemp, Warning, TEXT("character"));
 	}*/
-
-	//HitBoxWeb->SetGenerateOverlapEvents(false);
+	//HitBoxWeb->GetComponentLocation() += FVector(0.f, 100.f, 0.f);
+	HitBoxWeb->SetGenerateOverlapEvents(false);
 }
 
 //onoverlap function
