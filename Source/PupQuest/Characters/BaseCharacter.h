@@ -20,10 +20,21 @@ protected:
 	
 	virtual void HandleDeath();
 
+	UPROPERTY(EditDefaultsOnly)
+	float MaxHealth {100.0f};
+
+	UPROPERTY(VisibleAnywhere)
+	float Health {0.f};
+
 public:
 	ABaseCharacter();
 
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	float TakeDamage(float DamageAmount, struct FDamageEvent const &DamageEvent, class AController *EventInstigator, AActor *DamageCauser);
+
+	UFUNCTION(BlueprintPure)
+	bool IsCharacterDead() const;
 };

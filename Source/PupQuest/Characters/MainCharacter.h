@@ -40,7 +40,7 @@ protected:
 
 	virtual void Tick(float DeltaTime) override;
 	
-	virtual void OnDeath() override;
+	virtual void HandleDeath() override;
 
 	void MoveForward(float Value);
 
@@ -79,14 +79,12 @@ protected:
 	UFUNCTION()
 		void PlankAttachToHand();
 
-
 	UFUNCTION()
 		void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 			bool bFromSweep, const FHitResult& SweepResult);
 
 	bool Interacting = false;
-
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
