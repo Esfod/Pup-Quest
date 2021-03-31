@@ -39,6 +39,8 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
+	
+	virtual void OnDeath() override;
 
 	void MoveForward(float Value);
 

@@ -12,22 +12,18 @@ UCLASS()
 class PUPQUEST_API ABaseCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
 protected:
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* HitBox { nullptr };
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-
+	virtual void HandleDeath();
 
 public:
 	ABaseCharacter();
 
-	UPROPERTY(EditAnywhere)
-	UBoxComponent* HitBox { nullptr };
-		
-
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 };

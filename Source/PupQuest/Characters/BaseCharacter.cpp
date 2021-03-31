@@ -36,3 +36,8 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+void ABaseCharacter::HandleDeath()
+{
+	//unviersal death and sound
+	
+}
