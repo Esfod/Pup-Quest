@@ -13,5 +13,8 @@ UCLASS()
 class PUPQUEST_API ASpiderCharacter : public AEnemyBaseCharacter
 {
 	GENERATED_BODY()
-	
+public:
+	ASpiderCharacter();
+
+	virtual void Attack(float OwnerDamage) override;
 };

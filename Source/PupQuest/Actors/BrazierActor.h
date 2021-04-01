@@ -27,6 +27,5 @@ protected:
 
 protected:
 	UPROPERTY(EditAnywhere)
-		class UStaticMeshComponent* MeshComp;
-
+		UStaticMeshComponent* MeshComp;
 };
