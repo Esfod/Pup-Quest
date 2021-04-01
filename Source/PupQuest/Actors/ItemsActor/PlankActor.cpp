@@ -7,7 +7,8 @@ APlankActor::APlankActor()
 {
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
 	RootComponent = MeshComp;
-
+	//SetActorHiddenInGame(true);
+	//SetActorEnableCollision(false);
 }
 
 void APlankActor::BeginPlay()
