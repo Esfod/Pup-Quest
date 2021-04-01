@@ -16,7 +16,6 @@
 #include "PupQuest/Actors/TorchHolderActor.h"
 #include "PupQuest/Actors/BrazierActor.h"
 
-//#include "PupQuest/Hud/P_Torch"
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
@@ -35,8 +34,6 @@ AMainCharacter::AMainCharacter()
 	HitBox->SetRelativeLocation(FVector(70.f,0.f, 0.f));
 
 	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlap);
-
-	//Flame->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("Test burning"));
 }
 
 void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -153,14 +150,6 @@ void AMainCharacter::PlacePlank()//F.M
 	}
 }
 
-void ATorchActor::StartTorchFlame() {
-	UE_LOG(LogTemp, Warning, TEXT("Torch is now lit"));
-}
-
-void ABrazierActor::StartBrazierFlame() {
-	UE_LOG(LogTemp, Warning, TEXT("Brazier is now lit"));
-}
-
 void AMainCharacter::StartInteract() {//F.M
 	//UE_LOG(LogTemp, Warning, TEXT("Interact!"));
 	HitBox->SetGenerateOverlapEvents(true);//Skrur på hitboxen så den registrerer om noe er i den
@@ -214,10 +203,8 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 		if (bTorchLit == true) {//Hvis torch er lit
 				if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {//Hvis det er spider web
 					ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
-					//Web->BurnWeb();
 					//UE_LOG(LogTemp, Warning, TEXT("player detects %s"), *OtherActor->GetName());
 					Web->HitBoxWeb->SetGenerateOverlapEvents(true);
-					//Web->BurnWeb();
 				}
 		}
 
@@ -250,7 +237,7 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	if (OtherActor->IsA(ABrazierActor::StaticClass())) {//Hvis det er brazier
 		ABrazierActor* Brazier = Cast<ABrazierActor>(OtherActor);
 		UBrazier = Brazier;
-		bBrazierLit = UBrazier->bBrazierActorLit;
+		bBrazierLit = UBrazier->bBrazierLit;
 		UE_LOG(LogTemp, Warning, TEXT("Brazier lit is %s"), bBrazierLit ? TEXT("true") : TEXT("false"));
 		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), bTorchLit ? TEXT("true") : TEXT("false"));
 		if (bHoldingTorch == true) {//Hvis karakter holder torch
@@ -260,12 +247,12 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 				}
 				else {//Hvis ikke er torch lit
 					bTorchLit = true;
-					Torch->ATorchActor::StartTorchFlame();
+					Torch->TorchFlameOn();
 				}
 			}
 			else {//Hvis ikke er brazier lit
 				if (bTorchLit == true) {//Hvis torch er lit
-					UBrazier->ABrazierActor::StartBrazierFlame();
+					UBrazier->ABrazierActor::BrazierFlameOn();
 					bBrazierLit = true;
 				}
 				else {//Hvis torch ikke er lit
@@ -281,6 +268,6 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 void AMainCharacter::HandleDeath()
 {
-	Super::HandleDeath();
+	//Super::HandleDeath();
 
 }

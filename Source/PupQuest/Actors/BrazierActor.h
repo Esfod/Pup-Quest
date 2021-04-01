@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Runtime/Engine/Classes/Particles/ParticleSystemComponent.h"
 #include "BrazierActor.generated.h"
+
+class UPointLightComponent;
 
 UCLASS()
 class PUPQUEST_API ABrazierActor : public AActor
@@ -15,11 +18,21 @@ public:
 	// Sets default values for this actor's properties
 	ABrazierActor();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
-	bool bBrazierActorLit = false;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Bools")
+	bool bBrazierLit = false;
+
+	UPROPERTY(VisibleAnywhere)
+		UPointLightComponent* LightSorce { nullptr };
+
+	UPROPERTY(VisibleAnywhere)
+		UParticleSystemComponent* Flame { nullptr };
+
 
 	UFUNCTION()
-		void StartBrazierFlame();
+		void BrazierFlameOn();
+
+	UFUNCTION()
+		void BrazierFlameOff();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

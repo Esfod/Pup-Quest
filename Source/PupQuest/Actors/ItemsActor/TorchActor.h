@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BaseItemActor.h"
+#include "Runtime/Engine/Classes/Particles/ParticleSystemComponent.h"
 #include "TorchActor.generated.h"
 
 class UPointLightComponent;
@@ -17,13 +18,21 @@ public:
 
 	ATorchActor();
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Bools")
 	bool bTorchLit = true;
 
-	UFUNCTION()
-		void StartTorchFlame();
 	UPROPERTY(VisibleAnywhere)
 	UPointLightComponent* LightSorce {nullptr};
+
+	UPROPERTY(VisibleAnywhere)
+		UParticleSystemComponent* Flame {nullptr};
+
+	UFUNCTION()
+		void TorchFlameOn();
+
+	UFUNCTION()
+		void TorchFlameOff();
+
 	
 protected:
 	UPROPERTY(EditAnywhere)
