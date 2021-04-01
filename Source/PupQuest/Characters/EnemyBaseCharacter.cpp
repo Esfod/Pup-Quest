@@ -5,15 +5,18 @@
 #include "EnemyBaseCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "MainCharacter.h"
+#include "Components/BoxComponent.h"
+
 
 AEnemyBaseCharacter::AEnemyBaseCharacter()
 {
+	CheckFireBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Box to check for closest fire"));
+	CheckFireBox->SetupAttachment(GetMesh());
 }
 
 void AEnemyBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	MainCharacter = Cast<AMainCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 }
 
 void AEnemyBaseCharacter::Tick(float DeltaTime)
@@ -21,7 +24,43 @@ void AEnemyBaseCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AEnemyBaseCharacter::Attack()
+void AEnemyBaseCharacter::Attack(float OwnerDamage)
 {
-	UE_LOG(LogTemp,Warning,TEXT("Attack"));
+	//UE_LOG(LogTemp,Warning,TEXT("Start Attack"));
+	HitBox->SetGenerateOverlapEvents(true);
+	TArray<AActor*> OverlappingActors;
+	HitBox->GetOverlappingActors(OverlappingActors);
+	for (AActor* Actors : OverlappingActors)
+	{
+		if(Actors->IsA(AMainCharacter::StaticClass()))
+		{
+			FHitResult Hit;
+			AController* OwnerController = this->GetController();
+			AMainCharacter* MainCharacter = Cast<AMainCharacter>(Actors);
+			if (OwnerController == nullptr)
+			{
+				UE_LOG(LogTemp,Warning,TEXT("OwnerController fail"));
+				return;
+			}
+			if (MainCharacter == nullptr)
+			{
+				UE_LOG(LogTemp,Warning,TEXT("MainCharacter fail"));
+				return;
+			}
+			if (this == nullptr)
+			{
+				UE_LOG(LogTemp,Warning,TEXT("this fail"));
+				return;
+			}
+			
+			bool bSuccess = GetWorld()->LineTraceSingleByChannel(Hit, this->GetActorForwardVector(), this->GetActorForwardVector()*10, ECollisionChannel::ECC_GameTraceChannel1);
+			if (bSuccess)
+			{
+				FVector HitDirection = MainCharacter->GetActorLocation() - this->GetActorLocation();
+                FPointDamageEvent DamageEvent(OwnerDamage, Hit, HitDirection, nullptr);
+                MainCharacter->TakeDamage(OwnerDamage, DamageEvent, OwnerController, this);
+			}
+		}
+	}
+	HitBox->SetGenerateOverlapEvents(false);
 }
