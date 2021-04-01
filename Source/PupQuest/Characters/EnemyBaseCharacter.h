@@ -14,16 +14,24 @@ class PUPQUEST_API AEnemyBaseCharacter : public ABaseCharacter
 	GENERATED_BODY()
 
 private:
-	AMainCharacter* MainCharacter{ nullptr };
+	UPROPERTY(EditAnywhere)
+	float AttackDistance{100.f};
 	
 public:
 	AEnemyBaseCharacter();
 
 	virtual void Tick(float DeltaTime) override;
 
-	void Attack();
-protected:
-
-	virtual void BeginPlay() override;
+	virtual void Attack(float OwnerDamage);
 	
+	UPROPERTY(EditAnywhere)
+	float Damage {50.f};
+
+protected:
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* CheckFireBox { nullptr };
+	
+	virtual void BeginPlay() override;
+
+
 };
