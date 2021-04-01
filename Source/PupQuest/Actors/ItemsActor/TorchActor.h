@@ -6,6 +6,8 @@
 #include "BaseItemActor.h"
 #include "TorchActor.generated.h"
 
+class UPointLightComponent;
+
 UCLASS()
 class PUPQUEST_API ATorchActor : public ABaseItemActor
 {
@@ -20,13 +22,12 @@ public:
 
 	UFUNCTION()
 		void StartTorchFlame();
+	UPROPERTY(VisibleAnywhere)
+	UPointLightComponent* LightSorce {nullptr};
+	
 protected:
 	UPROPERTY(EditAnywhere)
 		class UStaticMeshComponent* MeshComp;
 
-
-
-protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 };

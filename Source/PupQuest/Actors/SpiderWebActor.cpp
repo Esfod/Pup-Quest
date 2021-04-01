@@ -17,6 +17,7 @@ ASpiderWebActor::ASpiderWebActor()
 	HitBoxWeb->SetupAttachment(RootComponent);
 
 
+
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
 	RootComponent = MeshComp;
 
@@ -29,7 +30,7 @@ ASpiderWebActor::ASpiderWebActor()
 void ASpiderWebActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	HitBoxWeb->SetGenerateOverlapEvents(false);
 }
 
 // Called every frame
@@ -50,23 +51,20 @@ void ASpiderWebActor::BeginOverlapWeb(UPrimitiveComponent* OverlappedComponent, 
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Web detects %s"), *OtherActor->GetName());
+	//UE_LOG(LogTemp, Warning, TEXT("Web detects %s"), *OtherActor->GetName());
 	
 
-	if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {//&&OtherActor != this for å ikke telle med seg selv
-		//BurnWeb();
-		UE_LOG(LogTemp, Warning, TEXT("Web"));
+	if (OtherActor->IsA(ASpiderWebActor::StaticClass()) && OtherActor != this) {
+		ASpiderWebActor* SpiderWeb = Cast<ASpiderWebActor>(OtherActor);
+		UE_LOG(LogTemp, Warning, TEXT("Web detects %s"), *OtherActor->GetName());
+
+		SpiderWeb->HitBoxWeb->SetGenerateOverlapEvents(true);
+		SpiderWeb->HitBoxWeb->SetRelativeLocation(SpiderWeb->HitBoxWeb->GetRelativeLocation() + 1.f);
+		BurnWeb();
 	}
-
-	/*if (OtherActor->IsA(AMainCharacter::StaticClass())) {
-		UE_LOG(LogTemp, Warning, TEXT("character"));
-	}*/
-
-	//HitBoxWeb->SetGenerateOverlapEvents(false);
+	
+	HitBoxWeb->SetRelativeLocation(HitBoxWeb->GetRelativeLocation() - 1.f);
+	HitBoxWeb->SetGenerateOverlapEvents(false);
 }
 
-//onoverlap function
-
-//if other actor web
-//burnweb()
 

@@ -35,6 +35,10 @@ public:
 
 	void DropPlank();
 
+	void PlacePlank();
+
+	bool InTriggerBox = false;
+
 protected:
 	virtual void BeginPlay() override;
 
