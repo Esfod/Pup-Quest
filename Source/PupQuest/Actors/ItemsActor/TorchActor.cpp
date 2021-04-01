@@ -2,13 +2,15 @@
 
 
 #include "TorchActor.h"
-#include "Components/SkeletalMeshComponent.h"
+#include "Components/PointLightComponent.h"
 
 ATorchActor::ATorchActor()
 {
-MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
-RootComponent = MeshComp;
+	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
+	RootComponent = MeshComp;
 
+	LightSorce = CreateDefaultSubobject<UPointLightComponent>("PointLight");
+	LightSorce->SetupAttachment(MeshComp);
 }
 
 void ATorchActor::BeginPlay()
