@@ -29,14 +29,18 @@ void ATorchActor::BeginPlay()
 		TorchFlameOn();
 	}
 
+	//SetEnableGravity();
+
 }
 
 void ATorchActor::TorchFlameOn() {
 	Flame->SetVisibility(true);
 	LightSorce->SetVisibility(true);
+	bTorchLit = true;
 }
 
 void ATorchActor::TorchFlameOff() {
 	Flame->SetVisibility(false);
 	LightSorce->SetVisibility(false);
+	bTorchLit = false;
 }

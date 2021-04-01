@@ -117,6 +117,7 @@ void AMainCharacter::DropTorch()//F.M
 		Torch->SetActorEnableCollision(true);//Skrur på collision igjen
 		Torch->SetActorLocation(DropLocation);//Plasserer torchen på drop lokasjonen
 		bHoldingTorch = false;
+		Torch->TorchFlameOff();
 		UE_LOG(LogTemp, Warning, TEXT("Torch dropped"));
 	}
 }
@@ -173,10 +174,10 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 			{
 				ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
 				Torch = TorchHit;
-				bTorchLit = Torch->bTorchLit;
+				//bTorchLit = Torch->bTorchLit;
 				TorchAttachToHand();
 
-				UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), bTorchLit ? TEXT("true") : TEXT("false"));
+				UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
 
 			}
 			if (OtherActor->IsA(APlankActor::StaticClass()))//Hvis det er planke
@@ -188,8 +189,8 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	}
 	else if (bHoldingTorch == true) {//Hvis karakteren holder torch
 		if (OtherActor->IsA(ATorchHolderActor::StaticClass())) {//Hvis det er en torch holder
-			if (bTorchLit == true) {//Hvis torch er lit
-				ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(OtherActor);
+			ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(OtherActor);
+			if (Torch->bTorchLit == true) {//Hvis torch er lit
 
 				Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Karakteren slutter å holde torch
 				Torch->SetActorEnableCollision(true);//Skrur på collision igjen
@@ -200,7 +201,7 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 				UE_LOG(LogTemp, Warning, TEXT("Door will not open because the torch is not lit"));
 			}
 		}
-		if (bTorchLit == true) {//Hvis torch er lit
+		if (Torch->bTorchLit == true) {//Hvis torch er lit
 				if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {//Hvis det er spider web
 					ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
 					//UE_LOG(LogTemp, Warning, TEXT("player detects %s"), *OtherActor->GetName());
@@ -225,7 +226,6 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 			ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
 			Torch = TorchHit;
-			bTorchLit = Torch->bTorchLit;
 			TorchAttachToHand();//Attach torch til karakter
 
 			//UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), bTorchLit ? TEXT("true") : TEXT("false"));
@@ -235,25 +235,22 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 
 	if (OtherActor->IsA(ABrazierActor::StaticClass())) {//Hvis det er brazier
-		ABrazierActor* Brazier = Cast<ABrazierActor>(OtherActor);
-		UBrazier = Brazier;
-		bBrazierLit = UBrazier->bBrazierLit;
-		UE_LOG(LogTemp, Warning, TEXT("Brazier lit is %s"), bBrazierLit ? TEXT("true") : TEXT("false"));
-		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), bTorchLit ? TEXT("true") : TEXT("false"));
+		ABrazierActor* UBrazier = Cast<ABrazierActor>(OtherActor);
+		Brazier = UBrazier;
+		UE_LOG(LogTemp, Warning, TEXT("Brazier lit is %s"), Brazier->bBrazierLit ? TEXT("true") : TEXT("false"));
+		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
 		if (bHoldingTorch == true) {//Hvis karakter holder torch
-			if (bBrazierLit == true) {//Hvis brazier er lit
-				if (bTorchLit == true) {//Hvis torch er lit
+			if (Brazier->bBrazierLit == true) {//Hvis brazier er lit
+				if (Torch->bTorchLit == true) {//Hvis torch er lit
 					UE_LOG(LogTemp, Warning, TEXT("Brazier and torch is already lit"));
 				}
-				else {//Hvis ikke er torch lit
-					bTorchLit = true;
+				else {//Hvis torch ikke er lit
 					Torch->TorchFlameOn();
 				}
 			}
-			else {//Hvis ikke er brazier lit
-				if (bTorchLit == true) {//Hvis torch er lit
-					UBrazier->ABrazierActor::BrazierFlameOn();
-					bBrazierLit = true;
+			else {//Hvis brazier ikke er lit
+				if (Torch->bTorchLit == true) {//Hvis torch er lit
+					Brazier->BrazierFlameOn();
 				}
 				else {//Hvis torch ikke er lit
 					UE_LOG(LogTemp, Warning, TEXT("Your Torch has to be lit to light the brazier"));

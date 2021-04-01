@@ -67,12 +67,8 @@ protected:
 	UPROPERTY()
 	ATorchActor* Torch;
 
-	bool bTorchLit;
-
 	UPROPERTY()
-	ABrazierActor* UBrazier;
-
-	bool bBrazierLit;
+	ABrazierActor* Brazier;
 
 	bool pickupItem = false;//So you don't pick up something you just dropped
 

@@ -37,11 +37,13 @@ void ABrazierActor::BeginPlay()
 void ABrazierActor::BrazierFlameOn() {
 	Flame->SetVisibility(true);
 	LightSorce->SetVisibility(true);
+	bBrazierLit = true;
 }
 
 void ABrazierActor::BrazierFlameOff() {
 	Flame->SetVisibility(false);
 	LightSorce->SetVisibility(false);
+	bBrazierLit = false;
 }
 
 
