@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTService_UpdateClosestFireDist.h"
+#include "BTService_UpdateFireLocation.h"
 #include "AIController.h"
 #include "PupQuest/Characters/EnemyBaseCharacter.h"
 #include "PupQuest/Actors/BrazierActor.h"
@@ -9,12 +9,12 @@
 #include "Components/BoxComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
-UBTService_UpdateClosestFireDist::UBTService_UpdateClosestFireDist()
+UBTService_UpdateFireLocation::UBTService_UpdateFireLocation()
 {
-	NodeName = TEXT("Update Distanse to closest Fire");
+	NodeName = TEXT("Update Location to closest Fire if Fire is seen");
 }
 
-void UBTService_UpdateClosestFireDist::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 	AEnemyBaseCharacter* OwnerCharacter = Cast<AEnemyBaseCharacter>(OwnerComp.GetAIOwner()->GetCharacter());
@@ -25,6 +25,8 @@ void UBTService_UpdateClosestFireDist::TickNode(UBehaviorTreeComponent& OwnerCom
 
 	float DistanceA {0.f};
 	float DistanceB {0.f};
+	FVector VectorA {0.f};
+	FVector VectorB {0.f};
 	OwnerCharacter->CheckFireBox->GetOverlappingActors(OverlappingActors);
 	for(AActor* Actor : OverlappingActors)
 	{
@@ -32,22 +34,34 @@ void UBTService_UpdateClosestFireDist::TickNode(UBehaviorTreeComponent& OwnerCom
 		{
 			ABrazierActor* BrazierActor = Cast<ABrazierActor>(Actor);
 			if(BrazierActor == nullptr) return;
-			if(BrazierActor->bBrazierActorLit)
+			if(OwnerComp.GetAIOwner()->LineOfSightTo(BrazierActor))
 			{
-				DistanceA = FVector(BrazierActor->GetActorLocation() - OwnerCharacter->GetActorLocation()).Size();
+				if(BrazierActor->bBrazierActorLit)
+                {
+					VectorA = BrazierActor->GetActorLocation() - OwnerCharacter->GetActorLocation();
+                	DistanceA = VectorA.Size();
+                }
 			}
 		}
 		else if(Actor->IsA(ATorchActor::StaticClass()))
 		{
 			ATorchActor* TorchActor = Cast<ATorchActor>(Actor);
 			if(TorchActor == nullptr) return;
-			if(TorchActor->bTorchLit)
+			if(OwnerComp.GetAIOwner()->LineOfSightTo(TorchActor))
 			{
-				DistanceA = FVector(TorchActor->GetActorLocation() - OwnerCharacter->GetActorLocation()).Size();
-			}
+				if(TorchActor->bTorchLit)
+                {
+                	VectorA = TorchActor->GetActorLocation() - OwnerCharacter->GetActorLocation();
+                	DistanceA = VectorA.Size();
+                }
+			}		
 		}
 		if(DistanceA < DistanceB)
-			DistanceA = DistanceB;
+		{
+			 DistanceB = DistanceA;
+			 VectorB = VectorA;
+		}	
 	}
-	OwnerComp.GetBlackboardComponent()->SetValueAsFloat(GetSelectedBlackboardKey(), DistanceB);
+	OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), VectorB);
 }
+

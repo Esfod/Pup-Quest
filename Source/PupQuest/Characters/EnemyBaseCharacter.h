@@ -27,9 +27,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Damage {50.f};
 
-protected:
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* CheckFireBox { nullptr };
+protected:
+
 	
 	virtual void BeginPlay() override;
 

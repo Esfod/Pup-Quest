@@ -16,5 +16,4 @@ ATorchActor::ATorchActor()
 void ATorchActor::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
