@@ -39,6 +39,12 @@ public:
 
 	bool InTriggerBox = false;
 
+	ATorchActor* GetTorchActor();
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
+	bool bHoldingTorch = false;
+
+	bool bTorchLit;
 protected:
 	virtual void BeginPlay() override;
 
@@ -56,18 +62,13 @@ protected:
 	void StopInteract();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
-	bool bHoldingTorch = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 		bool bHoldingPlank = false;
-
+		
 	UPROPERTY()
 		APlankActor* Plank;
 
 	UPROPERTY()
 	ATorchActor* Torch;
-
-	bool bTorchLit;
 
 	UPROPERTY()
 	ABrazierActor* UBrazier;

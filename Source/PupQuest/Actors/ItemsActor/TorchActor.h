@@ -17,17 +17,17 @@ public:
 
 	ATorchActor();
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Bools")
 	bool bTorchLit = true;
 
 	UFUNCTION()
-		void StartTorchFlame();
-	UPROPERTY(VisibleAnywhere)
-	UPointLightComponent* LightSorce {nullptr};
-	
+		void StartTorchFlame();	
 protected:
 	UPROPERTY(EditAnywhere)
 		class UStaticMeshComponent* MeshComp;
 
 	virtual void BeginPlay() override;
+	
+	UPROPERTY(VisibleAnywhere)
+	UPointLightComponent* LightSorce {nullptr};
 };

@@ -15,8 +15,11 @@ class PUPQUEST_API AEnemyBaseCharacter : public ABaseCharacter
 
 private:
 	UPROPERTY(EditAnywhere)
-	float AttackDistance{100.f};
+	UBoxComponent* FireBox { nullptr };
 	
+	UPROPERTY(EditAnywhere)
+	float AttackDistance{100.f};
+
 public:
 	AEnemyBaseCharacter();
 
@@ -27,12 +30,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Damage {50.f};
 
-	UPROPERTY(EditAnywhere)
-	UBoxComponent* CheckFireBox { nullptr };
-protected:
-
+	TArray<AActor*> GetOverLappingActorsToFireBox();
 	
+protected:
 	virtual void BeginPlay() override;
-
 
 };

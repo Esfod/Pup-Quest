@@ -6,7 +6,6 @@
 #include "PupQuest/Characters/EnemyBaseCharacter.h"
 #include "PupQuest/Actors/BrazierActor.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
-#include "Components/BoxComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTService_UpdateClosestFireDist::UBTService_UpdateClosestFireDist()
@@ -20,12 +19,11 @@ void UBTService_UpdateClosestFireDist::TickNode(UBehaviorTreeComponent& OwnerCom
 	AEnemyBaseCharacter* OwnerCharacter = Cast<AEnemyBaseCharacter>(OwnerComp.GetAIOwner()->GetCharacter());
 	if(OwnerCharacter == nullptr) return;
 	
-	OwnerCharacter->CheckFireBox->SetGenerateOverlapEvents(true);
-	TArray<AActor*> OverlappingActors;
+	TArray<AActor*> OverlappingActors =  OwnerCharacter->GetOverLappingActorsToFireBox();
 
 	float DistanceA {0.f};
 	float DistanceB {0.f};
-	OwnerCharacter->CheckFireBox->GetOverlappingActors(OverlappingActors);
+	
 	for(AActor* Actor : OverlappingActors)
 	{
 		if(Actor->IsA(ABrazierActor::StaticClass()))
