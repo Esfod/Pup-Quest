@@ -18,6 +18,7 @@ public:
 
 	ATorchActor();
 	
+
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Bools")
 	bool bTorchLit = true;
 
@@ -33,10 +34,12 @@ public:
 	UFUNCTION()
 		void TorchFlameOff();
 
-	
 protected:
 	UPROPERTY(EditAnywhere)
 		class UStaticMeshComponent* MeshComp;
 
 	virtual void BeginPlay() override;
+	
+	UPROPERTY(VisibleAnywhere)
+	UPointLightComponent* LightSorce {nullptr};
 };

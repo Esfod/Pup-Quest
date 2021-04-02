@@ -178,7 +178,6 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 				TorchAttachToHand();
 
 				UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
-
 			}
 			if (OtherActor->IsA(APlankActor::StaticClass()))//Hvis det er planke
 				{
@@ -267,4 +266,9 @@ void AMainCharacter::HandleDeath()
 {
 	//Super::HandleDeath();
 
+}
+
+ATorchActor* AMainCharacter::GetTorchActor()
+{
+	return Torch;
 }
