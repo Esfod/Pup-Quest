@@ -50,12 +50,17 @@ public:
 	bool bHoldingTorch = false;
 
 	bool bTorchLit;
+
+	virtual void HandleDeath() override;
+
+	FVector NewLocation = FVector(50.f,50.f,50.f);
+
+	bool CheckpointLocation = false;
 protected:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
 	
-	virtual void HandleDeath() override;
 
 	void MoveForward(float Value);
 

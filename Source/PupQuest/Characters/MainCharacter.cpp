@@ -16,6 +16,7 @@
 #include "PupQuest/Actors/TorchHolderActor.h"
 #include "PupQuest/Actors/BrazierActor.h"
 
+#include <Runtime/Engine/Classes/Kismet/GameplayStatics.h>
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
@@ -59,6 +60,8 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("Drop", IE_Pressed, this, &AMainCharacter::DropPlank);
 
 	PlayerInputComponent->BindAction("Place", IE_Pressed, this, &AMainCharacter::PlacePlank);
+	PlayerInputComponent->BindAction("Reset", IE_Pressed, this, &AMainCharacter::HandleDeath);
+
 }
 
 void AMainCharacter::BeginPlay()
@@ -314,7 +317,11 @@ void AMainCharacter::StandOnOverlapEnd(UPrimitiveComponent* OverlappedComponent,
 void AMainCharacter::HandleDeath()
 {
 	//Super::HandleDeath();
-
+	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+	/*if (CheckpointLocation == true) {
+		UE_LOG(LogTemp, Warning, TEXT("Hello there"));
+		SetActorLocation(FVector(100.f,100.f,100.f));
+	}*/
 }
 
 ATorchActor* AMainCharacter::GetTorchActor()
