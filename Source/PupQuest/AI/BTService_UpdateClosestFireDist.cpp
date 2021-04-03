@@ -30,7 +30,7 @@ void UBTService_UpdateClosestFireDist::TickNode(UBehaviorTreeComponent& OwnerCom
 		{
 			ABrazierActor* BrazierActor = Cast<ABrazierActor>(Actor);
 			if(BrazierActor == nullptr) return;
-			if(BrazierActor->bBrazierActorLit)
+			if(BrazierActor->bBrazierLit)
 			{
 				DistanceA = FVector(BrazierActor->GetActorLocation() - OwnerCharacter->GetActorLocation()).Size();
 			}

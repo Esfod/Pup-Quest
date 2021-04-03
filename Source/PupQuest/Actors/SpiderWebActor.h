@@ -8,6 +8,8 @@
 
 class UBoxComponent;
 class AMainCharacter;
+class UPointLightComponent;
+
 
 UCLASS()
 class PUPQUEST_API ASpiderWebActor : public AActor
@@ -19,12 +21,14 @@ public:
 	ASpiderWebActor();
 
 	UFUNCTION()
-		void BurnWeb();
+		void StartBurnWeb();
 
 	UPROPERTY(EditAnywhere)
 		UBoxComponent* HitBoxWeb {	nullptr };
 
-	
+	bool bBurning = false;
+
+	void EndBurnWeb();
 
 private:
 
@@ -33,6 +37,10 @@ private:
 			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 			bool bFromSweep, const FHitResult& SweepResult);
 
+	FTimerHandle TimeGone;
+
+	//FVector Scale = FVector(1.f);
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -40,6 +48,11 @@ protected:
 	UPROPERTY(EditAnywhere)
 		class UStaticMeshComponent* MeshComp;
 
+	UPROPERTY(VisibleAnywhere)
+		UPointLightComponent* LightSorce { nullptr };
+
+	UPROPERTY(VisibleAnywhere)
+		UParticleSystemComponent* Flame { nullptr };
 	
 public:	
 	// Called every frame

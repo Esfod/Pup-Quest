@@ -39,6 +39,11 @@ public:
 
 	bool InTriggerBox = false;
 
+	UPROPERTY(EditAnywhere)
+		UBoxComponent* StandOnHitBox { nullptr };//To see if player is standing on item when he picks it up(movement does not work if he does)
+
+	bool OnTopOff = false;
+
 	ATorchActor* GetTorchActor();
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
@@ -71,11 +76,9 @@ protected:
 	ATorchActor* Torch;
 
 	UPROPERTY()
-	ABrazierActor* UBrazier;
+	ABrazierActor* Brazier;
 
-	bool bBrazierLit;
-
-	bool pickupItem = false;//So you don't pick up something you just dropped
+	bool Interacting = false;//So you don't pick up something you just dropped
 
 
 	UFUNCTION()
@@ -89,7 +92,15 @@ protected:
 			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 			bool bFromSweep, const FHitResult& SweepResult);
 
-	bool Interacting = false;
+	UFUNCTION()
+		void StandOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
+			bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void StandOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
+			bool bFromSweep, const FHitResult& SweepResult);
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
