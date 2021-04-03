@@ -31,9 +31,18 @@ AMainCharacter::AMainCharacter()
 	CameraComp  = CreateDefaultSubobject<UCameraComponent>("Camera Component");
 	CameraComp->SetupAttachment(SpringArm);
 
+	/*StandOnHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBoxWeb"));
+	StandOnHitBox->SetupAttachment(RootComponent);*/
+
+
+
 	HitBox->SetRelativeLocation(FVector(70.f,0.f, 0.f));
 
 	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlap);
+	/*StandOnHitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapBegin);
+	StandOnHitBox->OnComponentEndOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapEnd);*/
+
+
 }
 
 void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -88,26 +97,30 @@ void AMainCharacter::RotatePlayerTowardsWalkDirection()
 
 void AMainCharacter::TorchAttachToHand()//F.M
 {
-	if (Torch) 
-	{
-		Torch->MeshComp->SetSimulatePhysics(false);
-		Torch->SetActorEnableCollision(false);//Skrur av collision på torch
-		Torch->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("TorchSocket"));//Attach torch til main character
-		bHoldingTorch = true;
-		UE_LOG(LogTemp, Warning, TEXT("Torch picked up"));
-		pickupItem = false;//Passer på at du ikke kan plukke opp noe mer en en gang når du trykker på E, så etter torch er plukket opp kan man ikke plukke opp noe mer
-	}
+	//if (OnTopOff == false) {
+		if (Torch)
+		{
+			Torch->MeshComp->SetSimulatePhysics(false);
+			Torch->SetActorEnableCollision(false);//Skrur av collision på torch
+			Torch->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("TorchSocket"));//Attach torch til main character
+			bHoldingTorch = true;
+			UE_LOG(LogTemp, Warning, TEXT("Torch picked up"));
+			Interacting = false;//Passer på at du ikke kan plukke opp noe mer en en gang når du trykker på E, så etter torch er plukket opp kan man ikke plukke opp noe mer
+		}
+	//}
 }
 
 void AMainCharacter::PlankAttachToHand()//F.M
 {
-	if (Plank) {
-		Plank->SetActorEnableCollision(false);//Skrur av collision på plank
-		Plank->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("PlankSocket"));//Attach plank til main character
-		bHoldingPlank = true;
-		UE_LOG(LogTemp, Warning, TEXT("Plank picked up"));
-		pickupItem = false;//Passer på at du ikke kan plukke opp noe mer en en gang når du trykker på E, så etter torch er plukket opp kan man ikke plukke opp noe mer
-	}
+	//if (OnTopOff == false) {
+		if (Plank) {
+			Plank->SetActorEnableCollision(false);//Skrur av collision på plank
+			Plank->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("PlankSocket"));//Attach plank til main character
+			bHoldingPlank = true;
+			UE_LOG(LogTemp, Warning, TEXT("Plank picked up"));
+			Interacting = false;//Passer på at du ikke kan plukke opp noe mer en en gang når du trykker på E, så etter torch er plukket opp kan man ikke plukke opp noe mer
+		}
+	//}
 }
 
 void AMainCharacter::DropTorch()//F.M
@@ -135,7 +148,11 @@ void AMainCharacter::DropPlank()//F.M
 
 		//FVector Lol = GetActorForwardVector() * FVector(100.f, 0.f, 0.f);
 		Plank->SetActorRotation(FQuat(FRotator(0.f, 0.f, 270.f)));//Gir planke riktig rotasjon
-		FVector DropLocation = GetMesh()->GetComponentLocation() + FVector(100.f, 0.f, 20.f);//Bestemmer lokasjonen planken skal bli droppet
+		//FVector2D Test = FVector2D(5.f, 100.f);
+
+		//FVector DropTest = GetMesh()->GetActorForwardVector() * 50;
+		FVector DropLocation = Plank->GetActorLocation() + FVector(0.f, 0.f, -78.f);
+			// + FVector(0.f, 0.f, 20.f);//Bestemmer lokasjonen planken skal bli droppet
 		Plank->SetActorLocation(DropLocation);//Plasserer planken på drop lokasjonen
 
 
@@ -148,12 +165,11 @@ void AMainCharacter::DropPlank()//F.M
 void AMainCharacter::PlacePlank()//F.M 
 {
 	if (bHoldingPlank == true && InTriggerBox == true) {
-		FVector PlaceLocation = FVector(10500.0f, 9480.0f, 500.0f);
 		Plank->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach planken fra main character
 		Plank->SetActorEnableCollision(true);//Skrur på collision igjen
-		Plank->SetActorLocation(PlaceLocation);//Plasserer planken på drop lokasjonen
+
+		Plank->SetActorLocation(FVector(10500.0f, 9480.0f, 500.0f));//Plasserer planken på drop lokasjonen
 		Plank->SetActorScale3D(FVector(13.f));//Gir planke riktig størrelse
-		//Plank->SetActorRotation(FQuat(FRotator(0.f, 0.f, 0.f)));//Gir planke riktig rotasjon
 		Plank->SetActorRotation(FQuat(FRotator(-1.5f, 0.f, 90.f)));//Gir planke riktig rotasjon
 
 		bHoldingPlank = false;
@@ -164,7 +180,7 @@ void AMainCharacter::PlacePlank()//F.M
 void AMainCharacter::StartInteract() {//F.M
 	//UE_LOG(LogTemp, Warning, TEXT("Interact!"));
 	HitBox->SetGenerateOverlapEvents(true);//Skrur på hitboxen så den registrerer om noe er i den
-	pickupItem = true;
+	Interacting = true;
 }
 
 void AMainCharacter::StopInteract()//F.M
@@ -220,7 +236,7 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 				}
 		}
 
-		if (OtherActor->IsA(APlankActor::StaticClass()) && pickupItem == true)//Hvis det er planke
+		if (OtherActor->IsA(APlankActor::StaticClass()) && Interacting == true)//Hvis det er planke
 		{
 			DropTorch();//Dropper torch
 			APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
@@ -231,7 +247,7 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	}
 
 	if (bHoldingPlank == true) {//Hvis karakteren holder planke
-		if (OtherActor->IsA(ATorchActor::StaticClass()) && pickupItem == true)//Hvis det er torch
+		if (OtherActor->IsA(ATorchActor::StaticClass()) && Interacting == true)//Hvis det er torch
 		{
 			DropPlank();//Dropp planke
 
@@ -272,6 +288,27 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 			UE_LOG(LogTemp, Warning, TEXT("You are not holding a torch"));
 		}
 	}
+}
+
+
+void AMainCharacter::StandOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
+	bool bFromSweep, const FHitResult& SweepResult) //F.M
+{
+	//if (OtherActor->IsA(ATorchActor::StaticClass()) || OtherActor->IsA(APlankActor::StaticClass()))//Hvis det er torch
+	//{
+	//	OnTopOff = true;
+	//}
+}
+
+void AMainCharacter::StandOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
+	bool bFromSweep, const FHitResult& SweepResult) //F.M
+{
+	//if (OtherActor->IsA(ATorchActor::StaticClass()) || OtherActor->IsA(APlankActor::StaticClass()))//Hvis det er torch
+	//{
+	//	OnTopOff = false;
+	//}
 }
 
 void AMainCharacter::HandleDeath()
