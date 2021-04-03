@@ -148,13 +148,13 @@ void AMainCharacter::DropPlank()//F.M
 void AMainCharacter::PlacePlank()//F.M 
 {
 	if (bHoldingPlank == true && InTriggerBox == true) {
-		FVector PlaceLocation = FVector(10310.0f, 9430.0f, 500.0f);
+		FVector PlaceLocation = FVector(10500.0f, 9480.0f, 500.0f);
 		Plank->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach planken fra main character
 		Plank->SetActorEnableCollision(true);//Skrur på collision igjen
 		Plank->SetActorLocation(PlaceLocation);//Plasserer planken på drop lokasjonen
-		Plank->SetActorScale3D(FVector( 0.25, 0.25, 0.25));//Gir planke riktig størrelse
-		Plank->SetActorRotation(FQuat(FRotator(270.f, 0.f, 0.f)));//Gir planke riktig rotasjon
-		Plank->SetActorRotation(FQuat(FRotator(0.f, 90.f, -90.f)));//Gir planke riktig rotasjon
+		Plank->SetActorScale3D(FVector(13.f));//Gir planke riktig størrelse
+		//Plank->SetActorRotation(FQuat(FRotator(0.f, 0.f, 0.f)));//Gir planke riktig rotasjon
+		Plank->SetActorRotation(FQuat(FRotator(-1.5f, 0.f, 90.f)));//Gir planke riktig rotasjon
 
 		bHoldingPlank = false;
 		UE_LOG(LogTemp, Warning, TEXT("Plank placed"));

@@ -16,7 +16,6 @@ void APlacePlankTrigger::OnOverlapBegin(class AActor* OverlappedActor, class AAc
 	if (OtherActor->IsA(AMainCharacter::StaticClass())) {
 		AMainCharacter* Main = Cast<AMainCharacter>(OtherActor);
 		Main->InTriggerBox = true;
-
 	}
 }
 
