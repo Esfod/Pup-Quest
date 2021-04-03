@@ -43,7 +43,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 				if(BrazierActor == nullptr) return;
 				if(OwnerComp.GetAIOwner()->LineOfSightTo(BrazierActor))
 				{
-					if(BrazierActor->bBrazierActorLit)
+					if(BrazierActor->bBrazierLit)
 					{
 						//UE_LOG(LogTemp,Warning,TEXT("Can see lit Brazier"));
 						DistacnceVector = BrazierActor->GetActorLocation() - OwnerCharacter->GetActorLocation();

@@ -20,10 +20,7 @@ public:
 	
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Bools")
-	bool bTorchLit = true;
-
-	UPROPERTY(VisibleAnywhere)
-	UPointLightComponent* LightSorce {nullptr};
+	bool bTorchLit = false;
 
 	UPROPERTY(VisibleAnywhere)
 		UParticleSystemComponent* Flame {nullptr};
@@ -34,9 +31,11 @@ public:
 	UFUNCTION()
 		void TorchFlameOff();
 
-protected:
 	UPROPERTY(EditAnywhere)
 		class UStaticMeshComponent* MeshComp;
+
+protected:
+
 
 	virtual void BeginPlay() override;
 	

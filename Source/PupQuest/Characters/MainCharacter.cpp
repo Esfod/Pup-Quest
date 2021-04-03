@@ -90,6 +90,7 @@ void AMainCharacter::TorchAttachToHand()//F.M
 {
 	if (Torch) 
 	{
+		Torch->MeshComp->SetSimulatePhysics(false);
 		Torch->SetActorEnableCollision(false);//Skrur av collision på torch
 		Torch->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("TorchSocket"));//Attach torch til main character
 		bHoldingTorch = true;
@@ -112,10 +113,14 @@ void AMainCharacter::PlankAttachToHand()//F.M
 void AMainCharacter::DropTorch()//F.M
 {
 	if (bHoldingTorch == true) {
-		FVector DropLocation = Torch->GetActorLocation() + FVector(100.f, 0.f, 0.f);//Bestemmer lokasjonen torch skal bli droppet
+		//Torch->MeshComp->SetSimulatePhysics(true);
 		Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach torch fra main character
 		Torch->SetActorEnableCollision(true);//Skrur på collision igjen
+
+		FVector DropLocation = Torch->GetActorLocation() + FVector(0.f, 0.f, -40.f);//Bestemmer lokasjonen torch skal bli droppet
+		Torch->SetActorRotation(FQuat(FRotator(-85.f, -45.f, 0.f)));//Gir planke riktig rotasjon
 		Torch->SetActorLocation(DropLocation);//Plasserer torchen på drop lokasjonen
+
 		bHoldingTorch = false;
 		Torch->TorchFlameOff();
 		UE_LOG(LogTemp, Warning, TEXT("Torch dropped"));
@@ -125,10 +130,15 @@ void AMainCharacter::DropTorch()//F.M
 void AMainCharacter::DropPlank()//F.M
 {
 	if (bHoldingPlank == true) {
-		FVector DropLocation = GetMesh()->GetComponentLocation() + FVector(100.f, 0.f, 0.f);//Bestemmer lokasjonen planken skal bli droppet
 		Plank->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach planken fra main character
 		Plank->SetActorEnableCollision(true);//Skrur på collision igjen
+
+		//FVector Lol = GetActorForwardVector() * FVector(100.f, 0.f, 0.f);
+		Plank->SetActorRotation(FQuat(FRotator(0.f, 0.f, 270.f)));//Gir planke riktig rotasjon
+		FVector DropLocation = GetMesh()->GetComponentLocation() + FVector(100.f, 0.f, 20.f);//Bestemmer lokasjonen planken skal bli droppet
 		Plank->SetActorLocation(DropLocation);//Plasserer planken på drop lokasjonen
+
+
 
 		bHoldingPlank = false;
 		UE_LOG(LogTemp, Warning, TEXT("Plank dropped"));
@@ -204,7 +214,9 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 				if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {//Hvis det er spider web
 					ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
 					//UE_LOG(LogTemp, Warning, TEXT("player detects %s"), *OtherActor->GetName());
-					Web->HitBoxWeb->SetGenerateOverlapEvents(true);
+					if (Web->bBurning == false) {
+						Web->StartBurnWeb();
+					}
 				}
 		}
 
