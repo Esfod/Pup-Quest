@@ -6,7 +6,7 @@
 #include "Components/PointLightComponent.h"
 #include "Particles/ParticleSystem.h"
 #include "Components/BoxComponent.h"
-
+#include "DrawDebugHelpers.h"
 
 
 // Sets default values
@@ -54,21 +54,29 @@ void ABrazierActor::BeginPlay()
 	
 }
 
+void ABrazierActor::Tick(float DeltaTime) {
+
+	//DrawDebugBox(GetWorld(), GetActorLocation(), GetComponentsBoundingBox().GetExtent(), FColor::Red, true, -1, 0, 5);
+
+
+}
 void ABrazierActor::BrazierFlameOn() {
 	bBrazierLit = true;
 
 	BrazierFlame->SetVisibility(true);
 	BrazierLightSource->SetVisibility(true);
 
-	GetWorld()->GetTimerManager().SetTimer(TimeGone, this, &ABrazierActor::SearchForWeb, 1.f, false);
+	SetActorRelativeLocation(GetActorLocation() + 20.f);
+
+	/*GetWorld()->GetTimerManager().SetTimer(TimeGone, this, &ABrazierActor::SearchForWeb, 1.f, false);*/
 
 }
 
 void ABrazierActor::SearchForWeb() {
-	HitBoxBrazier->SetGenerateOverlapEvents(true);
-	HitBoxBrazier->SetRelativeLocation(HitBoxBrazier->GetRelativeLocation() + 0.1f);
+	/*HitBoxBrazier->SetGenerateOverlapEvents(true);
+	HitBoxBrazier->SetRelativeLocation(HitBoxBrazier->GetRelativeLocation() + 1.f);
 
-	UE_LOG(LogTemp, Warning, TEXT("Brazier detects stuff"));
+	UE_LOG(LogTemp, Warning, TEXT("Brazier detects stuff"));*/
 
 	
 }
@@ -84,7 +92,10 @@ void ABrazierActor::BeginOverlapBrazier(UPrimitiveComponent* OverlappedComponent
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Brazier detects %s"), *OtherActor->GetName());
+
+	//GetOverlappingActors();
+
+	/*UE_LOG(LogTemp, Warning, TEXT("Brazier detects %s"), *OtherActor->GetName());
 
 	if (OtherActor->IsA(ASpiderWebActor::StaticClass()) && OtherActor != this) {
 		ASpiderWebActor* SpiderWeb = Cast<ASpiderWebActor>(OtherActor);
@@ -93,10 +104,10 @@ void ABrazierActor::BeginOverlapBrazier(UPrimitiveComponent* OverlappedComponent
 		if (SpiderWeb->bBurning == false) {
 			SpiderWeb->StartBurnWeb();
 		}
-	}
+	}*/
 	
-	HitBoxBrazier->SetGenerateOverlapEvents(false);
-	HitBoxBrazier->SetRelativeLocation(HitBoxBrazier->GetRelativeLocation() - 0.1f);
+	/*HitBoxBrazier->SetGenerateOverlapEvents(false);
+	HitBoxBrazier->SetRelativeLocation(HitBoxBrazier->GetRelativeLocation() - 1.f);*/
 }
 
 

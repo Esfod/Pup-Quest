@@ -14,9 +14,9 @@ void ACheckpointHitBox::OnOverlap(class AActor* OverlappedActor, class AActor* O
 
 	//if (OtherActor->IsA(AMainCharacter::StaticClass())) {
 	//	AMainCharacter* Main = Cast<AMainCharacter>(OtherActor);
-	//	Main->CheckpointLocation = true;
+	//	//Main->CheckpointLocation = true;
 	//	//Main->NewLocation = this->GetMesh()->GetActorLocation();//GetActorLocation();
-	//	//Main->HandleDeath();
+	//	Main->HandleDeath();
 	//	//UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 	//}
 }

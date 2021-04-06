@@ -6,6 +6,9 @@
 #include "Components/PointLightComponent.h"
 #include "Particles/ParticleSystem.h"
 #include "Components/BoxComponent.h"
+#include "DrawDebugHelpers.h"
+#include "BrazierActor.h"
+
 
 
 // Sets default values
@@ -39,15 +42,20 @@ void ASpiderWebActor::BeginPlay()
 	Super::BeginPlay();
 	Flame->SetVisibility(false);
 	LightSorce->SetVisibility(false);
-	HitBoxWeb->SetGenerateOverlapEvents(false);
+	//HitBoxWeb->SetGenerateOverlapEvents(false);
 
-
+	
 }
 
 // Called every frame
 void ASpiderWebActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+
+	//DrawDebugBox(GetWorld(), GetActorLocation(), GetComponentsBoundingBox().GetExtent(), FColor::Red, true, -1, 0, 5);
+
+
 	//SetActorScale3D(FVector(Scale));//Krymper Web
 
 	//while (burning == true) {
@@ -72,14 +80,14 @@ void ASpiderWebActor::StartBurnWeb() {
 
 void ASpiderWebActor::EndBurnWeb() {
 	SetActorHiddenInGame(true);
-	HitBoxWeb->SetGenerateOverlapEvents(true);
+	//HitBoxWeb->SetGenerateOverlapEvents(true);
 	HitBoxWeb->SetRelativeLocation(HitBoxWeb->GetRelativeLocation() + 1.f);
 	SetActorEnableCollision(false);
 
 	UE_LOG(LogTemp, Warning, TEXT("Test"));
 
 
-	HitBoxWeb->SetGenerateOverlapEvents(false);
+	//HitBoxWeb->SetGenerateOverlapEvents(false);
 	HitBoxWeb->SetRelativeLocation(HitBoxWeb->GetRelativeLocation() - 1.f);
 
 	Flame->SetVisibility(false);
@@ -100,6 +108,14 @@ void ASpiderWebActor::BeginOverlapWeb(UPrimitiveComponent* OverlappedComponent, 
 			if (SpiderWeb->bBurning == false) {
 			SpiderWeb->StartBurnWeb();
 			}
+		}
+
+		if (OtherActor->IsA(ABrazierActor::StaticClass()) && OtherActor != this) {
+			ABrazierActor* Brazier = Cast<ABrazierActor>(OtherActor);
+			UE_LOG(LogTemp, Warning, TEXT("Web detects %s"), *OtherActor->GetName());
+
+				StartBurnWeb();
+			
 		}
 }
 

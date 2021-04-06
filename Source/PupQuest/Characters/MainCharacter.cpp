@@ -11,6 +11,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "PupQuest/Actors/SpiderWebActor.h"
+#include "PupQuest/PlacePlankTrigger.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
 #include "PupQuest/Actors/ItemsActor/PlankActor.h"
 #include "PupQuest/Actors/TorchHolderActor.h"
@@ -36,13 +37,13 @@ AMainCharacter::AMainCharacter()
 	StandOnHitBox->SetupAttachment(RootComponent);*/
 
 
-
 	HitBox->SetRelativeLocation(FVector(70.f,0.f, 0.f));
 
 	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlap);
 	/*StandOnHitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapBegin);
 	StandOnHitBox->OnComponentEndOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapEnd);*/
 
+	MoveIgnoreActorAdd(Plank);
 
 }
 
@@ -103,7 +104,7 @@ void AMainCharacter::TorchAttachToHand()//F.M
 	//if (OnTopOff == false) {
 		if (Torch)
 		{
-			Torch->MeshComp->SetSimulatePhysics(false);
+			//Torch->MeshComp->SetSimulatePhysics(false);
 			Torch->SetActorEnableCollision(false);//Skrur av collision på torch
 			Torch->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("TorchSocket"));//Attach torch til main character
 			bHoldingTorch = true;
@@ -134,8 +135,11 @@ void AMainCharacter::DropTorch()//F.M
 		Torch->SetActorEnableCollision(true);//Skrur på collision igjen
 
 		FVector DropLocation = Torch->GetActorLocation() + FVector(0.f, 0.f, -40.f);//Bestemmer lokasjonen torch skal bli droppet
-		Torch->SetActorRotation(FQuat(FRotator(-85.f, -45.f, 0.f)));//Gir planke riktig rotasjon
+		Torch->SetActorRotation(FQuat(FRotator(-85.f, GetMesh()->GetRelativeRotation().Yaw -45.f, 0.f)));//Gir planke riktig rotasjon
 		Torch->SetActorLocation(DropLocation);//Plasserer torchen på drop lokasjonen
+
+		
+
 
 		bHoldingTorch = false;
 		Torch->TorchFlameOff();
@@ -149,16 +153,9 @@ void AMainCharacter::DropPlank()//F.M
 		Plank->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach planken fra main character
 		Plank->SetActorEnableCollision(true);//Skrur på collision igjen
 
-		//FVector Lol = GetActorForwardVector() * FVector(100.f, 0.f, 0.f);
-		Plank->SetActorRotation(FQuat(FRotator(0.f, 0.f, 270.f)));//Gir planke riktig rotasjon
-		//FVector2D Test = FVector2D(5.f, 100.f);
-
-		//FVector DropTest = GetMesh()->GetActorForwardVector() * 50;
-		FVector DropLocation = Plank->GetActorLocation() + FVector(0.f, 0.f, -78.f);
-			// + FVector(0.f, 0.f, 20.f);//Bestemmer lokasjonen planken skal bli droppet
+		Plank->SetActorRotation(FQuat(FRotator(0.f, GetMesh()->GetRelativeRotation().Yaw + 90.f, 270.f)));//Gir planke riktig rotasjon
+		FVector DropLocation = Plank->GetActorLocation() + FVector(0.f, 0.f, -78.f);//Bestemmer lokasjonen planken skal bli droppet
 		Plank->SetActorLocation(DropLocation);//Plasserer planken på drop lokasjonen
-
-
 
 		bHoldingPlank = false;
 		UE_LOG(LogTemp, Warning, TEXT("Plank dropped"));
@@ -168,12 +165,15 @@ void AMainCharacter::DropPlank()//F.M
 void AMainCharacter::PlacePlank()//F.M 
 {
 	if (bHoldingPlank == true && InTriggerBox == true) {
+
+
+
 		Plank->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach planken fra main character
 		Plank->SetActorEnableCollision(true);//Skrur på collision igjen
 
-		Plank->SetActorLocation(FVector(10500.0f, 9480.0f, 500.0f));//Plasserer planken på drop lokasjonen
+		Plank->SetActorLocation(Location);//Plasserer planken på drop lokasjonen FVector(10500.0f, 9480.0f, 500.0f)
 		Plank->SetActorScale3D(FVector(13.f));//Gir planke riktig størrelse
-		Plank->SetActorRotation(FQuat(FRotator(-1.5f, 0.f, 90.f)));//Gir planke riktig rotasjon
+		Plank->SetActorRelativeRotation(FQuat(Rotation));//Gir planke riktig rotasjon FRotator(-1.5f, 0.f, 90.f))
 
 		bHoldingPlank = false;
 		UE_LOG(LogTemp, Warning, TEXT("Plank placed"));
@@ -196,6 +196,7 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult& SweepResult) //F.M
 {
+
 	//UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
 
 	if (bHoldingTorch == false && bHoldingPlank == false) {//Hvis karakteren ikke holder torch eller planke
@@ -317,12 +318,14 @@ void AMainCharacter::StandOnOverlapEnd(UPrimitiveComponent* OverlappedComponent,
 void AMainCharacter::HandleDeath()
 {
 	//Super::HandleDeath();
+	//GetWorld()->GetTimerManager().SetTimer(TimeGone, this, &AMainCharacter::Test, 5.f, false);
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
-	/*if (CheckpointLocation == true) {
-		UE_LOG(LogTemp, Warning, TEXT("Hello there"));
-		SetActorLocation(FVector(100.f,100.f,100.f));
-	}*/
+	//if (CheckpointLocation == true) {
+		//UE_LOG(LogTemp, Warning, TEXT("Hello there"));
+		//SetActorLocation(FVector(7000.f,9500.f,580.f));
+	//}
 }
+
 
 ATorchActor* AMainCharacter::GetTorchActor()
 {

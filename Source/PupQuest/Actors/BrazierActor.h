@@ -20,7 +20,8 @@ public:
 	// Sets default values for this actor's properties
 	ABrazierActor();
 
-	
+	virtual void Tick(float DeltaTime) override;
+
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Bools")
 	bool bBrazierLit = false;

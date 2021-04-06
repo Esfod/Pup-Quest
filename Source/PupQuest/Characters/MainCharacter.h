@@ -9,6 +9,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class ATorchActor;
+class APlacePlankTrigger;
 class APlankActor;
 class ABrazierActor;
 
@@ -51,9 +52,13 @@ public:
 
 	bool bTorchLit;
 
+	FVector Location;
+
+	FRotator Rotation;
+
 	virtual void HandleDeath() override;
 
-	FVector NewLocation = FVector(50.f,50.f,50.f);
+	//FVector NewLocation = FVector(50.f,50.f,50.f);
 
 	bool CheckpointLocation = false;
 protected:
@@ -78,7 +83,7 @@ protected:
 		APlankActor* Plank;
 
 	UPROPERTY()
-	ATorchActor* Torch;
+		ATorchActor* Torch;
 
 	UPROPERTY()
 	ABrazierActor* Brazier;
