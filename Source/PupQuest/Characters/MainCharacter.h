@@ -28,6 +28,8 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 
 	UPROPERTY(EditAnywhere)
 	float RotateSpeed = 30.f;
+
+	void Attack();
 public:
 	AMainCharacter();
 
@@ -59,6 +61,7 @@ protected:
 	void RotatePlayerTowardsWalkDirection();
 	
 	void StartInteract();
+	
 	void StopInteract();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
@@ -68,15 +71,14 @@ protected:
 		APlankActor* Plank;
 
 	UPROPERTY()
-	ATorchActor* Torch;
+		ATorchActor* Torch;
 
 	UPROPERTY()
-	ABrazierActor* UBrazier;
+		ABrazierActor* UBrazier;
 
 	bool bBrazierLit;
 
 	bool pickupItem = false;//So you don't pick up something you just dropped
-
 
 	UFUNCTION()
         void TorchAttachToHand();

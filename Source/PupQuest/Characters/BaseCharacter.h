@@ -25,9 +25,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	float Health {0.f};
-
-	
-
 public:
 	ABaseCharacter();
 
