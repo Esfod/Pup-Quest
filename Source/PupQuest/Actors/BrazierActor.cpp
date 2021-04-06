@@ -66,7 +66,7 @@ void ABrazierActor::BrazierFlameOn() {
 	BrazierFlame->SetVisibility(true);
 	BrazierLightSource->SetVisibility(true);
 
-	SetActorRelativeLocation(GetActorLocation() + 20.f);
+	//SetActorRelativeLocation(GetActorLocation() + 20.f);
 
 	/*GetWorld()->GetTimerManager().SetTimer(TimeGone, this, &ABrazierActor::SearchForWeb, 1.f, false);*/
 
