@@ -72,3 +72,8 @@ TArray<AActor*> AEnemyBaseCharacter::GetOverLappingActorsToFireBox()
 	FireBox->GetOverlappingActors(OverlappingActors);
 	return OverlappingActors;
 }
+
+void AEnemyBaseCharacter::GetHit(int32 ObjectInHand)
+{
+	
+}

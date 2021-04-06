@@ -31,8 +31,12 @@ public:
 	float Damage {50.f};
 
 	TArray<AActor*> GetOverLappingActorsToFireBox();
-	
+
+	bool bIsEnemyKnockedOut = false;
 protected:
 	virtual void BeginPlay() override;
+	
+	virtual void GetHit(int32 ObjectInHand);
 
+	float KnockOutTime {0.f};
 };

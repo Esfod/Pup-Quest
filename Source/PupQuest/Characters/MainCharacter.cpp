@@ -3,9 +3,14 @@
 
 #include "MainCharacter.h"
 
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
+
 #include "Components/InputComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/BoxComponent.h"
+
+#include "DrawDebugHelpers.h"
 
 #include "GameFramework/Controller.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -17,10 +22,14 @@
 #include "PupQuest/Actors/TorchHolderActor.h"
 #include "PupQuest/Actors/BrazierActor.h"
 
+
 #include <Runtime/Engine/Classes/Kismet/GameplayStatics.h>
 
-#include "GameFramework/SpringArmComponent.h"
-#include "Camera/CameraComponent.h"
+#include "PupQuest/Characters/SpiderCharacter.h"
+
+//#include "PupQuest/Hud/P_Torch"
+
+
 
 AMainCharacter::AMainCharacter()
 {
@@ -29,7 +38,7 @@ AMainCharacter::AMainCharacter()
 	SpringArm->SetRelativeRotation(FRotator(0.f, -30.f, 15.f));
 	SpringArm->bDoCollisionTest = false;
 	SpringArm->bInheritYaw = false;
-
+	this->
 	CameraComp  = CreateDefaultSubobject<UCameraComponent>("Camera Component");
 	CameraComp->SetupAttachment(SpringArm);
 
@@ -40,10 +49,14 @@ AMainCharacter::AMainCharacter()
 	HitBox->SetRelativeLocation(FVector(70.f,0.f, 0.f));
 
 	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlap);
+
 	/*StandOnHitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapBegin);
 	StandOnHitBox->OnComponentEndOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapEnd);*/
 
 	MoveIgnoreActorAdd(Plank);
+
+	
+
 
 }
 
@@ -57,6 +70,8 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::StartInteract);
 	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AMainCharacter::StopInteract);
 
+	PlayerInputComponent->BindAction("Attack",IE_Pressed,this, &AMainCharacter::Attack);
+	
 	PlayerInputComponent->BindAction("Drop", IE_Pressed, this, &AMainCharacter::DropTorch);
 	PlayerInputComponent->BindAction("Drop", IE_Pressed, this, &AMainCharacter::DropPlank);
 
@@ -330,4 +345,33 @@ void AMainCharacter::HandleDeath()
 ATorchActor* AMainCharacter::GetTorchActor()
 {
 	return Torch;
+}
+
+void AMainCharacter::Attack()
+{
+	UE_LOG(LogTemp,Warning,TEXT("Attack"));
+	//DrawDebugBox(GetWorld(), GetActorLocation()+GetMesh()->GetForwardVector()*25,FVector(25,25,50), FColor::Purple, true, -1, 0, 10);
+	HitBox->SetGenerateOverlapEvents(true);
+	TArray<AActor*> OverlappingActors;
+	HitBox->GetOverlappingActors(OverlappingActors);
+	for (AActor* Actor : OverlappingActors)
+	{
+		UE_LOG(LogTemp,Error,TEXT("Actor hit %s"), *Actor->GetName());
+		if(Actor->IsA(ASpiderCharacter::StaticClass()))
+		{
+			ASpiderCharacter* SpiderHit = Cast<ASpiderCharacter>(Actor);
+			if(bHoldingTorch)
+			{
+				if(bTorchLit)
+					SpiderHit->GetHit(2);
+				else
+					SpiderHit->GetHit(1);
+			}
+			else if(bHoldingPlank)
+				SpiderHit->GetHit(3);
+			else
+				SpiderHit->GetHit(0);
+		}
+	}
+	HitBox->SetGenerateOverlapEvents(false);
 }

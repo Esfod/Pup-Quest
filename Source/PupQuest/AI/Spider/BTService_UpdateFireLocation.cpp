@@ -30,7 +30,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 	FVector VectorA {0.f};
 	FVector VectorB {0.f}; //the outgoing variable
 	bool bDistanceASet {false};
-	UE_LOG(LogTemp,Warning,TEXT("1. Distance A = %f\tDistance B = %f"), DistanceA, DistanceB);
+	//UE_LOG(LogTemp,Warning,TEXT("1. Distance A = %f\tDistance B = %f"), DistanceA, DistanceB);
 
 	for(AActor* Actor : OverlappingActors)
 	{
@@ -84,7 +84,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 						DistacnceVector = MainCharacter->GetActorLocation() - OwnerCharacter->GetActorLocation();
 						VectorA = MainCharacter->GetActorLocation();
 						DistanceA = DistacnceVector.Size();
-						UE_LOG(LogTemp,Warning,TEXT("2. Distance A = %f\tDistance B = %f"), DistanceA, DistanceB);
+						//UE_LOG(LogTemp,Warning,TEXT("2. Distance A = %f\tDistance B = %f"), DistanceA, DistanceB);
 						bDistanceASet = true;
 					}
 				}
@@ -93,7 +93,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 			{
 				DistanceB = DistanceA;
 				VectorB = VectorA;
-				UE_LOG(LogTemp,Warning,TEXT("3. Distance A = %f\tDistance B = %f"), DistanceA, DistanceB);
+				//UE_LOG(LogTemp,Warning,TEXT("3. Distance A = %f\tDistance B = %f"), DistanceA, DistanceB);
 			}
 			bDistanceASet = false;
 		}
