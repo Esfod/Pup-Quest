@@ -127,7 +127,8 @@ void AMainCharacter::AttachItem(AActor* Item) {
 	Interacting = false;//Passer på at du ikke kan plukke opp noe mer en en gang når du trykker på E, så etter torch er plukket opp kan man ikke plukke opp noe mer
 }
 
-void AMainCharacter::ChooseItemDrop() {
+void AMainCharacter::ChooseItemDrop()//F.M
+{
 	if (bHoldingPlank == true) {
 		DropItem(Plank);
 	}
@@ -136,7 +137,8 @@ void AMainCharacter::ChooseItemDrop() {
 	}
 }
 
-void AMainCharacter::DropItem(AActor* Item) {
+void AMainCharacter::DropItem(AActor* Item)//F.M
+{
 	if (Item) {
 		Item->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach torch fra main character
 		Item->SetActorEnableCollision(true);//Skrur på collision igjen
