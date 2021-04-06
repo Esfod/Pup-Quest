@@ -169,7 +169,7 @@ void AMainCharacter::DropPlank()//F.M
 		Plank->SetActorEnableCollision(true);//Skrur på collision igjen
 
 		Plank->SetActorRotation(FQuat(FRotator(0.f, GetMesh()->GetRelativeRotation().Yaw + 90.f, 270.f)));//Gir planke riktig rotasjon
-		FVector DropLocation = Plank->GetActorLocation() + FVector(0.f, 0.f, -78.f);//Bestemmer lokasjonen planken skal bli droppet
+		FVector DropLocation = Plank->GetActorLocation() + FVector(0.f, 0.f, -30.f);//Bestemmer lokasjonen planken skal bli droppet
 		Plank->SetActorLocation(DropLocation);//Plasserer planken på drop lokasjonen
 
 		bHoldingPlank = false;

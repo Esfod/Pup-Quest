@@ -42,7 +42,7 @@ void ASpiderWebActor::BeginPlay()
 	Super::BeginPlay();
 	Flame->SetVisibility(false);
 	LightSorce->SetVisibility(false);
-	//HitBoxWeb->SetGenerateOverlapEvents(false);
+	HitBoxWeb->SetGenerateOverlapEvents(false);
 
 	
 }
@@ -80,14 +80,14 @@ void ASpiderWebActor::StartBurnWeb() {
 
 void ASpiderWebActor::EndBurnWeb() {
 	SetActorHiddenInGame(true);
-	//HitBoxWeb->SetGenerateOverlapEvents(true);
+	HitBoxWeb->SetGenerateOverlapEvents(true);
 	HitBoxWeb->SetRelativeLocation(HitBoxWeb->GetRelativeLocation() + 1.f);
 	SetActorEnableCollision(false);
 
 	UE_LOG(LogTemp, Warning, TEXT("Test"));
 
 
-	//HitBoxWeb->SetGenerateOverlapEvents(false);
+	HitBoxWeb->SetGenerateOverlapEvents(false);
 	HitBoxWeb->SetRelativeLocation(HitBoxWeb->GetRelativeLocation() - 1.f);
 
 	Flame->SetVisibility(false);
