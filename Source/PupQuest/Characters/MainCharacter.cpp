@@ -194,33 +194,26 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult& SweepResult) //F.M
 {
-
 	//UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
-
 	if (bHoldingTorch == false && bHoldingPlank == false) {//Hvis karakteren ikke holder torch eller planke
-			if (OtherActor->IsA(ATorchActor::StaticClass()))//Hvis det er torch
+		if (OtherActor->IsA(ATorchActor::StaticClass()))//Hvis det er torch
+		{
+			ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
+			Torch = TorchHit;
+			AttachItem(Torch);
+			UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
+		}
+		if (OtherActor->IsA(APlankActor::StaticClass()))//Hvis det er planke
 			{
-				ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
-				Torch = TorchHit;
-				//bTorchLit = Torch->bTorchLit;
-				//TorchAttachToHand();
-				AttachItem(Torch);
-
-				UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
-			}
-			if (OtherActor->IsA(APlankActor::StaticClass()))//Hvis det er planke
-				{
-				APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
-				Plank = PlankHit;
-				//PlankAttachToHand();	
-				AttachItem(Plank);
+			APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
+			Plank = PlankHit;
+			AttachItem(Plank);
 			}
 	}
 	else if (bHoldingTorch == true) {//Hvis karakteren holder torch
 		if (OtherActor->IsA(ATorchHolderActor::StaticClass())) {//Hvis det er en torch holder
 			ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(OtherActor);
 			if (Torch->bTorchLit == true) {//Hvis torch er lit
-
 				Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Karakteren slutter å holde torch
 				Torch->SetActorEnableCollision(true);//Skrur på collision igjen
 				Torch->SetActorLocation(TorchHolder->GetTorchPlacementPoint());//Setter torch i torch holder
@@ -231,42 +224,31 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 			}
 		}
 		if (Torch->bTorchLit == true) {//Hvis torch er lit
-				if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {//Hvis det er spider web
-					ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
-					//UE_LOG(LogTemp, Warning, TEXT("player detects %s"), *OtherActor->GetName());
-					if (Web->bBurning == false) {
-						Web->StartBurnWeb();
-					}
+			if (OtherActor->IsA(ASpiderWebActor::StaticClass())) {//Hvis det er spider web
+				ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
+				//UE_LOG(LogTemp, Warning, TEXT("player detects %s"), *OtherActor->GetName());
+				if (Web->bBurning == false) {
+					Web->StartBurnWeb();
 				}
+			}
 		}
-
 		if (OtherActor->IsA(APlankActor::StaticClass()) && Interacting == true)//Hvis det er planke
 		{
-			//DropTorch();//Dropper torch
 			DropItem(Torch);
 			APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
 			Plank = PlankHit;
-			//PlankAttachToHand();//Attach planke til karakter
 			AttachItem(Plank);
 		}
-
 	}
-
 	if (bHoldingPlank == true) {//Hvis karakteren holder planke
 		if (OtherActor->IsA(ATorchActor::StaticClass()) && Interacting == true)//Hvis det er torch
 		{
-			//DropPlank();//Dropp planke
 			DropItem(Plank);
 			ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
 			Torch = TorchHit;
-			//TorchAttachToHand();//Attach torch til karakter
 			AttachItem(Torch);
-			//UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), bTorchLit ? TEXT("true") : TEXT("false"));
-
 		}
 	}
-
-
 	if (OtherActor->IsA(ABrazierActor::StaticClass())) {//Hvis det er brazier
 		ABrazierActor* UBrazier = Cast<ABrazierActor>(OtherActor);
 		Brazier = UBrazier;
