@@ -24,7 +24,8 @@ EBTNodeResult::Type UBTTask_RunAwayFromFire::ExecuteTask(UBehaviorTreeComponent&
 		UE_LOG(LogTemp,Warning,TEXT("SpiderCharacter cast fail"));
 		return EBTNodeResult::Failed;
 	}
-	FVector TempVector = FireLocation-SpiderCharacter->GetActorLocation();
-	SpiderCharacter->MoveForward(TempVector, -1);
+	FVector TempVector = SpiderCharacter->GetActorLocation() - FireLocation;
+	TempVector.Normalize();
+	SpiderCharacter->AddMovementInput(TempVector, 1);
 	return EBTNodeResult::Succeeded;
 }
