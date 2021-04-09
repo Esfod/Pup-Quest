@@ -6,6 +6,8 @@
 #include "PupQuest/Characters/EnemyBaseCharacter.h"
 #include "PupQuest/Actors/BrazierActor.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
+
+
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTService_UpdateClosestFireDist::UBTService_UpdateClosestFireDist()

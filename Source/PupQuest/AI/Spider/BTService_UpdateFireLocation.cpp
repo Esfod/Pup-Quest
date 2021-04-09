@@ -80,7 +80,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 					//UE_LOG(LogTemp,Warning,TEXT("Kim holds a torch"));
 					if(MainCharacter->bTorchLit)
 					{
-						//UE_LOG(LogTemp,Warning,TEXT("Torch is lit"));
+						UE_LOG(LogTemp,Warning,TEXT("Torch is lit"));
 						DistacnceVector = MainCharacter->GetActorLocation() - OwnerCharacter->GetActorLocation();
 						VectorA = MainCharacter->GetActorLocation();
 						DistanceA = DistacnceVector.Size();

@@ -51,4 +51,7 @@ void ASpiderCharacter::GetHit(int32 ObjectInHand)
 	}
 }
 
-
+void ASpiderCharacter::MoveForward(FVector WalkDirection, float ValueDirection)
+{
+	AddMovementInput(WalkDirection,1);
+}

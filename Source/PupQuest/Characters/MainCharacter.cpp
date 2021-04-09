@@ -38,26 +38,21 @@ AMainCharacter::AMainCharacter()
 	SpringArm->SetRelativeRotation(FRotator(0.f, -30.f, 15.f));
 	SpringArm->bDoCollisionTest = false;
 	SpringArm->bInheritYaw = false;
-	this->
 	CameraComp  = CreateDefaultSubobject<UCameraComponent>("Camera Component");
 	CameraComp->SetupAttachment(SpringArm);
 
 	/*StandOnHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBoxWeb"));
 	StandOnHitBox->SetupAttachment(RootComponent);*/
-
-
-	HitBox->SetRelativeLocation(FVector(70.f,0.f, 0.f));
-
-	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlap);
-
 	/*StandOnHitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapBegin);
 	StandOnHitBox->OnComponentEndOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapEnd);*/
 
+	HitBox->SetRelativeLocation(FVector(70.f,0.f, 0.f));
+	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlap);
+
+	AttackBoxComponent = CreateDefaultSubobject<UBoxComponent>("Attack HitBox");
+	AttackBoxComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("Attack_Box_Attach"));
+
 	MoveIgnoreActorAdd(Plank);
-
-	
-
-
 }
 
 void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -77,41 +72,46 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAction("Place", IE_Pressed, this, &AMainCharacter::PlacePlank);
 	PlayerInputComponent->BindAction("Reset", IE_Pressed, this, &AMainCharacter::HandleDeath);
-
 }
 
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
 }
 
 void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if(MoveForwardVector.X != 0 || MoveRightVector.Y != 0)
-		RotatePlayerTowardsWalkDirection();
 }
 
 void AMainCharacter::MoveForward(float Value)
 {
-	AddMovementInput(GetActorForwardVector(), Value);
-	MoveForwardVector = GetActorForwardVector() * Value;
+	if ((Controller != nullptr) && (Value != 0.0f))
+	{
+		// find out which way is forward
+		const FRotator PlayerRotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, PlayerRotation.Yaw, 0);
+
+		// get forward vector
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		AddMovementInput(Direction, Value);
+	}
 }
 
 void AMainCharacter::MoveRight(float Value)
 {
-	AddMovementInput(GetActorRightVector(), Value);
-	MoveRightVector = GetActorRightVector() * Value;
-}
-
-void AMainCharacter::RotatePlayerTowardsWalkDirection()
-{
-	float InitialYaw = GetMesh()->GetRelativeRotation().Yaw;
-    FVector MoveDirection = MoveForwardVector + MoveRightVector;
-	float RotateToYaw = MoveDirection.Rotation().Yaw;
-	float CurrentYaw = FMath::Lerp(InitialYaw, RotateToYaw, GetWorld()->DeltaTimeSeconds*RotateSpeed);
+	if ( (Controller != nullptr) && (Value != 0.0f) )
+	{
+		// find out which way is right
+		const FRotator PlayerRotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, PlayerRotation.Yaw, 0);
 	
-	GetMesh()->SetRelativeRotation(FRotator(0.f,CurrentYaw,0.f));
+		// get right vector 
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		// add movement in that direction
+		AddMovementInput(Direction, Value);
+	}
 }
 
 void AMainCharacter::TorchAttachToHand()//F.M
@@ -152,9 +152,6 @@ void AMainCharacter::DropTorch()//F.M
 		FVector DropLocation = Torch->GetActorLocation() + FVector(0.f, 0.f, -40.f);//Bestemmer lokasjonen torch skal bli droppet
 		Torch->SetActorRotation(FQuat(FRotator(-85.f, GetMesh()->GetRelativeRotation().Yaw -45.f, 0.f)));//Gir planke riktig rotasjon
 		Torch->SetActorLocation(DropLocation);//Plasserer torchen på drop lokasjonen
-
-		
-
 
 		bHoldingTorch = false;
 		Torch->TorchFlameOff();
@@ -219,7 +216,7 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 			{
 				ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
 				Torch = TorchHit;
-				//bTorchLit = Torch->bTorchLit;
+				bTorchLit = Torch->bTorchLit;
 				TorchAttachToHand();
 
 				UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
@@ -344,7 +341,10 @@ void AMainCharacter::HandleDeath()
 
 ATorchActor* AMainCharacter::GetTorchActor()
 {
-	return Torch;
+	if(Torch != nullptr)
+		return Torch;
+	else
+		return nullptr;
 }
 
 void AMainCharacter::Attack()
