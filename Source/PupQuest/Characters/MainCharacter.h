@@ -62,6 +62,8 @@ public:
 
 	bool bTorchLit;
 
+	AActor* DroppedItem = nullptr;
+
 	FVector Location;
 
 	FRotator Rotation;

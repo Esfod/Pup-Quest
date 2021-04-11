@@ -126,22 +126,23 @@ void AMainCharacter::RotatePlayerTowardsWalkDirection()
 }
 
 void AMainCharacter::AttachItem(AActor* Item) {
-		Interacting = false;//Passer på at du ikke kan plukke opp noe mer en en gang når du trykker på E, så etter torch er plukket opp kan man ikke plukke opp noe mer
+		//Interacting = false;//Passer på at du ikke kan plukke opp noe mer en en gang når du trykker på E, så etter torch er plukket opp kan man ikke plukke opp noe mer
 		DropHoldingItem();
 
 		Item->SetActorEnableCollision(false);//Skrur av collision
 
-		if (Item == Torch) {
+		if (Item == Torch && DroppedItem != Torch) {
 			Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("TorchSocket"));//Attach torch til main character
 			bHoldingTorch = true;
 			UE_LOG(LogTemp, Warning, TEXT("Torch picked up"));
 		}
 
-		if (Item == Plank) {
+		if (Item == Plank && DroppedItem != Plank) {
 			Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("PlankSocket"));//Attach plank til main character
 			bHoldingPlank = true;
 			UE_LOG(LogTemp, Warning, TEXT("Plank picked up"));
 		}
+		DroppedItem = nullptr;
 }
 
 void AMainCharacter::DropHoldingItem()//F.M
@@ -167,6 +168,7 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 			DropRotation = FRotator(0.f, GetMesh()->GetRelativeRotation().Yaw + 90.f, 270.f);
 			bHoldingPlank = false;
 			UE_LOG(LogTemp, Warning, TEXT("Plank dropped"));
+			DroppedItem = Plank;
 		}
 
 		if (Item == Torch) {
@@ -174,6 +176,7 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 			bHoldingTorch = false;
 			Torch->TorchFlameOff();
 			UE_LOG(LogTemp, Warning, TEXT("Torch dropped"));
+			DroppedItem = Torch;
 		}
 
 		Item->SetActorRotation(FQuat(DropRotation));
@@ -200,7 +203,7 @@ void AMainCharacter::PlacePlank()//F.M
 void AMainCharacter::StartInteract() {//F.M
 	//UE_LOG(LogTemp, Warning, TEXT("Interact!"));
 	HitBox->SetGenerateOverlapEvents(true);//Skrur på hitboxen så den registrerer om noe er i den
-	Interacting = true;
+	//Interacting = true;
 }
 
 void AMainCharacter::StopInteract()//F.M
@@ -214,14 +217,14 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	bool bFromSweep, const FHitResult& SweepResult) //F.M
 {
 	//UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
-	if (OtherActor->IsA(ATorchActor::StaticClass()) && Interacting == true)//Hvis det er torch
+	if (OtherActor->IsA(ATorchActor::StaticClass()))//Hvis det er torch
 	{
 		ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
 		Torch = TorchHit;
 		AttachItem(Torch);
 		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
 	}
-	if (OtherActor->IsA(APlankActor::StaticClass()) && Interacting == true)//Hvis det er planke
+	if (OtherActor->IsA(APlankActor::StaticClass()))//Hvis det er planke
 	{
 		APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
 		Plank = PlankHit;
@@ -234,6 +237,7 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 				Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Karakteren slutter å holde torch
 				Torch->SetActorEnableCollision(true);//Skrur på collision igjen
 				Torch->SetActorLocation(TorchHolder->GetTorchPlacementPoint());//Setter torch i torch holder
+				DroppedItem = Torch;
 				bHoldingTorch = false;
 			}
 			else {
