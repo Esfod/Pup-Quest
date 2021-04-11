@@ -22,9 +22,7 @@ void ATorchActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-
 	//MeshComp->SetSimulatePhysics(true);
-
 
 	if (bTorchLit == false) {
 		TorchFlameOff();
