@@ -227,7 +227,8 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 			if (Torch->bTorchLit == true) {//Hvis torch er lit
 				Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Karakteren slutter å holde torch
 				Torch->SetActorEnableCollision(true);//Skrur på collision igjen
-				Torch->SetActorLocation(TorchHolder->GetTorchPlacementPoint());//Setter torch i torch holder
+				Torch->SetActorLocation(TorchHolder->GetTorchPlacementPoint().GetLocation());
+				Torch->SetActorRotation(TorchHolder->GetTorchPlacementPoint().GetRotation());//Setter torch i torch holder
 				DroppedItem = Torch;
 				bHoldingTorch = false;
 			}
