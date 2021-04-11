@@ -27,7 +27,7 @@ void ATorchActor::BeginPlay()
 	if (bTorchLit == false) {
 		TorchFlameOff();
 	}
-	else {
+	else if (bTorchLit == true) {
 		TorchFlameOn();
 	}
 
