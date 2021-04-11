@@ -18,7 +18,6 @@ public:
 
 	ATorchActor();
 	
-
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Bools")
 	bool bTorchLit;
 

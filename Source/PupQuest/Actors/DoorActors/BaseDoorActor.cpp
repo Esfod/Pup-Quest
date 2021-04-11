@@ -9,7 +9,7 @@
 // Sets default values
 ABaseDoorActor::ABaseDoorActor()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = true; 
 
 	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeh Component"));
 	RootComponent = StaticMeshComp;

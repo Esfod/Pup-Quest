@@ -23,7 +23,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 	AEnemyBaseCharacter* OwnerCharacter = Cast<AEnemyBaseCharacter>(OwnerComp.GetAIOwner()->GetCharacter());
-	if(OwnerCharacter == nullptr) return;
+	if(OwnerCharacter == nullptr) return; 
 	TArray<AActor*> OverlappingActors = OwnerCharacter->GetOverLappingActorsToFireBox();
 	float DistanceA {0.f}; //an temporary variable
 	float DistanceB {100000.f}; 

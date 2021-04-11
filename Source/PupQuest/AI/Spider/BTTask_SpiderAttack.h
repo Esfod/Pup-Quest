@@ -14,7 +14,7 @@ class PUPQUEST_API UBTTask_SpiderAttack : public UBTTaskNode
 {
 	GENERATED_BODY()
 public:
-	UBTTask_SpiderAttack();
+	UBTTask_SpiderAttack(); 
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;	
 };

@@ -23,5 +23,5 @@ public:
 protected:
 	virtual void Tick(float DeltaSeconds) override;
 private:
-	float Timer {0.f};
+	float Timer {0.f}; 
 };

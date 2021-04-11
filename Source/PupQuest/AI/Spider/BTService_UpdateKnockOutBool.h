@@ -15,7 +15,7 @@ class PUPQUEST_API UBTService_UpdateKnockOutBool : public UBTService_BlackboardB
 	GENERATED_BODY()
 public:
 	UBTService_UpdateKnockOutBool();
-private:
+private: 
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 };
 

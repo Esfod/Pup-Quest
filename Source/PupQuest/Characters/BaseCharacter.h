@@ -24,7 +24,7 @@ protected:
 	float MaxHealth {100.0f};
 
 	UPROPERTY(VisibleAnywhere)
-	float Health {0.f};
+	float Health {0.f}; 
 	
 	void IsCharacterDead();
 public:

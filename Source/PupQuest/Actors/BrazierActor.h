@@ -24,7 +24,7 @@ public:
 
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Bools")
-	bool bBrazierLit = false;
+	bool bBrazierLit = false; 
 
 	UPROPERTY(VisibleAnywhere)
 		UPointLightComponent* BrazierLightSource { nullptr };
