@@ -28,6 +28,6 @@ EBTNodeResult::Type UBTTask_RunAwayFromFire::ExecuteTask(UBehaviorTreeComponent&
 	}
 	FVector TempVector = SpiderCharacter->GetActorLocation() - FireLocation;
 	TempVector.Normalize();
-	SpiderCharacter->MoveForward(TempVector, 1);
+	SpiderCharacter->AddMovementInput(TempVector, 1);
 	return EBTNodeResult::Succeeded;
 }

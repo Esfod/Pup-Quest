@@ -43,7 +43,7 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	DamageToApply = FMath::Min(Health, DamageToApply);
 	Health -= DamageToApply;
 	UE_LOG(LogTemp,Warning,TEXT("Health left is %f"), Health);
-	if(IsCharacterDead())
+	if(bCharacterDead)
 	{
 		DetachFromControllerPendingDestroy();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -58,8 +58,8 @@ void ABaseCharacter::HandleDeath()
 	
 }
 
-bool ABaseCharacter::IsCharacterDead() const
+void ABaseCharacter::IsCharacterDead()
 {
-	if(Health == 0.f) return true;
-    	return false;
+	if(Health == 0.f) bCharacterDead = true;
+    	bCharacterDead = false;
 }

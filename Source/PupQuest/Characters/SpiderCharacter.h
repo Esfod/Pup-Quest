@@ -20,7 +20,6 @@ public:
 
 	virtual void GetHit(int32 ObjectInHand) override;
 
-	void MoveForward(FVector WalkDirection, float ValueDirection);
 protected:
 	virtual void Tick(float DeltaSeconds) override;
 private:
