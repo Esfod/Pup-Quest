@@ -25,7 +25,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	ATorchHolderActor();
+	ATorchHolderActor(); 
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bHasATorch {false};

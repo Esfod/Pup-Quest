@@ -52,7 +52,7 @@ public:
 
 	bool OnTopOff = false;
 	
-	bool CheckpointLocation = false;
+	bool CheckpointLocation = false; 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bHoldingTorch = false;

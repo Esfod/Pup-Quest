@@ -24,7 +24,7 @@ void AEnemyBaseCharacter::BeginPlay()
 
 void AEnemyBaseCharacter::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaTime); 
 }
 
 void AEnemyBaseCharacter::Attack(float OwnerDamage)

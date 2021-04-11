@@ -20,7 +20,7 @@ ATorchActor::ATorchActor()
 
 void ATorchActor::BeginPlay()
 {
-	Super::BeginPlay();
+	Super::BeginPlay(); 
 
 	//MeshComp->SetSimulatePhysics(true);
 

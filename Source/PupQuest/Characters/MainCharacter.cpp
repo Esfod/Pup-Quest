@@ -228,7 +228,7 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 	}
 	else if (OtherActor->IsA(ATorchHolderActor::StaticClass()))//Hvis det er en torch holder
 	{
-		ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(OtherActor);
+		ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(OtherActor); 
 		if (bHoldingTorch == true) {//Hvis karakteren holder torch
 			if (Torch->bTorchLit == true) {//Hvis torch er lit
 				Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Karakteren slutter å holde torch

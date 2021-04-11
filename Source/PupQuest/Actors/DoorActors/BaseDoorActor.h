@@ -18,7 +18,7 @@ private:
 	UStaticMeshComponent* StaticMeshComp { nullptr };
 
 	UPROPERTY(EditAnywhere, Category= "Variables")
-	bool bTorchHolder { true };
+	bool bTorchHolder { true }; 
 
 	bool CheckTorchHolder(ATorchHolderActor* a);
 	bool CheckTorchHolder(ATorchHolderActor* a, ATorchHolderActor* b);

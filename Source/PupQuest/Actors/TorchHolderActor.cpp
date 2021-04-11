@@ -26,7 +26,7 @@ ATorchActor* ATorchHolderActor::GetTorchActor()
 
 void ATorchHolderActor::SetTorchActor(ATorchActor* NewTorchActor)
 {
-	TorchActor = NewTorchActor;
+	TorchActor = NewTorchActor; 
 }
 
 FTransform ATorchHolderActor::GetTorchPlacementPoint() 

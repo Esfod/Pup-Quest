@@ -20,6 +20,6 @@ EBTNodeResult::Type UBTTask_SpiderAttack::ExecuteTask(UBehaviorTreeComponent& Ow
 		UE_LOG(LogTemp,Warning,TEXT("cast failed"));
 		return EBTNodeResult::Failed;
 	}
-	SpiderCharacter->Attack(SpiderCharacter->Damage);
+	SpiderCharacter->Attack(SpiderCharacter->Damage); 
 	return EBTNodeResult::Succeeded;
 }

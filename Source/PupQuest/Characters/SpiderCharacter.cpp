@@ -18,7 +18,7 @@ void ASpiderCharacter::Tick(float DeltaSeconds)
 		{
 			bIsEnemyKnockedOut = false;
 			KnockOutTime = 0;
-			Timer = 0.f;
+			Timer = 0.f; 
 		}
 	}
 }

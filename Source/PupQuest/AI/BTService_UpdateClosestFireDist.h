@@ -14,7 +14,7 @@ class PUPQUEST_API UBTService_UpdateClosestFireDist : public UBTService_Blackboa
 {
 	GENERATED_BODY()
 public:
-	UBTService_UpdateClosestFireDist();
+	UBTService_UpdateClosestFireDist(); 
 private:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 };

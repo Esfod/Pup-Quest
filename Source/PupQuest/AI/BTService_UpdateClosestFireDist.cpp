@@ -30,7 +30,7 @@ void UBTService_UpdateClosestFireDist::TickNode(UBehaviorTreeComponent& OwnerCom
 	float DistanceB {0.f};
 	for(AActor* Actor : OverlappingActors)
 	{
-		//UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
+		//UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName()); 
 		if(OwnerComp.GetAIOwner()->LineOfSightTo(Actor))
 		{
 			if(Actor->IsA(AMainCharacter::StaticClass()))
