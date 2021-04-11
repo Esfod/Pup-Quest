@@ -38,7 +38,7 @@ public:
 	void AttachItem(AActor* Item);
 
 	UFUNCTION()
-		void ChooseItemDrop();
+		void DropHoldingItem();
 
 	UFUNCTION()
 	void DropItem(AActor* Item);

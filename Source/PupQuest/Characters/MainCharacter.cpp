@@ -69,7 +69,7 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAction("Attack",IE_Pressed,this, &AMainCharacter::Attack);
 	
-	PlayerInputComponent->BindAction("Drop", IE_Pressed, this, &AMainCharacter::ChooseItemDrop);
+	PlayerInputComponent->BindAction("Drop", IE_Pressed, this, &AMainCharacter::DropHoldingItem);
 	PlayerInputComponent->BindAction("Place", IE_Pressed, this, &AMainCharacter::PlacePlank);
 
 	PlayerInputComponent->BindAction("Reset", IE_Pressed, this, &AMainCharacter::HandleDeath);
@@ -110,24 +110,25 @@ void AMainCharacter::RotatePlayerTowardsWalkDirection()
 }
 
 void AMainCharacter::AttachItem(AActor* Item) {
+		Interacting = false;//Passer på at du ikke kan plukke opp noe mer en en gang når du trykker på E, så etter torch er plukket opp kan man ikke plukke opp noe mer
+		DropHoldingItem();
 
-	Item->SetActorEnableCollision(false);//Skrur av collision på plank
+		Item->SetActorEnableCollision(false);//Skrur av collision
 
-	if (Item == Torch) {
-		Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("TorchSocket"));//Attach torch til main character
-		bHoldingTorch = true;
-		UE_LOG(LogTemp, Warning, TEXT("Torch picked up"));
-	}
+		if (Item == Torch) {
+			Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("TorchSocket"));//Attach torch til main character
+			bHoldingTorch = true;
+			UE_LOG(LogTemp, Warning, TEXT("Torch picked up"));
+		}
 
-	if (Item == Plank) {
-		Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("PlankSocket"));//Attach plank til main character
-		bHoldingPlank = true;
-		UE_LOG(LogTemp, Warning, TEXT("Plank picked up"));
-	}
-	Interacting = false;//Passer på at du ikke kan plukke opp noe mer en en gang når du trykker på E, så etter torch er plukket opp kan man ikke plukke opp noe mer
+		if (Item == Plank) {
+			Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("PlankSocket"));//Attach plank til main character
+			bHoldingPlank = true;
+			UE_LOG(LogTemp, Warning, TEXT("Plank picked up"));
+		}
 }
 
-void AMainCharacter::ChooseItemDrop()//F.M
+void AMainCharacter::DropHoldingItem()//F.M
 {
 	if (bHoldingPlank == true) {
 		DropItem(Plank);
@@ -149,12 +150,14 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 		if (Item == Plank) {
 			DropRotation = FRotator(0.f, GetMesh()->GetRelativeRotation().Yaw + 90.f, 270.f);
 			bHoldingPlank = false;
+			UE_LOG(LogTemp, Warning, TEXT("Plank dropped"));
 		}
 
 		if (Item == Torch) {
 			DropRotation = FRotator(-85.f, GetMesh()->GetRelativeRotation().Yaw - 45.f, 0.f);
 			bHoldingTorch = false;
 			Torch->TorchFlameOff();
+			UE_LOG(LogTemp, Warning, TEXT("Torch dropped"));
 		}
 
 		Item->SetActorRotation(FQuat(DropRotation));
@@ -195,20 +198,18 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	bool bFromSweep, const FHitResult& SweepResult) //F.M
 {
 	//UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
-	if (bHoldingTorch == false && bHoldingPlank == false) {//Hvis karakteren ikke holder torch eller planke
-		if (OtherActor->IsA(ATorchActor::StaticClass()))//Hvis det er torch
-		{
-			ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
-			Torch = TorchHit;
-			AttachItem(Torch);
-			UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
-		}
-		if (OtherActor->IsA(APlankActor::StaticClass()))//Hvis det er planke
-			{
-			APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
-			Plank = PlankHit;
-			AttachItem(Plank);
-			}
+	if (OtherActor->IsA(ATorchActor::StaticClass()) && Interacting == true)//Hvis det er torch
+	{
+		ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
+		Torch = TorchHit;
+		AttachItem(Torch);
+		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
+	}
+	if (OtherActor->IsA(APlankActor::StaticClass()) && Interacting == true)//Hvis det er planke
+	{
+		APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
+		Plank = PlankHit;
+		AttachItem(Plank);
 	}
 	else if (bHoldingTorch == true) {//Hvis karakteren holder torch
 		if (OtherActor->IsA(ATorchHolderActor::StaticClass())) {//Hvis det er en torch holder
@@ -232,35 +233,17 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 				}
 			}
 		}
-		if (OtherActor->IsA(APlankActor::StaticClass()) && Interacting == true)//Hvis det er planke
-		{
-			DropItem(Torch);
-			APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
-			Plank = PlankHit;
-			AttachItem(Plank);
-		}
-	}
-	if (bHoldingPlank == true) {//Hvis karakteren holder planke
-		if (OtherActor->IsA(ATorchActor::StaticClass()) && Interacting == true)//Hvis det er torch
-		{
-			DropItem(Plank);
-			ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
-			Torch = TorchHit;
-			AttachItem(Torch);
-		}
-	}
-	if (OtherActor->IsA(ABrazierActor::StaticClass())) {//Hvis det er brazier
-		ABrazierActor* UBrazier = Cast<ABrazierActor>(OtherActor);
-		Brazier = UBrazier;
-		UE_LOG(LogTemp, Warning, TEXT("Brazier lit is %s"), Brazier->bBrazierLit ? TEXT("true") : TEXT("false"));
-		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
-		if (bHoldingTorch == true) {//Hvis karakter holder torch
+		if (OtherActor->IsA(ABrazierActor::StaticClass())) {//Hvis det er brazier
+			ABrazierActor* UBrazier = Cast<ABrazierActor>(OtherActor);
+			Brazier = UBrazier;
+			UE_LOG(LogTemp, Warning, TEXT("Brazier lit is %s"), Brazier->bBrazierLit ? TEXT("true") : TEXT("false"));
+			UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
 			if (Brazier->bBrazierLit == true) {//Hvis brazier er lit
 				if (Torch->bTorchLit == true) {//Hvis torch er lit
 					UE_LOG(LogTemp, Warning, TEXT("Brazier and torch is already lit"));
 				}
 				else {//Hvis torch ikke er lit
-					Torch->TorchFlameOn();
+				Torch->TorchFlameOn();
 				}
 			}
 			else {//Hvis brazier ikke er lit
@@ -271,9 +254,6 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 					UE_LOG(LogTemp, Warning, TEXT("Your Torch has to be lit to light the brazier"));
 				}
 			}
-		}
-		else {//Hvis karakteren ikke holder torch
-			UE_LOG(LogTemp, Warning, TEXT("You are not holding a torch"));
 		}
 	}
 }
