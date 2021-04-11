@@ -83,6 +83,9 @@ void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (DroppedItem) {
+		DroppedItem = nullptr;
+	}
 }
 
 void AMainCharacter::MoveForward(float Value)
@@ -134,6 +137,8 @@ void AMainCharacter::AttachItem(AActor* Item) {
 			bHoldingPlank = true;
 			UE_LOG(LogTemp, Warning, TEXT("Plank picked up"));
 		}
+		//DroppedItem = nullptr;
+
 }
 
 void AMainCharacter::DropHoldingItem()//F.M
@@ -195,13 +200,14 @@ void AMainCharacter::StartInteract() {//F.M
 	//UE_LOG(LogTemp, Warning, TEXT("Interact!"));
 	HitBox->SetGenerateOverlapEvents(true);//Skrur på hitboxen så den registrerer om noe er i den
 	//Interacting = true;
+		//DroppedItem = nullptr;
 }
 
 void AMainCharacter::StopInteract()//F.M
 {
 	//UE_LOG(LogTemp, Warning, TEXT("Stop Interact!"));
 	HitBox->SetGenerateOverlapEvents(false);//Skrur av hitboxen igjen
-	DroppedItem = nullptr;
+	//DroppedItem = nullptr;
 }
 
 void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -215,6 +221,7 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 		Torch = TorchHit;
 		AttachItem(Torch);
 		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
+		
 	}
 	if (OtherActor->IsA(APlankActor::StaticClass()))//Hvis det er planke
 	{
@@ -230,6 +237,7 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 				Torch->SetActorEnableCollision(true);//Skrur på collision igjen
 				Torch->SetActorLocation(TorchHolder->GetTorchPlacementPoint().GetLocation());
 				Torch->SetActorRotation(TorchHolder->GetTorchPlacementPoint().GetRotation());//Setter torch i torch holder
+				Torch->TorchFlameOn();
 				DroppedItem = Torch;
 				bHoldingTorch = false;
 			}
