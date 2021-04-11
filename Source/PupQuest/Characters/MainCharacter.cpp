@@ -103,7 +103,7 @@ void AMainCharacter::MoveRight(float Value)
 {
 	if ( (Controller != nullptr) && (Value != 0.0f) )
 	{
-		// find out which way is righ
+		// find out which way is right
 		const FRotator PlayerRotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, PlayerRotation.Yaw, 0);
 	
