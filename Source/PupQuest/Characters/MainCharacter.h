@@ -50,6 +50,7 @@ public:
 
 	bool OnTopOff = false;
 
+
 	ATorchActor* GetTorchActor();
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
