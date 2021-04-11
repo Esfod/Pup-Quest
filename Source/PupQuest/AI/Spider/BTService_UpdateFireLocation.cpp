@@ -9,6 +9,7 @@
 #include "PupQuest/Characters/MainCharacter.h"
 #include "PupQuest/Characters/EnemyBaseCharacter.h"
 #include "PupQuest/Actors/BrazierActor.h"
+#include "PupQuest/Actors/TorchHolderActor.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
 
 
@@ -88,6 +89,10 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 						bDistanceASet = true;
 					}
 				}
+			}
+			else if(Actor->IsA(ATorchHolderActor::StaticClass()))
+			{
+				
 			}
 			if(bDistanceASet && DistanceA < DistanceB)
 			{

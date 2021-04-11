@@ -235,8 +235,8 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 				Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Karakteren slutter å holde torch
 				Torch->SetActorEnableCollision(true);//Skrur på collision igjen
-				Torch->SetActorLocation(TorchHolder->GetTorchPlacementPoint());//Setter torch i torch holder
-				Torch->SetActorRotation(TorchHolder->GetTorchPlacementPoint().Rotation());
+				Torch->SetActorLocation(TorchHolder->GetTorchPlacementPoint().GetLocation());//Setter torch i torch holder
+				Torch->SetActorRotation(TorchHolder->GetTorchPlacementPoint().GetRotation());
 				bHoldingTorch = false;
 			}
 			else {
@@ -252,7 +252,6 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 					}
 				}
 		}
-
 		if (OtherActor->IsA(APlankActor::StaticClass()) && Interacting == true)//Hvis det er planke
 		{
 			DropTorch();//Dropper torch
@@ -260,7 +259,6 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 			Plank = PlankHit;
 			PlankAttachToHand();//Attach planke til karakter
 		}
-
 	}
 
 	if (bHoldingPlank == true) {//Hvis karakteren holder planke
