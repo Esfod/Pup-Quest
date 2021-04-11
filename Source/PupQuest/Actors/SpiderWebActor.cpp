@@ -84,8 +84,6 @@ void ASpiderWebActor::EndBurnWeb() {
 	HitBoxWeb->SetRelativeLocation(HitBoxWeb->GetRelativeLocation() + 1.f);
 	SetActorEnableCollision(false);
 
-	UE_LOG(LogTemp, Warning, TEXT("Test"));
-
 
 	HitBoxWeb->SetGenerateOverlapEvents(false);
 	HitBoxWeb->SetRelativeLocation(HitBoxWeb->GetRelativeLocation() - 1.f);

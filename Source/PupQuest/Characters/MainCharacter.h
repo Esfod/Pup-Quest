@@ -35,9 +35,17 @@ private:
 public:
 	AMainCharacter();
 
-	void DropTorch();
+	UFUNCTION()
+	void AttachItem(AActor* Item);
 
-	void DropPlank();
+	UFUNCTION()
+		void DropHoldingItem();
+
+	UFUNCTION()
+	void DropItem(AActor* Item);
+
+	FRotator DropRotation;
+
 
 	void PlacePlank();
 
@@ -58,6 +66,8 @@ public:
 	bool bHoldingPlank = false;
 	
 	bool bTorchLit;
+
+	AActor* DroppedItem = nullptr;
 
 	FVector Location;
 
@@ -94,12 +104,6 @@ protected:
 	bool bBrazierLit;
 
 	bool Interacting = false;//So you don't pick up something you just dropped
-
-	UFUNCTION()
-        void TorchAttachToHand();
-
-	UFUNCTION()
-		void PlankAttachToHand();
 
 	UFUNCTION()
 		void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
