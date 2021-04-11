@@ -21,14 +21,12 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm { nullptr };
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComp { nullptr };
 
 	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* AttackBoxComponent {nullptr};
-
-	FVector MoveForwardVector;
-	FVector MoveRightVector;
 
 	UPROPERTY(EditAnywhere)
 	float RotateSpeed = 30.f;
@@ -94,7 +92,6 @@ protected:
 		ABrazierActor* Brazier;
 
 	bool bBrazierLit;
-
 
 	bool Interacting = false;//So you don't pick up something you just dropped
 
