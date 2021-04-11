@@ -83,20 +83,36 @@ void AMainCharacter::BeginPlay()
 void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if(MoveForwardVector.X != 0 || MoveRightVector.Y != 0)
-		RotatePlayerTowardsWalkDirection();
+
 }
 
 void AMainCharacter::MoveForward(float Value)
 {
-	AddMovementInput(GetActorForwardVector(), Value);
-	MoveForwardVector = GetActorForwardVector() * Value;
+	if ((Controller != nullptr) && (Value != 0.0f))
+	{
+		// find out which way is forward
+		const FRotator PlayerRotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, PlayerRotation.Yaw, 0);
+
+		// get forward vector
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		AddMovementInput(Direction, Value);
+	}
 }
 
 void AMainCharacter::MoveRight(float Value)
 {
-	AddMovementInput(GetActorRightVector(), Value);
-	MoveRightVector = GetActorRightVector() * Value;
+	if ((Controller != nullptr) && (Value != 0.0f))
+	{
+		// find out which way is right
+		const FRotator PlayerRotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, PlayerRotation.Yaw, 0);
+
+		// get right vector 
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		// add movement in that direction
+		AddMovementInput(Direction, Value);
+	}
 }
 
 void AMainCharacter::RotatePlayerTowardsWalkDirection()
@@ -141,7 +157,7 @@ void AMainCharacter::DropHoldingItem()//F.M
 void AMainCharacter::DropItem(AActor* Item)//F.M
 {
 	if (Item) {
-		Item->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach torch fra main character
+		Item->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach item fra main character
 		Item->SetActorEnableCollision(true);//Skrur på collision igjen
 
 		FVector CharacterLocation = GetMesh()->GetComponentLocation() - FVector(0.f, 0.f, 10.f);
