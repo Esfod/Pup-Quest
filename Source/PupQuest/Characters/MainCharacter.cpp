@@ -38,23 +38,21 @@ AMainCharacter::AMainCharacter()
 	SpringArm->SetRelativeRotation(FRotator(0.f, -30.f, 15.f));
 	SpringArm->bDoCollisionTest = false;
 	SpringArm->bInheritYaw = false;
-	this->
 	CameraComp  = CreateDefaultSubobject<UCameraComponent>("Camera Component");
 	CameraComp->SetupAttachment(SpringArm);
 
 	/*StandOnHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBoxWeb"));
 	StandOnHitBox->SetupAttachment(RootComponent);*/
-
-
-	HitBox->SetRelativeLocation(FVector(70.f,0.f, 0.f));
-
-	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlap);
-
 	/*StandOnHitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapBegin);
 	StandOnHitBox->OnComponentEndOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapEnd);*/
 
-	//MoveIgnoreActorAdd(Plank);
+	HitBox->SetRelativeLocation(FVector(70.f,0.f, 0.f));
+	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlap);
 
+	AttackBoxComponent = CreateDefaultSubobject<UBoxComponent>("Attack HitBox");
+	AttackBoxComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("Attack_Box_Attach"));
+
+	//MoveIgnoreActorAdd(Plank);
 }
 
 void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -78,6 +76,7 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
 }
 
 void AMainCharacter::Tick(float DeltaTime)
@@ -108,22 +107,13 @@ void AMainCharacter::MoveRight(float Value)
 		const FRotator PlayerRotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, PlayerRotation.Yaw, 0);
 
-		// get right vector 
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		// add movement in that direction
+		// get forward vector
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(Direction, Value);
 	}
 }
 
-void AMainCharacter::RotatePlayerTowardsWalkDirection()
-{
-	float InitialYaw = GetMesh()->GetRelativeRotation().Yaw;
-    FVector MoveDirection = MoveForwardVector + MoveRightVector;
-	float RotateToYaw = MoveDirection.Rotation().Yaw;
-	float CurrentYaw = FMath::Lerp(InitialYaw, RotateToYaw, GetWorld()->DeltaTimeSeconds*RotateSpeed);
-	
-	GetMesh()->SetRelativeRotation(FRotator(0.f,CurrentYaw,0.f));
-}
+
 
 void AMainCharacter::AttachItem(AActor* Item) {
 		//Interacting = false;//Passer på at du ikke kan plukke opp noe mer en en gang når du trykker på E, så etter torch er plukket opp kan man ikke plukke opp noe mer
@@ -152,6 +142,7 @@ void AMainCharacter::DropHoldingItem()//F.M
 	}
 	if (bHoldingTorch == true) {
 		DropItem(Torch);
+
 	}
 }
 
@@ -258,6 +249,7 @@ void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 			Brazier = UBrazier;
 			UE_LOG(LogTemp, Warning, TEXT("Brazier lit is %s"), Brazier->bBrazierLit ? TEXT("true") : TEXT("false"));
 			UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
+
 			if (Brazier->bBrazierLit == true) {//Hvis brazier er lit
 				if (Torch->bTorchLit == true) {//Hvis torch er lit
 					UE_LOG(LogTemp, Warning, TEXT("Brazier and torch is already lit"));
@@ -313,7 +305,10 @@ void AMainCharacter::HandleDeath()
 
 ATorchActor* AMainCharacter::GetTorchActor()
 {
-	return Torch;
+	if(Torch != nullptr)
+		return Torch;
+	else
+		return nullptr;
 }
 
 void AMainCharacter::Attack()

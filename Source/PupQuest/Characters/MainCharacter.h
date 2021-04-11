@@ -18,11 +18,14 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
-	private:
+private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm { nullptr };
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComp { nullptr };
+
+	UPROPERTY(VisibleAnywhere)
+	UBoxComponent* AttackBoxComponent {nullptr};
 
 	FVector MoveForwardVector;
 	FVector MoveRightVector;
@@ -55,11 +58,15 @@ public:
 
 	bool OnTopOff = false;
 
+
 	ATorchActor* GetTorchActor();
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bHoldingTorch = false;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
+	bool bHoldingPlank = false;
+	
 	bool bTorchLit;
 
 	AActor* DroppedItem = nullptr;
@@ -73,25 +80,20 @@ public:
 	//FVector NewLocation = FVector(50.f,50.f,50.f);
 
 	bool CheckpointLocation = false;
+	
 protected:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
-	
 
 	void MoveForward(float Value);
 
 	void MoveRight(float Value);
-
-	void RotatePlayerTowardsWalkDirection();
 	
 	void StartInteract();
 	
 	void StopInteract();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
-		bool bHoldingPlank = false;
-		
 	UPROPERTY()
 		APlankActor* Plank;
 
@@ -99,8 +101,7 @@ protected:
 		ATorchActor* Torch;
 
 	UPROPERTY()
-
-	ABrazierActor* Brazier;
+		ABrazierActor* Brazier;
 
 	bool bBrazierLit;
 
