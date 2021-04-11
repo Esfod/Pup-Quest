@@ -121,18 +121,19 @@ void AMainCharacter::AttachItem(AActor* Item) {
 
 		Item->SetActorEnableCollision(false);//Skrur av collision
 
+		//UE_LOG(LogTemp, Warning, TEXT("Dropped item is %s"), *DroppedItem->GetName());
+
 		if (Item == Torch && DroppedItem != Torch) {
 			Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("TorchSocket"));//Attach torch til main character
 			bHoldingTorch = true;
 			UE_LOG(LogTemp, Warning, TEXT("Torch picked up"));
 		}
 
-		if (Item == Plank && DroppedItem != Plank) {
+		else if (Item == Plank && DroppedItem != Plank) {
 			Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("PlankSocket"));//Attach plank til main character
 			bHoldingPlank = true;
 			UE_LOG(LogTemp, Warning, TEXT("Plank picked up"));
 		}
-		DroppedItem = nullptr;
 }
 
 void AMainCharacter::DropHoldingItem()//F.M
@@ -142,7 +143,6 @@ void AMainCharacter::DropHoldingItem()//F.M
 	}
 	if (bHoldingTorch == true) {
 		DropItem(Torch);
-
 	}
 }
 
@@ -201,6 +201,7 @@ void AMainCharacter::StopInteract()//F.M
 {
 	//UE_LOG(LogTemp, Warning, TEXT("Stop Interact!"));
 	HitBox->SetGenerateOverlapEvents(false);//Skrur av hitboxen igjen
+	DroppedItem = nullptr;
 }
 
 void AMainCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
