@@ -326,6 +326,7 @@ ATorchActor* AMainCharacter::GetTorchActor()
 
 void AMainCharacter::AttackStart()
 {
+	UE_LOG(LogTemp,Warning,TEXT("Attack"));
 	AttackBoxComponent->SetGenerateOverlapEvents(true);
 	bIsAttacking = true;
 }
@@ -339,7 +340,6 @@ void AMainCharacter::AttackEnd()
 void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp,Warning,TEXT("Attack"));
 	if(OtherActor->IsA(ASpiderCharacter::StaticClass()))
 	{
 		ASpiderCharacter* SpiderHit = Cast<ASpiderCharacter>(OtherActor);
@@ -355,7 +355,10 @@ void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent
 		else //melee
 			SpiderHit->GetHit(0);
 	}
-	UE_LOG(LogTemp,Error,TEXT("Actor hit %s"), *OtherActor->GetName());
+	
+	UE_LOG(LogTemp,Error,TEXT("OverlappedComponent hit %s"), *OverlappedComponent->GetName());
+	UE_LOG(LogTemp,Error,TEXT("OtherActor hit %s"), *OtherActor->GetName());
+	UE_LOG(LogTemp,Error,TEXT("OtherComponent hit %s"), *OtherComponent->GetName());
 }
 
 void AMainCharacter::HandleDeath()
