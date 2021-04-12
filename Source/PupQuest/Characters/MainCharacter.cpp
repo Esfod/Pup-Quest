@@ -214,15 +214,14 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 	bool bFromSweep, const FHitResult& SweepResult) //F.M
 {
 	//UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
-	if (OtherActor->IsA(ATorchActor::StaticClass()))//Hvis det er torch
+	if (OtherActor->IsA(ATorchActor::StaticClass()) && !bHoldingTorch)//Hvis det er torch
 	{
 		ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
 		Torch = TorchHit;
 		AttachItem(Torch);
 		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
-		
 	}
-	else if (OtherActor->IsA(APlankActor::StaticClass()))//Hvis det er planke
+	else if (OtherActor->IsA(APlankActor::StaticClass()) && !bHoldingPlank)//Hvis det er planke
 	{
 		APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
 		Plank = PlankHit;
@@ -248,9 +247,10 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 			}
 			else UE_LOG(LogTemp, Warning, TEXT("Door will not open because the torch is not lit"));
 		}
-		else if(GetTorchActor() != nullptr)
+		else if(TorchHolder->GetTorchActor() != nullptr)
 		{
 			Torch = TorchHolder->GetTorchActor();
+			TorchHolder->SetTorchActor(nullptr);
 			TorchHolder->bHasATorch = false;
 			UE_LOG(LogTemp,Warning,TEXT("%s"),*Torch->GetName());
 			AttachItem(Torch);
