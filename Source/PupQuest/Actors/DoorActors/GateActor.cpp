@@ -22,7 +22,7 @@ void AGateActor::BeginPlay()
 
 void AGateActor::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaTime); 
 	OpenDoor(DeltaTime);
 }
 

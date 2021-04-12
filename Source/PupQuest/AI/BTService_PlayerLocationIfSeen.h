@@ -14,7 +14,7 @@ class PUPQUEST_API UBTService_PlayerLocationIfSeen : public UBTService_Blackboar
 {
 	GENERATED_BODY()
 public:
-	UBTService_PlayerLocationIfSeen();
+	UBTService_PlayerLocationIfSeen(); 
 	protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 };

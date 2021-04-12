@@ -20,16 +20,14 @@ ATorchActor::ATorchActor()
 
 void ATorchActor::BeginPlay()
 {
-	Super::BeginPlay();
-
+	Super::BeginPlay(); 
 
 	//MeshComp->SetSimulatePhysics(true);
-
 
 	if (bTorchLit == false) {
 		TorchFlameOff();
 	}
-	else {
+	else if (bTorchLit == true) {
 		TorchFlameOn();
 	}
 

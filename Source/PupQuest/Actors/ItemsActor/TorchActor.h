@@ -18,9 +18,8 @@ public:
 
 	ATorchActor();
 	
-
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Bools")
-	bool bTorchLit = false;
+	bool bTorchLit;
 
 	UPROPERTY(VisibleAnywhere)
 		UParticleSystemComponent* Flame {nullptr};

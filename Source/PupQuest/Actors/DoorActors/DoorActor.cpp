@@ -19,7 +19,7 @@ void ADoorActor::BeginPlay()
 
 void ADoorActor::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaTime); 
 	
 	OpenDoor(DeltaTime);
 }

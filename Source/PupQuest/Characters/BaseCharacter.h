@@ -24,7 +24,9 @@ protected:
 	float MaxHealth {100.0f};
 
 	UPROPERTY(VisibleAnywhere)
-	float Health {0.f};
+	float Health {0.f}; 
+	
+	void IsCharacterDead();
 public:
 	ABaseCharacter();
 
@@ -33,7 +35,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	float TakeDamage(float DamageAmount, struct FDamageEvent const &DamageEvent, class AController *EventInstigator, AActor *DamageCauser);
-
-	UFUNCTION(BlueprintPure)
-	bool IsCharacterDead() const;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bCharacterDead = false;
 };

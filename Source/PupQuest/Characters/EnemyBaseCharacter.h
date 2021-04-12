@@ -21,7 +21,7 @@ private:
 	float AttackDistance{100.f};
 
 public:
-	AEnemyBaseCharacter();
+	AEnemyBaseCharacter(); 
 
 	virtual void Tick(float DeltaTime) override;
 
