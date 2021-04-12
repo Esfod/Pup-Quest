@@ -17,4 +17,11 @@ public:
 	ASpiderCharacter();
 
 	virtual void Attack(float OwnerDamage) override;
+
+	virtual void GetHit(int32 ObjectInHand) override;
+
+protected:
+	virtual void Tick(float DeltaSeconds) override;
+private:
+	float Timer {0.f}; 
 };

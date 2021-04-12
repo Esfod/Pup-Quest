@@ -10,8 +10,11 @@
 
 AEnemyBaseCharacter::AEnemyBaseCharacter()
 {
-	CheckFireBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Box to check for closest fire"));
-	CheckFireBox->SetupAttachment(GetMesh());
+	FireBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Box to check for closest fire"));
+	FireBox->SetupAttachment(GetMesh());
+	FireBox->SetGenerateOverlapEvents(true);
+	HitBox->SetGenerateOverlapEvents(true);
+
 }
 
 void AEnemyBaseCharacter::BeginPlay()
@@ -21,13 +24,12 @@ void AEnemyBaseCharacter::BeginPlay()
 
 void AEnemyBaseCharacter::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaTime); 
 }
 
 void AEnemyBaseCharacter::Attack(float OwnerDamage)
 {
 	//UE_LOG(LogTemp,Warning,TEXT("Start Attack"));
-	HitBox->SetGenerateOverlapEvents(true);
 	TArray<AActor*> OverlappingActors;
 	HitBox->GetOverlappingActors(OverlappingActors);
 	for (AActor* Actors : OverlappingActors)
@@ -62,5 +64,16 @@ void AEnemyBaseCharacter::Attack(float OwnerDamage)
 			}
 		}
 	}
-	HitBox->SetGenerateOverlapEvents(false);
+}
+
+TArray<AActor*> AEnemyBaseCharacter::GetOverLappingActorsToFireBox()
+{
+	TArray<AActor*> OverlappingActors;
+	FireBox->GetOverlappingActors(OverlappingActors);
+	return OverlappingActors;
+}
+
+void AEnemyBaseCharacter::GetHit(int32 ObjectInHand)
+{
+	
 }

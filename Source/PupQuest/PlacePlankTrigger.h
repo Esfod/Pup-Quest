@@ -19,4 +19,11 @@ public:
 	
 	UFUNCTION()
 		void OnOverlapEnd(class AActor* OverlappedActor, class AActor* OtherActor);
+
+	UPROPERTY(EditAnywhere, Category = "Componets")
+		FVector Location;
+
+	UPROPERTY(EditAnywhere, Category = "Componets")
+		FRotator Rotation;
+
 };

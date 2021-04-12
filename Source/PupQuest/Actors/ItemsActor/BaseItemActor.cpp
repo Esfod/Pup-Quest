@@ -21,7 +21,7 @@ void ABaseItemActor::BeginPlay()
 // Called every frame
 void ABaseItemActor::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaTime); 
 
 }
 

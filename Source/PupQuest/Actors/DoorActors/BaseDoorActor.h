@@ -7,7 +7,7 @@
 #include "BaseDoorActor.generated.h"
 
 class ATriggerVolume;
-
+class ATorchHolderActor;
 UCLASS()
 class PUPQUEST_API ABaseDoorActor : public AActor
 {
@@ -18,17 +18,17 @@ private:
 	UStaticMeshComponent* StaticMeshComp { nullptr };
 
 	UPROPERTY(EditAnywhere, Category= "Variables")
-	bool bTorchHolder { true };
+	bool bTorchHolder { true }; 
 
-	bool CheckTorchHolder(const AActor* a);
-	bool CheckTorchHolder(const AActor* a, const AActor* b);
+	bool CheckTorchHolder(ATorchHolderActor* a);
+	bool CheckTorchHolder(ATorchHolderActor* a, ATorchHolderActor* b);
 
 protected:
-	UPROPERTY(EditAnywhere, Category = "Componets")
-	const AActor* TorchHolder1 { nullptr };
+	UPROPERTY(EditAnywhere, Category = "TorchHolder")
+	ATorchHolderActor* TorchHolder1 { nullptr };
 
-	UPROPERTY(EditAnywhere, Category = "Componets")
-	const AActor* TorchHolder2 { nullptr };
+	UPROPERTY(EditAnywhere, Category = "TorchHolder")
+	ATorchHolderActor* TorchHolder2 { nullptr };
 	
 	UPROPERTY(EditAnywhere,Category="Variables")
 	float MoveLength{300.f};

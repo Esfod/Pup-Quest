@@ -9,6 +9,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class ATorchActor;
+class APlacePlankTrigger;
 class APlankActor;
 class ABrazierActor;
 
@@ -17,78 +18,113 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
-	private:
+private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm { nullptr };
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComp { nullptr };
 
-	FVector MoveForwardVector;
-	FVector MoveRightVector;
+	UPROPERTY(VisibleAnywhere)
+	UBoxComponent* AttackBoxComponent {nullptr};
 
 	UPROPERTY(EditAnywhere)
 	float RotateSpeed = 30.f;
+
+	void AttackStart();
+
+	void AttackEnd();
+
+	AActor* DroppedItem = nullptr;
 public:
 	AMainCharacter();
 
-	void DropTorch();
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* StandOnHitBox { nullptr };//To see if player is standing on item when he picks it up(movement does not work if he does)
 
-	void DropPlank();
+	FRotator DropRotation;
 
-	void PlacePlank();
+	ATorchActor* GetTorchActor();
 
+	bool bTorchLit {false};
+	
 	bool InTriggerBox = false;
 
-protected:
-	virtual void BeginPlay() override;
-
-	virtual void Tick(float DeltaTime) override;
+	bool OnTopOff = false;
 	
-	virtual void HandleDeath() override;
-
-	void MoveForward(float Value);
-
-	void MoveRight(float Value);
-
-	void RotatePlayerTowardsWalkDirection();
-	
-	void StartInteract();
-	void StopInteract();
+	bool CheckpointLocation = false; 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bHoldingTorch = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
-		bool bHoldingPlank = false;
+	bool bHoldingPlank = false;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
+	bool bIsAttacking = false;
+
+	FVector Location;
+
+	FRotator Rotation;
+
+	virtual void HandleDeath() override;
+
+	void PlacePlank();
+	
+	UFUNCTION()
+void AttachItem(AActor* Item);
+
+	UFUNCTION()
+        void DropHoldingItem();
+
+	UFUNCTION()
+    void DropItem(AActor* Item);
+	
+protected:
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
+
+	void MoveForward(float Value);
+
+	void MoveRight(float Value);
+	
+	void StartInteract();
+	
+	void StopInteract();
 
 	UPROPERTY()
 		APlankActor* Plank;
 
 	UPROPERTY()
-	ATorchActor* Torch;
-
-	bool bTorchLit;
+		ATorchActor* Torch;
 
 	UPROPERTY()
-	ABrazierActor* UBrazier;
+		ABrazierActor* Brazier;
 
 	bool bBrazierLit;
 
-	bool pickupItem = false;//So you don't pick up something you just dropped
-
-
-	UFUNCTION()
-        void TorchAttachToHand();
+	bool Interacting = false;//So you don't pick up something you just dropped
 
 	UFUNCTION()
-		void PlankAttachToHand();
-
-	UFUNCTION()
-		void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		void OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 			bool bFromSweep, const FHitResult& SweepResult);
 
-	bool Interacting = false;
+	UFUNCTION()
+        void OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+            UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
+            bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void StandOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
+			bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void StandOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
+			bool bFromSweep, const FHitResult& SweepResult);
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

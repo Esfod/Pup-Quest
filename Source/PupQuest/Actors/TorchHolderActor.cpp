@@ -17,10 +17,19 @@ ATorchHolderActor::ATorchHolderActor()
 void ATorchHolderActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
-FVector ATorchHolderActor::GetTorchPlacementPoint() 
+ATorchActor* ATorchHolderActor::GetTorchActor()
 {
-	return TorchPlacementPoint->GetComponentLocation();
+	return TorchActor;
+}
+
+void ATorchHolderActor::SetTorchActor(ATorchActor* NewTorchActor)
+{
+	TorchActor = NewTorchActor; 
+}
+
+FTransform ATorchHolderActor::GetTorchPlacementPoint() 
+{
+	return TorchPlacementPoint->GetComponentTransform();
 }
