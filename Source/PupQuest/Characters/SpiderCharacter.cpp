@@ -18,7 +18,7 @@ void ASpiderCharacter::Tick(float DeltaSeconds)
 		{
 			bIsEnemyKnockedOut = false;
 			KnockOutTime = 0;
-			Timer = 0.f;
+			Timer = 0.f; 
 		}
 	}
 }
@@ -49,9 +49,4 @@ void ASpiderCharacter::GetHit(int32 ObjectInHand)
 		default:
 		break;
 	}
-}
-
-void ASpiderCharacter::MoveForward(FVector WalkDirection, float ValueDirection)
-{
-	AddMovementInput(WalkDirection,ValueDirection);
 }

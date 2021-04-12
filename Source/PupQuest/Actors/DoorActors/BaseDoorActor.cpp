@@ -4,17 +4,15 @@
 #include "BaseDoorActor.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
 #include "PupQuest/Characters/MainCharacter.h"
+#include "PupQuest/Actors/TorchHolderActor.h"
 
 // Sets default values
 ABaseDoorActor::ABaseDoorActor()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = true; 
 
 	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeh Component"));
 	RootComponent = StaticMeshComp;
-
-
-	
 }
 
 void ABaseDoorActor::BeginPlay()
@@ -52,51 +50,16 @@ void ABaseDoorActor::Tick(float DeltaTime)
 	}
 }
 
-bool ABaseDoorActor::CheckTorchHolder(const AActor* a)
+bool ABaseDoorActor::CheckTorchHolder(ATorchHolderActor* a)
 {
-	TArray<AActor*> OverlappingActors;
-	if(a)
-	{
-		a->GetOverlappingActors(OverlappingActors);
-		for(AActor* Actor : OverlappingActors)
-		{
-			if(Actor->IsA(ATorchActor::StaticClass()) || Actor->IsA(AMainCharacter::StaticClass()))
-			{
-				//UE_LOG(LogTemp,Warning,TEXT("åpne dør"));
-				return true;
-			}
-		}
-	}
+	if (a->bHasATorch) return true;
 	return false;
 }
 
-bool ABaseDoorActor::CheckTorchHolder(const AActor* a, const AActor* b)
+bool ABaseDoorActor::CheckTorchHolder(ATorchHolderActor* a, ATorchHolderActor* b)
 {
-	TArray<AActor*> OverlappingActors;
-	//UE_LOG(LogTemp,Warning,TEXT("hello from check torchholder 2"), );
-	int x {0};
-	a->GetOverlappingActors(OverlappingActors);
-	for(AActor* Actor : OverlappingActors)
-	{
-		if(Actor->IsA(ATorchActor::StaticClass()))
-		{
-			//UE_LOG(LogTemp,Warning,TEXT("Torch 1 er klar"));
-			x++;
-		}
-	}
-
-	b->GetOverlappingActors(OverlappingActors);
-	for(AActor* Actor : OverlappingActors)
-	{
-		if(Actor->IsA(ATorchActor::StaticClass()))
-		{
-			//UE_LOG(LogTemp,Warning,TEXT("Torch 2 er klar"));
-			x++;
-		}
-	}
-	if(x == 2)
+	if(a->bHasATorch && b->bHasATorch)
 		return true;
-	
 	return false;
 }
 
