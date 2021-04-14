@@ -38,5 +38,6 @@ protected:
 	
 	virtual void GetHit(int32 ObjectInHand);
 
+	UPROPERTY(BlueprintReadOnly)
 	float KnockOutTime {0.f};
 };

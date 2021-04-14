@@ -25,7 +25,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	float Health {0.f}; 
-	
+
 	void IsCharacterDead();
 public:
 	ABaseCharacter();
