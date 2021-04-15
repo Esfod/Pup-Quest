@@ -17,7 +17,7 @@ void UBTService_DistanceToAttackPlayer::TickNode(UBehaviorTreeComponent& OwnerCo
 	APawn* PlayerPawn = Cast<APawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	APawn* OwnerPawn = Cast<APawn>(OwnerComp.GetAIOwner()->GetPawn());
 	if(PlayerPawn == nullptr) return;
-	FVector VectorBetween = OwnerPawn-> GetActorLocation() - PlayerPawn->GetActorLocation();
+	FVector VectorBetween = OwnerPawn->GetActorLocation() - PlayerPawn->GetActorLocation();
 	float DistanceBetween = VectorBetween.Size();	 
 	OwnerComp.GetBlackboardComponent()->SetValueAsFloat(GetSelectedBlackboardKey(), DistanceBetween);
 }

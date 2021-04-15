@@ -27,7 +27,7 @@ void UBTService_UpdateClosestFireDist::TickNode(UBehaviorTreeComponent& OwnerCom
 	TArray<AActor*> OverlappingActors =  OwnerCharacter->GetOverLappingActorsToFireBox();
 
 	float DistanceA {0.f};
-	float DistanceB {0.f};
+	float DistanceB {100000.f};
 	for(AActor* Actor : OverlappingActors)
 	{
 		//UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName()); 
@@ -35,15 +35,12 @@ void UBTService_UpdateClosestFireDist::TickNode(UBehaviorTreeComponent& OwnerCom
 		{
 			if(Actor->IsA(AMainCharacter::StaticClass()))
 			{
-				//UE_LOG(LogTemp,Warning,TEXT("Sees Actor"))
 				AMainCharacter* MainCharacter = Cast<AMainCharacter>(Actor);
-				if(MainCharacter->bHoldingTorch)
+				if(MainCharacter->bHoldingTorch && MainCharacter->bTorchLit)
 				{
-					if(MainCharacter->bTorchLit)
-					{
-						DistanceA = FVector(MainCharacter->GetActorLocation() - OwnerCharacter->GetActorLocation()).Size();
-						//UE_LOG(LogTemp,Warning,TEXT("2. Distance A = %f\tDistance B = %f"), DistanceA, DistanceB);
-					}
+					//UE_LOG(LogTemp,Warning,TEXT("Player holding lit torch"));
+					DistanceA = FVector(MainCharacter->GetActorLocation() - OwnerCharacter->GetActorLocation()).Size();
+					//UE_LOG(LogTemp,Warning,TEXT("2. Distance A = %f\tDistance B = %f"), DistanceA, DistanceB);
 				}
 			}
 			else if(Actor->IsA(ATorchHolderActor::StaticClass()))
@@ -53,6 +50,7 @@ void UBTService_UpdateClosestFireDist::TickNode(UBehaviorTreeComponent& OwnerCom
 				{
 					if(TorchHolderActor->bHasATorch)
 					{
+						//UE_LOG(LogTemp,Warning,TEXT("Sees lit torch in torchholder"))
 						DistanceA = FVector(TorchHolderActor->GetActorLocation() - OwnerCharacter->GetActorLocation()).Size();
 						//UE_LOG(LogTemp,Warning,TEXT("2. Distance A = %f\tDistance B = %f"), DistanceA, DistanceB);
 					}
@@ -65,6 +63,7 @@ void UBTService_UpdateClosestFireDist::TickNode(UBehaviorTreeComponent& OwnerCom
 				{
 					if(BrazierActor->bBrazierLit)
 					{
+						//UE_LOG(LogTemp,Warning,TEXT("Sees lit brazier"));
 						DistanceA = FVector(BrazierActor->GetActorLocation() - OwnerCharacter->GetActorLocation()).Size();
 					}
 				}
@@ -76,6 +75,7 @@ void UBTService_UpdateClosestFireDist::TickNode(UBehaviorTreeComponent& OwnerCom
 				{
 					if(TorchActor->bTorchLit)
 					{
+						//UE_LOG(LogTemp,Warning,TEXT("Sees lit torch"));
 						DistanceA = FVector(TorchActor->GetActorLocation() - OwnerCharacter->GetActorLocation()).Size();
 					}
 				}
@@ -84,5 +84,11 @@ void UBTService_UpdateClosestFireDist::TickNode(UBehaviorTreeComponent& OwnerCom
 				DistanceB = DistanceA;
 		}
 	}
-	OwnerComp.GetBlackboardComponent()->SetValueAsFloat(GetSelectedBlackboardKey(), DistanceB);
+	if(DistanceB == 100000.f)
+	{
+		OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
+		//UE_LOG(LogTemp,Warning,TEXT("%f"), DistanceB);
+	}
+	else
+		OwnerComp.GetBlackboardComponent()->SetValueAsFloat(GetSelectedBlackboardKey(), DistanceB);
 }

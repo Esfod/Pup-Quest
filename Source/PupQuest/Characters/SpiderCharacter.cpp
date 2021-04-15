@@ -12,8 +12,6 @@ void ASpiderCharacter::Tick(float DeltaSeconds)
 	if(KnockOutTime != 0)
 	{
 		bIsEnemyKnockedOut = true;
-		if(Timer == 0.f)
-			Timer = DeltaSeconds;
 		if(Timer + KnockOutTime == DeltaSeconds)
 		{
 			bIsEnemyKnockedOut = false;
@@ -25,28 +23,31 @@ void ASpiderCharacter::Tick(float DeltaSeconds)
 void ASpiderCharacter::Attack(float OwnerDamage)
 {
 	Super::Attack(OwnerDamage);
-
 }
 
 void ASpiderCharacter::GetHit(int32 ObjectInHand)
 {
 	Super::GetHit(ObjectInHand);
-	UE_LOG(LogTemp,Error,TEXT("Getting hit"));
 	switch (ObjectInHand)
 	{
 		case 0:
-		KnockOutTime = 1;
-		break;
+			KnockOutTime = 1;
+			UE_LOG(LogTemp,Warning,TEXT("Spider is hit by hand"));
+			break;
 		case 1:
-		KnockOutTime = 5;
-		break;
+			KnockOutTime = 5;
+			UE_LOG(LogTemp,Warning,TEXT("Spider is hit by an unlit torch"));
+			break;
 		case 2:
-		KnockOutTime = 5;
-		break;
+			KnockOutTime = 5;
+			UE_LOG(LogTemp,Warning,TEXT("Spider is hit by an lit torch"));
+			break;
 		case 3:
-		KnockOutTime = 7;
-		break;
+			KnockOutTime = 7;
+			UE_LOG(LogTemp,Warning,TEXT("Spider is hit by an plank"));
+			break;
 		default:
-		break;
+			break;
 	}
+	Timer = GetWorld()->DeltaTimeSeconds;
 }

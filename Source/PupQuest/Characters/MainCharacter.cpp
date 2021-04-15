@@ -10,26 +10,20 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/BoxComponent.h"
 
-#include "DrawDebugHelpers.h"
-
 #include "GameFramework/Controller.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "PupQuest/Actors/SpiderWebActor.h"
-#include "PupQuest/PlacePlankTrigger.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
 #include "PupQuest/Actors/ItemsActor/PlankActor.h"
 #include "PupQuest/Actors/TorchHolderActor.h"
 #include "PupQuest/Actors/BrazierActor.h"
 
-
-#include <Runtime/Engine/Classes/Kismet/GameplayStatics.h>
-
 #include "PupQuest/Characters/SpiderCharacter.h"
 
+#include "Kismet/GameplayStatics.h"
+
 //#include "PupQuest/Hud/P_Torch"
-
-
 
 AMainCharacter::AMainCharacter()
 {
@@ -50,8 +44,11 @@ AMainCharacter::AMainCharacter()
 	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlapHitBox);
 
 	AttackBoxComponent = CreateDefaultSubobject<UBoxComponent>("Attack HitBox");
+	AttackBoxComponent->SetupAttachment(GetMesh());
 	//AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("Attack_Box_Attach")); //TODO Add when attack-animation is implemented
 	AttackBoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlapAttackBox);
+	AttackBoxComponent->SetGenerateOverlapEvents(false);
+
 	
 	//MoveIgnoreActorAdd(Plank);
 }
@@ -307,18 +304,16 @@ void AMainCharacter::StandOnOverlapBegin(UPrimitiveComponent* OverlappedComponen
 	//}
 }
 
+
 void AMainCharacter::StandOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
-	bool bFromSweep, const FHitResult& SweepResult) //F.M
+                                       UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
+                                       bool bFromSweep, const FHitResult& SweepResult) //F.M
 {
 	//if (OtherActor->IsA(ATorchActor::StaticClass()) || OtherActor->IsA(APlankActor::StaticClass()))//Hvis det er torch
 	//{
 	//	OnTopOff = false;
 	//}
 }
-
-
-
 
 ATorchActor* AMainCharacter::GetTorchActor()
 {
@@ -330,7 +325,6 @@ ATorchActor* AMainCharacter::GetTorchActor()
 
 void AMainCharacter::AttackStart()
 {
-	UE_LOG(LogTemp,Warning,TEXT("Attack"));
 	AttackBoxComponent->SetGenerateOverlapEvents(true);
 	bIsAttacking = true;
 }
@@ -342,29 +336,25 @@ void AMainCharacter::AttackEnd()
 }
 
 void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+    UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if(OtherActor->IsA(ASpiderCharacter::StaticClass()))
-	{
-		ASpiderCharacter* SpiderHit = Cast<ASpiderCharacter>(OtherActor);
-		if(bHoldingTorch)
+		UE_LOG(LogTemp,Warning,TEXT("Actor name: %s") ,*OtherActor->GetName());
+		if(OtherActor->IsA(ASpiderCharacter::StaticClass()))
 		{
-			if(bTorchLit) //torch on fire
-				SpiderHit->GetHit(2);
-			else //torch not on fire
-				SpiderHit->GetHit(1);
+			ASpiderCharacter* SpiderHit = Cast<ASpiderCharacter>(OtherActor);
+			if(bHoldingTorch)
+			{
+				if(bTorchLit) //torch on fire
+					SpiderHit->GetHit(2);
+				else //torch not on fire
+					SpiderHit->GetHit(1);
+			}
+			else if(bHoldingPlank) //plank
+				SpiderHit->GetHit(3);
+			else //melee
+				SpiderHit->GetHit(0);
 		}
-		else if(bHoldingPlank) //plank
-			SpiderHit->GetHit(3);
-		else //melee
-			SpiderHit->GetHit(0);
-	}
-	
-	UE_LOG(LogTemp,Error,TEXT("OverlappedComponent hit %s"), *OverlappedComponent->GetName());
-	UE_LOG(LogTemp,Error,TEXT("OtherActor hit %s"), *OtherActor->GetName());
-	UE_LOG(LogTemp,Error,TEXT("OtherComponent hit %s"), *OtherComponent->GetName());
 }
-
 void AMainCharacter::HandleDeath()
 {
 	//Super::HandleDeath();

@@ -12,15 +12,9 @@ UCLASS()
 class PUPQUEST_API AEnemyBaseCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
-
-private:
-	UPROPERTY(EditAnywhere)
-	UBoxComponent* FireBox { nullptr };
 	
-	UPROPERTY(EditAnywhere)
-	float AttackDistance{100.f};
-
 public:
+	
 	AEnemyBaseCharacter(); 
 
 	virtual void Tick(float DeltaTime) override;
@@ -33,11 +27,22 @@ public:
 	TArray<AActor*> GetOverLappingActorsToFireBox();
 
 	bool bIsEnemyKnockedOut = false;
+	
 protected:
+	
 	virtual void BeginPlay() override;
 	
 	virtual void GetHit(int32 ObjectInHand);
 
 	UPROPERTY(BlueprintReadOnly)
 	float KnockOutTime {0.f};
+	
+private:
+	
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* FireBox { nullptr };
+	
+	UPROPERTY(EditAnywhere)
+	float AttackDistance{100.f};
+
 };
