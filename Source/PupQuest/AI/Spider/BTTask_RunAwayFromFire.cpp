@@ -27,6 +27,11 @@ EBTNodeResult::Type UBTTask_RunAwayFromFire::ExecuteTask(UBehaviorTreeComponent&
 	}
 	FVector TempVector = SpiderCharacter->GetActorLocation() - FireLocation;
 	TempVector.Normalize();
-	SpiderCharacter->SetActorRotation(TempVector.Rotation());
+	
+	float Yaw = FMath::Lerp(SpiderCharacter->GetActorRotation().Yaw, TempVector.Rotation().Yaw, GetWorld()->DeltaTimeSeconds * 20); //Open Door
+	FRotator SpiderRotator;
+	SpiderRotator.Yaw = Yaw;
+	SpiderCharacter->SetActorRotation(SpiderRotator);
+	SpiderCharacter->AddMovementInput(TempVector,1);
 	return EBTNodeResult::Succeeded;
 }

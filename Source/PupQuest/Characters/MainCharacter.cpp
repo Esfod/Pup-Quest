@@ -338,10 +338,10 @@ void AMainCharacter::AttackEnd()
 void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
     UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-		UE_LOG(LogTemp,Warning,TEXT("Actor name: %s") ,*OtherActor->GetName());
 		if(OtherActor->IsA(ASpiderCharacter::StaticClass()))
 		{
 			ASpiderCharacter* SpiderHit = Cast<ASpiderCharacter>(OtherActor);
+			UE_LOG(LogTemp,Warning,TEXT("Player hits Spider"));
 			if(bHoldingTorch)
 			{
 				if(bTorchLit) //torch on fire

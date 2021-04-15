@@ -26,7 +26,11 @@ public:
 
 	TArray<AActor*> GetOverLappingActorsToFireBox();
 
-	bool bIsEnemyKnockedOut = false;
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsEnemyKnockedOut {false};
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsAttacking {false};
 	
 protected:
 	
@@ -34,7 +38,6 @@ protected:
 	
 	virtual void GetHit(int32 ObjectInHand);
 
-	UPROPERTY(BlueprintReadOnly)
 	float KnockOutTime {0.f};
 	
 private:
