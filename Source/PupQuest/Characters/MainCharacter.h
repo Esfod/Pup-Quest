@@ -12,6 +12,8 @@ class ATorchActor;
 class APlacePlankTrigger;
 class APlankActor;
 class ABrazierActor;
+class ABucketActor;
+class AWellActor;
 
 UCLASS()
 class PUPQUEST_API AMainCharacter : public ABaseCharacter
@@ -47,6 +49,8 @@ public:
 	ATorchActor* GetTorchActor();
 
 	bool bTorchLit {false};
+
+	bool bBucketFilled{ false };
 	
 	bool InTriggerBox = false;
 
@@ -60,6 +64,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bHoldingPlank = false;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
+		bool bHoldingBucket = false;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bIsAttacking = false;
 
@@ -100,7 +107,13 @@ protected:
 		ATorchActor* Torch;
 
 	UPROPERTY()
+		ABucketActor* Bucket;
+
+	UPROPERTY()
 		ABrazierActor* Brazier;
+
+	UPROPERTY()
+		AWellActor* Well;
 
 	bool bBrazierLit;
 

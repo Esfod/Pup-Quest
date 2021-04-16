@@ -19,8 +19,11 @@
 #include "PupQuest/PlacePlankTrigger.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
 #include "PupQuest/Actors/ItemsActor/PlankActor.h"
+#include "PupQuest/Actors/ItemsActor/BucketActor.h"
 #include "PupQuest/Actors/TorchHolderActor.h"
 #include "PupQuest/Actors/BrazierActor.h"
+#include "PupQuest/Actors/WellActor.h"
+
 
 
 #include <Runtime/Engine/Classes/Kismet/GameplayStatics.h>
@@ -138,6 +141,14 @@ void AMainCharacter::AttachItem(AActor* Item) {
 			bHoldingPlank = true;
 			UE_LOG(LogTemp, Warning, TEXT("Plank picked up"));
 		}
+		else if (Item == Bucket && DroppedItem != Bucket) {
+			ABucketActor* BucketActor = Cast<ABucketActor>(Item);
+			Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("BucketSocket"));//Attach plank til main character
+			bHoldingBucket = true;
+			UE_LOG(LogTemp, Warning, TEXT("Bucket picked up"));
+			if (BucketActor == nullptr) return;
+			bBucketFilled = BucketActor->bBucketFilled;
+		}
 		//DroppedItem = nullptr;
 
 }
@@ -150,6 +161,9 @@ void AMainCharacter::DropHoldingItem()//F.M
 	else if (bHoldingTorch == true) {
 		DropItem(Torch);
 	}
+	else if (bHoldingBucket == true) {
+		DropItem(Bucket);
+	}
 }
 
 void AMainCharacter::DropItem(AActor* Item)//F.M
@@ -158,7 +172,7 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 		Item->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach item fra main character
 		Item->SetActorEnableCollision(true);//Skrur på collision igjen
 
-		FVector CharacterLocation = GetMesh()->GetComponentLocation() - FVector(0.f, 0.f, 10.f);
+		FVector CharacterLocation = GetMesh()->GetComponentLocation() + FVector(0.f, 0.f, -10.f);
 		FVector DropLocation = CharacterLocation + (GetMesh()->GetForwardVector() * 60.f);
 
 		if (Item == Plank) {
@@ -173,6 +187,12 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 			Torch->TorchFlameOff();
 			UE_LOG(LogTemp, Warning, TEXT("Torch dropped"));
 			DroppedItem = Torch;
+		}
+		else if (Item == Bucket) {
+			DropRotation = FRotator(0.f);
+			bHoldingBucket = false;
+			UE_LOG(LogTemp, Warning, TEXT("Bucket dropped"));
+			DroppedItem = Bucket;
 		}
 
 		Item->SetActorRotation(FQuat(DropRotation));
@@ -226,6 +246,12 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 		APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
 		Plank = PlankHit;
 		AttachItem(Plank);
+	}
+	else if (OtherActor->IsA(ABucketActor::StaticClass()) && !bHoldingBucket)//Hvis det er planke
+	{
+		ABucketActor* BucketHit = Cast<ABucketActor>(OtherActor);
+		Bucket = BucketHit;
+		AttachItem(Bucket);
 	}
 	else if (OtherActor->IsA(ATorchHolderActor::StaticClass()))//Hvis det er en torch holder
 	{
@@ -294,6 +320,13 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 			}
 		}
 	}
+	else if (OtherActor->IsA(AWellActor::StaticClass()) && bHoldingBucket == true) {//Hvis det er brazier
+		AWellActor* UWell = Cast<AWellActor>(OtherActor);
+		Well = UWell;
+		UE_LOG(LogTemp, Warning, TEXT("Hello there"));
+		Bucket->BucketWithWater();
+	}
+	
 }
 
 
