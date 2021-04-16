@@ -271,7 +271,7 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 			}
 		}
 	}
-	else if (OtherActor->IsA(ABrazierActor::StaticClass())) {//Hvis det er brazier
+	else if (OtherActor->IsA(ABrazierActor::StaticClass()) && bHoldingTorch == true) {//Hvis det er brazier
 		ABrazierActor* UBrazier = Cast<ABrazierActor>(OtherActor);
 		Brazier = UBrazier;
 		UE_LOG(LogTemp, Warning, TEXT("Brazier lit is %s"), Brazier->bBrazierLit ? TEXT("true") : TEXT("false"));
