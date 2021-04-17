@@ -45,7 +45,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 				{
 					if(BrazierActor->bBrazierLit)
 					{
-						UE_LOG(LogTemp,Warning,TEXT("Can see lit Brazier"));
+						//UE_LOG(LogTemp,Warning,TEXT("Can see lit Brazier"));
 						DistacnceVector = BrazierActor->GetActorLocation() - OwnerCharacter->GetActorLocation();
 						VectorA = BrazierActor->GetActorLocation();
 						DistanceA = DistacnceVector.Size();
@@ -61,7 +61,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 				{
 					if(TorchActor->bTorchLit)
 					{
-						UE_LOG(LogTemp,Warning,TEXT("Can see Lit Torch"));
+						//UE_LOG(LogTemp,Warning,TEXT("Can see Lit Torch"));
 						DistacnceVector = TorchActor->GetActorLocation() - OwnerCharacter->GetActorLocation();
 						VectorA = TorchActor->GetActorLocation();
 						DistanceA = DistacnceVector.Size();
@@ -80,11 +80,10 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 						//UE_LOG(LogTemp,Warning,TEXT("Kim holds a torch"));
 						if(MainCharacter->bTorchLit)
 						{
-							UE_LOG(LogTemp,Warning,TEXT("Kim holdes a lit torch"));
+							//UE_LOG(LogTemp,Warning,TEXT("Kim holdes a lit torch"));
 							DistacnceVector = MainCharacter->GetActorLocation() - OwnerCharacter->GetActorLocation();
 							VectorA = MainCharacter->GetActorLocation();
 							DistanceA = DistacnceVector.Size();
-							//UE_LOG(LogTemp,Warning,TEXT("2. Distance A = %f\tDistance B = %f"), DistanceA, DistanceB);
 							bDistanceASet = true;
 						}
 					}
@@ -97,11 +96,10 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 				{
 					if(TorchHolderActor->bHasATorch)
 					{
-						UE_LOG(LogTemp,Warning,TEXT("Can se torchholder with lit torch"));
+						//UE_LOG(LogTemp,Warning,TEXT("Can se torchholder with lit torch"));
 						DistacnceVector = TorchHolderActor->GetActorLocation() - OwnerCharacter->GetActorLocation();
 						VectorA = TorchHolderActor->GetActorLocation();
 						DistanceA = DistacnceVector.Size();
-						//UE_LOG(LogTemp,Warning,TEXT("2. Distance A = %f\tDistance B = %f"), DistanceA, DistanceB);
 						bDistanceASet = true;
 					}
 				}
@@ -110,7 +108,6 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 			{
 				DistanceB = DistanceA;
 				VectorB = VectorA;
-				//UE_LOG(LogTemp,Warning,TEXT("3. Distance A = %f\tDistance B = %f"), DistanceA, DistanceB);
 			}
 			bDistanceASet = false;
 		}
@@ -123,6 +120,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 	else
 	{
 		//UE_LOG(LogTemp,Warning,TEXT("Sets Value"));
+		//UE_LOG(LogTemp,Warning,TEXT("%s"), *VectorB.ToString());
 		OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), VectorB);
 	}
 	//UE_LOG(LogTemp,Warning,TEXT("Update Location FireLoc done"));
