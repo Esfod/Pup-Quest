@@ -31,10 +31,10 @@ protected:
 	float MeleeKnockOutTime {1.f};
 	
 	UPROPERTY(EditAnywhere, Category = "KnockOut Times")
-	float TorchKnockOutTime {1.f};
+	float TorchKnockOutTime {5.f};
 	
 	UPROPERTY(EditAnywhere, Category = "KnockOut Times")
-	float PlankKnockOutTime {1.f};
+	float PlankKnockOutTime {7.f};
 	
 private:
 	float Timer {0.f}; 

@@ -9,21 +9,34 @@ ASpiderCharacter::ASpiderCharacter()
 
 void ASpiderCharacter::Tick(float DeltaSeconds)
 {
-	if(KnockOutTime != 0)
+	Super::Tick(DeltaSeconds);
+	if(KnockOutTime > 0)
 	{
 		if(Timer == 0.0f)
-			Timer = GetWorld()->GetRealTimeSeconds();
+			Timer = GetWorld()->GetTimeSeconds();
 		bIsEnemyKnockedOut = true;
-		if(Timer + KnockOutTime == GetWorld()->GetRealTimeSeconds())
+		if(Timer + KnockOutTime <= GetWorld()->GetTimeSeconds())
 		{
 			bIsEnemyKnockedOut = false;
 			KnockOutTime = 0;
 			Timer = 0.0f; 
 		}
 	}
-	//UE_LOG(LogTemp,Warning,TEXT("Timer = %f"), Timer);
-	//UE_LOG(LogTemp,Warning,TEXT("KnockOutTime = %f"), KnockOutTime);
-	//UE_LOG(LogTemp,Warning,TEXT("DeltaSeconds = %f"), DeltaSeconds);
+	/*
+	UE_LOG(LogTemp,Warning,TEXT("Timer = %f"), Timer);
+	UE_LOG(LogTemp,Warning,TEXT("KnockOutTime = %f"), KnockOutTime);
+	UE_LOG(LogTemp,Warning,TEXT("TimeSeconds DeltaSeconds = %f"), GetWorld()->GetTimeSeconds());
+	
+	if(bIsEnemyKnockedOut)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("bIsEnemyKnockedOut = true"));
+	}
+	else
+	{
+		UE_LOG(LogTemp,Warning,TEXT("bIsEnemyKnockedOut = false"));
+	}
+	*/
+
 }
 void ASpiderCharacter::Attack(float OwnerDamage)
 {
