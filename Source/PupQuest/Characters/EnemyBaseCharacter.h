@@ -17,14 +17,16 @@ public:
 	
 	AEnemyBaseCharacter(); 
 
+protected:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void Attack(float OwnerDamage);
 	
+public:
 	UPROPERTY(EditAnywhere)
 	float Damage {50.f};
 
-	TArray<AActor*> GetOverLappingActorsToFireBox();
+	TArray<AActor*> GetOverLappingActorsToFireBox() const;
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsEnemyKnockedOut {false};

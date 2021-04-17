@@ -75,6 +75,7 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	Health = 100.f;
 	
 }
 
@@ -354,6 +355,14 @@ void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent
 			else //melee
 				SpiderHit->GetHit(0);
 		}
+}
+
+void AMainCharacter::TakeDamage(float DamageTaken)
+{
+	Health -= DamageTaken;
+	UE_LOG(LogTemp,Warning,TEXT("Players Health is %f"), Health);
+	if(Health < 0.f)
+		Health =  0.f;
 }
 void AMainCharacter::HandleDeath()
 {
