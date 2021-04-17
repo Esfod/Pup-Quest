@@ -45,7 +45,7 @@ void AEnemyBaseCharacter::Attack(float OwnerDamage)
 	}
 }
 
-TArray<AActor*> AEnemyBaseCharacter::GetOverLappingActorsToFireBox()
+TArray<AActor*> AEnemyBaseCharacter::GetOverLappingActorsToFireBox() const
 {
 	TArray<AActor*> OverlappingActors;
 	FireBox->GetOverlappingActors(OverlappingActors);

@@ -79,13 +79,15 @@ public:
 	void PlacePlank();
 	
 	UFUNCTION()
-void AttachItem(AActor* Item);
+	void AttachItem(AActor* Item);
 
 	UFUNCTION()
-        void DropHoldingItem();
+    void DropHoldingItem();
 
 	UFUNCTION()
     void DropItem(AActor* Item);
+
+	void TakeDamage(float DamageTaken);
 	
 protected:
 	virtual void BeginPlay() override;
