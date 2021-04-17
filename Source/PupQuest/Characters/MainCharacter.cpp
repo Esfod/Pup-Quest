@@ -390,7 +390,7 @@ void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent
 		}
 }
 
-void AMainCharacter::TakeDamage(float DamageTaken)
+void AMainCharacter::PlayerTakeDamage(float DamageTaken)
 {
 	Health -= DamageTaken;
 	UE_LOG(LogTemp,Warning,TEXT("Players Health is %f"), Health);

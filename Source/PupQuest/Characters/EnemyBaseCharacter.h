@@ -20,9 +20,11 @@ public:
 protected:
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void BeginPlay() override;
+
+public:
 	virtual void Attack(float OwnerDamage);
 	
-public:
 	UPROPERTY(EditAnywhere)
 	float Damage {50.f};
 
@@ -34,9 +36,7 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsAttacking {false};
 	
-protected:
-	
-	virtual void BeginPlay() override;
+
 	
 	virtual void GetHit(int32 ObjectInHand);
 

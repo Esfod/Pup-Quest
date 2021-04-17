@@ -87,7 +87,7 @@ public:
 	UFUNCTION()
     void DropItem(AActor* Item);
 
-	void TakeDamage(float DamageTaken);
+	void PlayerTakeDamage(float DamageTaken);
 	
 protected:
 	virtual void BeginPlay() override;
