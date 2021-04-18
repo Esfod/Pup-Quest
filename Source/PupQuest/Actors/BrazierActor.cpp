@@ -29,7 +29,7 @@ ABrazierActor::ABrazierActor()
 	BrazierFlame->SetupAttachment(MeshComp);
 
 	HitBoxBrazier = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBoxBrazier"));
-	HitBoxBrazier->InitBoxExtent(FVector(50.f, 50.f, 50.f));
+	HitBoxBrazier->InitBoxExtent(FVector(50.f, 50.f, 50.f)); 
 	HitBoxBrazier->SetupAttachment(RootComponent);
 
 	HitBoxBrazier->OnComponentBeginOverlap.AddDynamic(this, &ABrazierActor::BeginOverlapBrazier);

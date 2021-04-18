@@ -14,7 +14,7 @@ class PUPQUEST_API UBTService_UpdateFireLocation : public UBTService_BlackboardB
 {
 	GENERATED_BODY()
 public:
-	UBTService_UpdateFireLocation();
+	UBTService_UpdateFireLocation(); 
 private:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 

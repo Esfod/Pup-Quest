@@ -28,7 +28,7 @@ public:
 
 	bool bBurning = false;
 
-	void EndBurnWeb();
+	void EndBurnWeb(); 
 
 private:
 

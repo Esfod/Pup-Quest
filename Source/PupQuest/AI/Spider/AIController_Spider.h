@@ -15,7 +15,7 @@ class PUPQUEST_API AAIController_Spider : public AAIController
 	GENERATED_BODY()
 	
 protected:
-	virtual void BeginPlay() override;
+	virtual void BeginPlay() override; 
 
 private:
 	UPROPERTY(EditAnywhere)

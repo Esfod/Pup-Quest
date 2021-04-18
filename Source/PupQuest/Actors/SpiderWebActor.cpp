@@ -28,7 +28,7 @@ ASpiderWebActor::ASpiderWebActor()
 	LightSorce->SetupAttachment(MeshComp);
 
 	Flame = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("FlameParticle"));
-	Flame->SetupAttachment(MeshComp);
+	Flame->SetupAttachment(MeshComp); 
 
 	
 
@@ -68,7 +68,7 @@ void ASpiderWebActor::Tick(float DeltaTime)
 void ASpiderWebActor::StartBurnWeb() {
 	bBurning = true;
 	SetActorScale3D(FVector(0.15));//Krymper Web
-	HitBoxWeb->SetRelativeScale3D(FVector(24.f));//Når Web krymper krymper også Hitbox, så Hitbox må bli større igjen for å fange opp 
+	HitBoxWeb->SetRelativeScale3D(FVector(24.f));//Nï¿½r Web krymper krymper ogsï¿½ Hitbox, sï¿½ Hitbox mï¿½ bli stï¿½rre igjen for ï¿½ fange opp 
 
 	UE_LOG(LogTemp, Warning, TEXT("Burn web"));
 

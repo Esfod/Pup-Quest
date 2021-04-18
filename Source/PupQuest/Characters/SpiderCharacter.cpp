@@ -9,49 +9,62 @@ ASpiderCharacter::ASpiderCharacter()
 
 void ASpiderCharacter::Tick(float DeltaSeconds)
 {
-	if(KnockOutTime != 0)
+	Super::Tick(DeltaSeconds);
+	if(KnockOutTime > 0)
 	{
+		if(Timer == 0.0f)
+			Timer = GetWorld()->GetTimeSeconds();
 		bIsEnemyKnockedOut = true;
-		if(Timer == 0.f)
-			Timer = DeltaSeconds;
-		if(Timer + KnockOutTime == DeltaSeconds)
+		if(Timer + KnockOutTime <= GetWorld()->GetTimeSeconds())
 		{
 			bIsEnemyKnockedOut = false;
 			KnockOutTime = 0;
-			Timer = 0.f;
+			Timer = 0.0f; 
 		}
 	}
+	/*
+	UE_LOG(LogTemp,Warning,TEXT("Timer = %f"), Timer);
+	UE_LOG(LogTemp,Warning,TEXT("KnockOutTime = %f"), KnockOutTime);
+	UE_LOG(LogTemp,Warning,TEXT("TimeSeconds DeltaSeconds = %f"), GetWorld()->GetTimeSeconds());
+	
+	if(bIsEnemyKnockedOut)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("bIsEnemyKnockedOut = true"));
+	}
+	else
+	{
+		UE_LOG(LogTemp,Warning,TEXT("bIsEnemyKnockedOut = false"));
+	}
+	*/
+
 }
 void ASpiderCharacter::Attack(float OwnerDamage)
 {
 	Super::Attack(OwnerDamage);
-
 }
 
 void ASpiderCharacter::GetHit(int32 ObjectInHand)
 {
 	Super::GetHit(ObjectInHand);
-	UE_LOG(LogTemp,Error,TEXT("Getting hit"));
 	switch (ObjectInHand)
 	{
 		case 0:
-		KnockOutTime = 1;
-		break;
+			KnockOutTime = MeleeKnockOutTime;
+			//UE_LOG(LogTemp,Warning,TEXT("Spider is hit by hand"));
+			break;
 		case 1:
-		KnockOutTime = 5;
-		break;
+			KnockOutTime = TorchKnockOutTime;
+			//UE_LOG(LogTemp,Warning,TEXT("Spider is hit by an unlit torch"));
+			break;
 		case 2:
-		KnockOutTime = 5;
-		break;
+			KnockOutTime = TorchKnockOutTime;
+			//UE_LOG(LogTemp,Warning,TEXT("Spider is hit by an lit torch"));
+			break;
 		case 3:
-		KnockOutTime = 7;
-		break;
+			KnockOutTime = PlankKnockOutTime;
+			//UE_LOG(LogTemp,Warning,TEXT("Spider is hit by an plank"));
+			break;
 		default:
-		break;
+			break;
 	}
-}
-
-void ASpiderCharacter::MoveForward(FVector WalkDirection, float ValueDirection)
-{
-	AddMovementInput(WalkDirection,ValueDirection);
 }

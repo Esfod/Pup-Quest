@@ -14,5 +14,5 @@ APlankActor::APlankActor()
 void APlankActor::BeginPlay()
 {
 	Super::BeginPlay();
-
+ 
 }

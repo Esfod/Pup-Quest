@@ -17,7 +17,7 @@ class PUPQUEST_API AGateActor : public ABaseDoorActor
 protected:
 	AGateActor();
 	
-	virtual void BeginPlay() override;
+	virtual void BeginPlay() override; 
 
 	virtual void Tick(float DeltaTime) override;
 

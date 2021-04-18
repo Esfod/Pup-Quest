@@ -4,6 +4,7 @@
 #include "BTService_UpdatePlayerLocation.h"
 #include "Kismet/GameplayStatics.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "AIController.h"
 
 UBTService_UpdatePlayerLocation::UBTService_UpdatePlayerLocation()
 {
@@ -16,5 +17,12 @@ void UBTService_UpdatePlayerLocation::TickNode(UBehaviorTreeComponent& OwnerComp
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
 	if(PlayerPawn == nullptr) return;
-	OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(),PlayerPawn->GetActorLocation());
+	
+	if(OwnerComp.GetAIOwner()->LineOfSightTo(PlayerPawn))
+	{
+		OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(),PlayerPawn->GetActorLocation());
+	}
+	else
+	OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
+
 }

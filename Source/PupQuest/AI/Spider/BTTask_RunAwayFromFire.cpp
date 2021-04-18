@@ -7,7 +7,6 @@
 
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
-#include "GameFramework/PawnMovementComponent.h"
 #include "NavigationSystem.h"
 
 UBTTask_RunAwayFromFire::UBTTask_RunAwayFromFire()
@@ -24,10 +23,15 @@ EBTNodeResult::Type UBTTask_RunAwayFromFire::ExecuteTask(UBehaviorTreeComponent&
 	if(SpiderCharacter==nullptr)
 	{
 		UE_LOG(LogTemp,Warning,TEXT("SpiderCharacter cast fail"));
-		return EBTNodeResult::Failed;
+		return EBTNodeResult::Failed; 
 	}
 	FVector TempVector = SpiderCharacter->GetActorLocation() - FireLocation;
 	TempVector.Normalize();
-	SpiderCharacter->MoveForward(TempVector, 1);
+	
+	float Yaw = FMath::Lerp(SpiderCharacter->GetActorRotation().Yaw, TempVector.Rotation().Yaw, GetWorld()->DeltaTimeSeconds * 20); //Open Door
+	FRotator SpiderRotator;
+	SpiderRotator.Yaw = Yaw;
+	SpiderCharacter->SetActorRotation(SpiderRotator);
+	SpiderCharacter->AddMovementInput(TempVector,1);
 	return EBTNodeResult::Succeeded;
 }

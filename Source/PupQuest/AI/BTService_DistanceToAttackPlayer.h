@@ -14,7 +14,7 @@ class PUPQUEST_API UBTService_DistanceToAttackPlayer : public UBTService_Blackbo
 {
 	GENERATED_BODY()
 public:
-	UBTService_DistanceToAttackPlayer();
+	UBTService_DistanceToAttackPlayer(); 
 private:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 

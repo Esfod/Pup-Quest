@@ -16,7 +16,7 @@ class PUPQUEST_API ABridgeActor : public ABaseDoorActor
 protected:
 	ABridgeActor();
 	
-	virtual void BeginPlay() override;
+	virtual void BeginPlay() override; 
 
 	virtual void Tick(float DeltaTime) override;
 
