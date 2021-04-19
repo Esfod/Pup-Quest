@@ -16,6 +16,7 @@ class PUPQUEST_API UBTService_DistanceToAttackPlayer : public UBTService_Blackbo
 public:
 	UBTService_DistanceToAttackPlayer(); 
 private:
+	float DistanceBetween {0.f};
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
 };
