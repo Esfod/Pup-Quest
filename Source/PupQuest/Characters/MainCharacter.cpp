@@ -22,6 +22,7 @@
 #include "PupQuest/Actors/WellActor.h"
 
 
+
 #include "PupQuest/Characters/SpiderCharacter.h"
 
 #include "Kismet/GameplayStatics.h"
@@ -73,6 +74,8 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("Place", IE_Pressed, this, &AMainCharacter::PlacePlank);
 
 	PlayerInputComponent->BindAction("Reset", IE_Pressed, this, &AMainCharacter::HandleDeath);
+
+	PlayerInputComponent->BindAction("Push", IE_Pressed, this, &AMainCharacter::IsPushing);
 }
 
 void AMainCharacter::BeginPlay()
@@ -90,9 +93,23 @@ void AMainCharacter::Tick(float DeltaTime)
 	}
 }
 
+void AMainCharacter::IsPushing()
+{
+	if (Pushing == 1) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Started Pushing"));
+		Pushing++;
+	}
+	else if (Pushing == 2) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Stopped Pushing"));
+		Pushing--;
+	}
+}
+
 void AMainCharacter::MoveForward(float Value)
 {
-	if ((Controller != nullptr) && (Value != 0.0f))
+	if ((Controller != nullptr) && (Value != 0.0f) && (Pushing == 1))
 	{
 		// find out which way is forward
 		const FRotator PlayerRotation = Controller->GetControlRotation();
@@ -106,7 +123,7 @@ void AMainCharacter::MoveForward(float Value)
 
 void AMainCharacter::MoveRight(float Value)
 {
-	if ( (Controller != nullptr) && (Value != 0.0f) )
+	if ( (Controller != nullptr) && (Value != 0.0f) && (Pushing == 1)) 
 	{
 		// find out which way is right
 		const FRotator PlayerRotation = Controller->GetControlRotation();
@@ -213,6 +230,7 @@ void AMainCharacter::PlacePlank()//F.M
 		UE_LOG(LogTemp, Warning, TEXT("Plank placed"));
 	}
 }
+
 
 void AMainCharacter::StartInteract() {//F.M
 	//UE_LOG(LogTemp, Warning, TEXT("Interact!"));
@@ -407,3 +425,5 @@ void AMainCharacter::HandleDeath()
 		//SetActorLocation(FVector(7000.f,9500.f,580.f));
 	//}
 }
+
+

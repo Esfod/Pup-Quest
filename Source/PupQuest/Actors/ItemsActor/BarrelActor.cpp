@@ -14,6 +14,8 @@ ABarrelActor::ABarrelActor()
 }
 
 
+
+
 // Called when the game starts or when spawned
 void ABarrelActor::BeginPlay()
 {
@@ -28,10 +30,11 @@ void ABarrelActor::Tick(float DeltaTime)
 
 }
 
-void ABarrelActor::FindClosestPush()
-{
-}
 
-void ABarrelActor::HandleInteraction()
-{
-}
+//void ABarrelActor::FindClosestPush()
+//{
+//}
+//
+//void ABarrelActor::HandleInteraction()
+//{
+//}
