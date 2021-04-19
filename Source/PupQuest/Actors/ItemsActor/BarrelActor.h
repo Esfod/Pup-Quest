@@ -15,17 +15,16 @@ public:
 	// Sets default values for this actor's properties
 	ABarrelActor();
 
-	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	UFUNCTION(BlueprintCallable)
 		void FindClosestPush();
 	
-	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	UFUNCTION(BlueprintCallable)
 		void HandleInteraction();
 
-	/*UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Variables")
-		float PushSpeed;
 
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Variables")
-		float PushRange;*/
+
+	UPROPERTY(EditAnywhere)
+		class UStaticMeshComponent* MeshComp;
 
 protected:
 	// Called when the game starts or when spawned
