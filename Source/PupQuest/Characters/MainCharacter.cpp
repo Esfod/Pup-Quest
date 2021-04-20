@@ -99,11 +99,15 @@ void AMainCharacter::IsPushing()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Started Pushing"));
 		Pushing++;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	}
 	else if (Pushing == 2) 
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Stopped Pushing"));
 		Pushing--;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
+		GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	}
 }
 
