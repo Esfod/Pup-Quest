@@ -6,13 +6,12 @@
 #include "Kismet/GameplayStatics.h"
 #include "MainCharacter.h"
 #include "Components/BoxComponent.h"
-
+#include "Kismet/KismetSystemLibrary.h"
+#include "DrawDebugHelpers.h"
+#include "PhysXInterfaceWrapperCore.h"
 
 AEnemyBaseCharacter::AEnemyBaseCharacter()
 {
-	FireBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Box to check for closest fire"));
-	FireBox->SetupAttachment(GetMesh());
-	FireBox->SetGenerateOverlapEvents(true);
 }
 
 void AEnemyBaseCharacter::BeginPlay()
@@ -48,8 +47,20 @@ void AEnemyBaseCharacter::Attack(float OwnerDamage)
 TArray<AActor*> AEnemyBaseCharacter::GetOverLappingActorsToFireBox() const
 {
 	TArray<AActor*> OverlappingActors;
-	FireBox->GetOverlappingActors(OverlappingActors);
-	return OverlappingActors;
+	TArray<AActor*> OverlappedActors;
+	TArray<AActor*> ActorsToIgnore;
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+	ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldDynamic));
+	//ActorsToIgnore.Add(this);
+	DrawDebugSphere(GetWorld(), GetActorLocation(), SphereRadius, 20, FColor::Red);
+	
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetActorLocation(), SphereRadius, ObjectTypes,nullptr,ActorsToIgnore,OverlappedActors);
+	for(AActor* Actor : OverlappedActors)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("%s's Sphere overlaps with %s"),*GetName(), *Actor->GetName());
+	}
+	return OverlappedActors;
+	
 }
 
 void AEnemyBaseCharacter::GetHit(int32 ObjectInHand)

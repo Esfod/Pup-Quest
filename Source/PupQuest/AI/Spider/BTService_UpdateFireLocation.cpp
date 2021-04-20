@@ -27,7 +27,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 	TArray<AActor*> OverlappingActors = OwnerCharacter->GetOverLappingActorsToFireBox();
 	float DistanceA {0.f}; //an temporary variable
 	float DistanceB {100000.f}; 
-	FVector DistacnceVector {0.f}; //an temporary variable
+	FVector DistanceVector {0.f}; //an temporary variable
 	FVector VectorA {0.f};
 	FVector VectorB {0.f}; //the outgoing variable
 	bool bDistanceASet {false};
@@ -46,9 +46,9 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 					if(BrazierActor->bBrazierLit)
 					{
 						//UE_LOG(LogTemp,Warning,TEXT("Can see lit Brazier"));
-						DistacnceVector = BrazierActor->GetActorLocation() - OwnerCharacter->GetActorLocation();
+						DistanceVector = BrazierActor->GetActorLocation() - OwnerCharacter->GetActorLocation();
 						VectorA = BrazierActor->GetActorLocation();
-						DistanceA = DistacnceVector.Size();
+						DistanceA = DistanceVector.Size();
 						bDistanceASet = true;
 					}
 				}
@@ -62,9 +62,9 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 					if(TorchActor->bTorchLit)
 					{
 						//UE_LOG(LogTemp,Warning,TEXT("Can see Lit Torch"));
-						DistacnceVector = TorchActor->GetActorLocation() - OwnerCharacter->GetActorLocation();
+						DistanceVector = TorchActor->GetActorLocation() - OwnerCharacter->GetActorLocation();
 						VectorA = TorchActor->GetActorLocation();
-						DistanceA = DistacnceVector.Size();
+						DistanceA = DistanceVector.Size();
 						bDistanceASet = true;
 					}
 				}
@@ -81,9 +81,9 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 						if(MainCharacter->bTorchLit)
 						{
 							//UE_LOG(LogTemp,Warning,TEXT("Kim holdes a lit torch"));
-							DistacnceVector = MainCharacter->GetActorLocation() - OwnerCharacter->GetActorLocation();
+							DistanceVector = MainCharacter->GetActorLocation() - OwnerCharacter->GetActorLocation();
 							VectorA = MainCharacter->GetActorLocation();
-							DistanceA = DistacnceVector.Size();
+							DistanceA = DistanceVector.Size();
 							bDistanceASet = true;
 						}
 					}
@@ -97,9 +97,9 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 					if(TorchHolderActor->bHasATorch)
 					{
 						//UE_LOG(LogTemp,Warning,TEXT("Can se torchholder with lit torch"));
-						DistacnceVector = TorchHolderActor->GetActorLocation() - OwnerCharacter->GetActorLocation();
+						DistanceVector = TorchHolderActor->GetActorLocation() - OwnerCharacter->GetActorLocation();
 						VectorA = TorchHolderActor->GetActorLocation();
-						DistanceA = DistacnceVector.Size();
+						DistanceA = DistanceVector.Size();
 						bDistanceASet = true;
 					}
 				}

@@ -27,7 +27,7 @@ void UBTService_DistanceToAttackPlayer::TickNode(UBehaviorTreeComponent& OwnerCo
 	{
 		DistanceBetween = FVector(OwnerPawn->GetActorLocation() - PlayerPawn->GetActorLocation()).Size();
         
-        UE_LOG(LogTemp,Warning,TEXT("DistanceBetween = %f"),DistanceBetween);	
+        //UE_LOG(LogTemp,Warning,TEXT("DistanceBetween = %f"),DistanceBetween);	
         OwnerComp.GetBlackboardComponent()->SetValueAsFloat(GetSelectedBlackboardKey(), DistanceBetween);
 	}
 	else

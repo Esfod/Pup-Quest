@@ -97,7 +97,7 @@ void AMainCharacter::MoveForward(float Value)
 		// find out which way is forward
 		const FRotator PlayerRotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, PlayerRotation.Yaw, 0);
-
+		
 		// get forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(Direction, Value);

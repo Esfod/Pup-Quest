@@ -22,6 +22,7 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	float SphereRadius {90.f};
 public:
 	virtual void Attack(float OwnerDamage);
 	
@@ -36,16 +37,11 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsAttacking {false};
 	
-
-	
 	virtual void GetHit(int32 ObjectInHand);
 
 	float KnockOutTime {0.f};
 	
 private:
-	
-	UPROPERTY(EditAnywhere)
-	UBoxComponent* FireBox { nullptr };
 	
 	UPROPERTY(EditAnywhere)
 	float AttackDistance{100.f};
