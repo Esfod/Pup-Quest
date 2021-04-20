@@ -93,24 +93,6 @@ void AMainCharacter::Tick(float DeltaTime)
 	}
 }
 
-void AMainCharacter::IsPushing()
-{
-	if (Pushing == 1) 
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Started Pushing"));
-		Pushing++;
-		GetCharacterMovement()->bOrientRotationToMovement = false;
-		GetCharacterMovement()->bUseControllerDesiredRotation = false;
-	}
-	else if (Pushing == 2) 
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Stopped Pushing"));
-		Pushing--;
-		GetCharacterMovement()->bOrientRotationToMovement = true;
-		GetCharacterMovement()->bUseControllerDesiredRotation = true;
-	}
-}
-
 void AMainCharacter::MoveForward(float Value)
 {
 	if ((Controller != nullptr) && (Value != 0.0f) && (Pushing == 1))
@@ -379,6 +361,24 @@ ATorchActor* AMainCharacter::GetTorchActor()
 	return nullptr;
 }
 
+void AMainCharacter::IsPushing()
+{
+	if (Pushing == 1) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Started Pushing"));
+		Pushing++;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		GetCharacterMovement()->bUseControllerDesiredRotation = false;
+	}
+	else if (Pushing == 2) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Stopped Pushing"));
+		Pushing--;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
+		GetCharacterMovement()->bUseControllerDesiredRotation = true;
+	}
+}
+
 void AMainCharacter::AttackStart()
 {
 	AttackBoxComponent->SetGenerateOverlapEvents(true);
@@ -419,6 +419,7 @@ void AMainCharacter::PlayerTakeDamage(float DamageTaken)
 	if(Health < 0.f)
 		Health =  0.f;
 }
+
 void AMainCharacter::HandleDeath()
 {
 	//Super::HandleDeath();

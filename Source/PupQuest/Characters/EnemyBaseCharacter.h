@@ -22,7 +22,9 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere)
 	float SphereRadius {90.f};
+	
 public:
 	virtual void Attack(float OwnerDamage);
 	
