@@ -70,6 +70,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bIsAttacking = false;
 
+	UPROPERTY(VisibleAnywhere, Category = "Variables")
+	int Pushing = 1;
+
 	FVector Location;
 
 	FRotator Rotation;
@@ -77,6 +80,9 @@ public:
 	virtual void HandleDeath() override;
 
 	void PlacePlank();
+
+	UFUNCTION()
+	void IsPushing();
 	
 	UFUNCTION()
 	void AttachItem(AActor* Item);
