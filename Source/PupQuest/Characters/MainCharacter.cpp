@@ -425,6 +425,7 @@ void AMainCharacter::HandleDeath()
 	//Super::HandleDeath();
 	//GetWorld()->GetTimerManager().SetTimer(TimeGone, this, &AMainCharacter::Test, 5.f, false);
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+
 	//if (CheckpointLocation == true) {
 		//UE_LOG(LogTemp, Warning, TEXT("Hello there"));
 		//SetActorLocation(FVector(7000.f,9500.f,580.f));
