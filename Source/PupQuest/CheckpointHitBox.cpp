@@ -3,6 +3,8 @@
 
 #include "CheckpointHitBox.h"
 #include "Characters/MainCharacter.h"
+#include "PupQuestGameInstance.h"
+
 
 ACheckpointHitBox::ACheckpointHitBox()
 {
@@ -12,11 +14,10 @@ ACheckpointHitBox::ACheckpointHitBox()
 
 void ACheckpointHitBox::OnOverlap(class AActor* OverlappedActor, class AActor* OtherActor) {
 
-	//if (OtherActor->IsA(AMainCharacter::StaticClass())) {
-	//	AMainCharacter* Main = Cast<AMainCharacter>(OtherActor);
-	//	//Main->CheckpointLocation = true;
-	//	//Main->NewLocation = this->GetMesh()->GetActorLocation();//GetActorLocation();
-	//	Main->HandleDeath();
-	//	//UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
-	//}
+	if (OtherActor->IsA(AMainCharacter::StaticClass())) {
+		UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
+		GameInstance->RespawnPoint = FVector(Location);
+		GameInstance->NewSpawn = true;
+		UE_LOG(LogTemp, Warning, TEXT("New spawn point"));
+	}
 }

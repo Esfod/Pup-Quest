@@ -16,4 +16,8 @@ public:
 
 	UFUNCTION()
 		void OnOverlap(class AActor* OverlappedActor, class AActor* OtherActor);
+	
+	UPROPERTY(EditAnywhere, Category = "NewSpawn")
+		FVector Location;
+
 };

@@ -23,6 +23,10 @@
 
 
 
+#include "PupQuest/PupQuestGameInstance.h"
+
+
+
 #include "PupQuest/Characters/SpiderCharacter.h"
 
 #include "Kismet/GameplayStatics.h"
@@ -39,10 +43,11 @@ AMainCharacter::AMainCharacter()
 	CameraComp  = CreateDefaultSubobject<UCameraComponent>("Camera Component");
 	CameraComp->SetupAttachment(SpringArm);
 
-	/*StandOnHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBoxWeb"));
-	StandOnHitBox->SetupAttachment(RootComponent);*/
-	/*StandOnHitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapBegin);
-	StandOnHitBox->OnComponentEndOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapEnd);*/
+	//StandOnHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBoxWeb"));
+	//StandOnHitBox->SetupAttachment(RootComponent);
+	//StandOnHitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapBegin);
+	//StandOnHitBox->OnComponentEndOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapEnd);
+
 
 	HitBox->SetRelativeLocation(FVector(70.f,0.f, 0.f));
 	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlapHitBox);
@@ -82,7 +87,11 @@ void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	Health = 100.f;
-	
+
+	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
+	if (GameInstance->NewSpawn == true) {
+		SetActorLocation(FVector(GameInstance->RespawnPoint));
+	}
 }
 
 void AMainCharacter::Tick(float DeltaTime)
@@ -423,13 +432,6 @@ void AMainCharacter::PlayerTakeDamage(float DamageTaken)
 void AMainCharacter::HandleDeath()
 {
 	//Super::HandleDeath();
-	//GetWorld()->GetTimerManager().SetTimer(TimeGone, this, &AMainCharacter::Test, 5.f, false);
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 
-	//if (CheckpointLocation == true) {
-		//UE_LOG(LogTemp, Warning, TEXT("Hello there"));
-		//SetActorLocation(FVector(7000.f,9500.f,580.f));
-	//}
 }
-
-

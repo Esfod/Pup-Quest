@@ -55,8 +55,6 @@ public:
 	bool InTriggerBox = false;
 
 	bool OnTopOff = false;
-	
-	bool CheckpointLocation = false; 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bHoldingTorch = false;
