@@ -70,6 +70,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bIsAttacking = false;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
+		bool bPushBool = false;
+
 	UPROPERTY(VisibleAnywhere, Category = "Variables")
 	int Pushing = 1;
 
