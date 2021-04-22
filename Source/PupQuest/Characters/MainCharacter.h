@@ -73,6 +73,8 @@ public:
 
 	FVector Location;
 
+	FVector LocationAdjustment;
+
 	FRotator Rotation;
 
 	virtual void HandleDeath() override;

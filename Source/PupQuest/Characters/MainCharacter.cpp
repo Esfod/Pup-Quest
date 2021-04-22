@@ -182,17 +182,18 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 		Item->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach item fra main character
 		Item->SetActorEnableCollision(true);//Skrur på collision igjen
 
-		FVector CharacterLocation = GetMesh()->GetComponentLocation() + FVector(0.f, 0.f, -10.f);
-		FVector DropLocation = CharacterLocation + (GetMesh()->GetForwardVector() * 60.f);
+		FVector CharacterLocation = GetMesh()->GetComponentLocation();
 
 		if (Item == Plank) {
 			DropRotation = FRotator(0.f, GetMesh()->GetRelativeRotation().Yaw + 90.f, 270.f);
+			LocationAdjustment = FVector(0.f, 0.f, -10.f);
 			bHoldingPlank = false;
 			UE_LOG(LogTemp, Warning, TEXT("Plank dropped"));
 			DroppedItem = Plank;
 		}
 		else if (Item == Torch) {
 			DropRotation = FRotator(-85.f, GetMesh()->GetRelativeRotation().Yaw - 45.f, 0.f);
+			LocationAdjustment = FVector(0.f, 0.f, -9.f);
 			bHoldingTorch = false;
 			Torch->TorchFlameOff();
 			UE_LOG(LogTemp, Warning, TEXT("Torch dropped"));
@@ -200,10 +201,14 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 		}
 		else if (Item == Bucket) {
 			DropRotation = FRotator(0.f);
+			LocationAdjustment = FVector(0.f, 0.f, -3.f);
 			bHoldingBucket = false;
 			UE_LOG(LogTemp, Warning, TEXT("Bucket dropped"));
 			DroppedItem = Bucket;
 		}
+
+		FVector DropLocation = CharacterLocation + (GetMesh()->GetForwardVector() * 60.f) + LocationAdjustment;
+
 
 		Item->SetActorRotation(FQuat(DropRotation));
 		Item->SetActorLocation(DropLocation);
