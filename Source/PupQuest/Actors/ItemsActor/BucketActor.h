@@ -19,10 +19,10 @@ public:
 		bool bBucketFilled;
 
 	UFUNCTION()
-		void BucketWithWater();
+		void BucketFill();
 
 	UFUNCTION()
-		void BucketWithoutWater();
+		void BucketEmpty();
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -31,7 +31,8 @@ private:
 	UPROPERTY(EditAnywhere)
 		class UStaticMeshComponent* Water;
 
-
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* FillBucket;
 
 
 	virtual void BeginPlay() override;

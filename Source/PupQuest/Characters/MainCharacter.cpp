@@ -21,11 +21,7 @@
 #include "PupQuest/Actors/BrazierActor.h"
 #include "PupQuest/Actors/WellActor.h"
 
-
-
 #include "PupQuest/PupQuestGameInstance.h"
-
-
 
 #include "PupQuest/Characters/SpiderCharacter.h"
 
@@ -249,7 +245,7 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult& SweepResult) //F.M
 {
-	//UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
 	if (OtherActor->IsA(ATorchActor::StaticClass()) && !bHoldingTorch)//Hvis det er torch
 	{
 		ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
@@ -339,8 +335,9 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 	else if (OtherActor->IsA(AWellActor::StaticClass()) && bHoldingBucket == true) {//Hvis det er brazier
 		AWellActor* UWell = Cast<AWellActor>(OtherActor);
 		Well = UWell;
-		UE_LOG(LogTemp, Warning, TEXT("Hello there"));
-		Bucket->BucketWithWater();
+		if (Bucket->bBucketFilled == false) {
+			Bucket->BucketFill();
+		}
 	}
 	
 }
