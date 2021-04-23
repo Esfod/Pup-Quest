@@ -374,14 +374,14 @@ ATorchActor* AMainCharacter::GetTorchActor()
 
 void AMainCharacter::IsPushing()
 {
-	if (Pushing == 1) 
+	if (Pushing == 1 && bPushBool == true) 
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Started Pushing"));
 		Pushing++;
 		GetCharacterMovement()->bOrientRotationToMovement = false;
 		GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	}
-	else if (Pushing == 2) 
+	else if (Pushing == 2 && bPushBool == false)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Stopped Pushing"));
 		Pushing--;
