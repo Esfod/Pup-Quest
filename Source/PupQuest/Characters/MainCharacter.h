@@ -63,13 +63,13 @@ public:
 	bool bHoldingPlank = false;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
-		bool bHoldingBucket = false;
+	bool bHoldingBucket = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bIsAttacking = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
-		bool bPushBool = false;
+	bool bPushBool = false;
 
 	UPROPERTY(VisibleAnywhere, Category = "Variables")
 	int Pushing = 1;
