@@ -24,7 +24,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 	AEnemyBaseCharacter* OwnerCharacter = Cast<AEnemyBaseCharacter>(OwnerComp.GetAIOwner()->GetCharacter());
 	if(OwnerCharacter == nullptr) return; 
-	TArray<AActor*> OverlappingActors = OwnerCharacter->GetOverLappingActorsToFireBox();
+	TArray<AActor*> OverlappingActors = OwnerCharacter->GetOverLappingActorsFromSphere();
 	float DistanceA {0.f}; //an temporary variable
 	float DistanceB {100000.f}; 
 	FVector DistanceVector {0.f}; //an temporary variable
@@ -35,7 +35,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 
 	for(AActor* Actor : OverlappingActors)
 	{
-		//UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
+		UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
 		if(OwnerComp.GetAIOwner()->LineOfSightTo(Actor))
 		{
 			if(Actor->IsA(ABrazierActor::StaticClass()))
@@ -91,12 +91,13 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 			}
 			else if(Actor->IsA(ATorchHolderActor::StaticClass()))
 			{
+				UE_LOG(LogTemp,Warning,TEXT("hellllllooooooo"));
 				ATorchHolderActor* TorchHolderActor = Cast<ATorchHolderActor>(Actor);
 				if(TorchHolderActor)
 				{
 					if(TorchHolderActor->bHasATorch)
 					{
-						//UE_LOG(LogTemp,Warning,TEXT("Can se torchholder with lit torch"));
+						UE_LOG(LogTemp,Warning,TEXT("Can se torchholder with lit torch"));
 						DistanceVector = TorchHolderActor->GetActorLocation() - OwnerCharacter->GetActorLocation();
 						VectorA = TorchHolderActor->GetActorLocation();
 						DistanceA = DistanceVector.Size();

@@ -4,21 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Services/BTService_BlackboardBase.h"
-#include "BTService_UpdateClosestFireDist.generated.h"
+#include "BTService_FindClosestNestLoc.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PUPQUEST_API UBTService_UpdateClosestFireDist : public UBTService_BlackboardBase
+class PUPQUEST_API UBTService_FindClosestNestLoc : public UBTService_BlackboardBase
 {
 	GENERATED_BODY()
-public:
-	UBTService_UpdateClosestFireDist();
-protected:
-	UPROPERTY(EditAnywhere, Category=Blackboard)
-	struct FBlackboardKeySelector FireLocation;
-private:
-	float Distance {0.f};
+	public:
+	UBTService_FindClosestNestLoc(); 
+	private:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+
 };
