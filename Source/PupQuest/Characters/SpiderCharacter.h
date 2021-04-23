@@ -23,6 +23,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Values")
 	float RotationSpeed {150};
 
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsEnemyKnockedOut {false};
+	
 protected:
 
 	virtual void Tick(float DeltaSeconds) override;

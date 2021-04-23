@@ -3,8 +3,11 @@
 
 #include "SpiderCharacter.h"
 
+#include "Components/BoxComponent.h"
+
 ASpiderCharacter::ASpiderCharacter()
 {
+	HitBox->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("AttackSocket"));
 }
 
 void ASpiderCharacter::Tick(float DeltaSeconds)

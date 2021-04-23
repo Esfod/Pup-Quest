@@ -3,7 +3,7 @@
 
 #include "BTTask_SpiderAttack.h"
 #include "AIController.h"
-#include "PupQuest/Characters/EnemyBaseCharacter.h"
+#include "PupQuest/Characters/SpiderCharacter.h"
 
 UBTTask_SpiderAttack::UBTTask_SpiderAttack()
 {
@@ -14,7 +14,7 @@ EBTNodeResult::Type UBTTask_SpiderAttack::ExecuteTask(UBehaviorTreeComponent& Ow
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	AEnemyBaseCharacter* SpiderCharacter = Cast<AEnemyBaseCharacter>(OwnerComp.GetAIOwner()->GetPawn());
+	ASpiderCharacter* SpiderCharacter = Cast<ASpiderCharacter>(OwnerComp.GetAIOwner()->GetPawn());
 	if(SpiderCharacter == nullptr)
 	{
 		UE_LOG(LogTemp,Warning,TEXT("cast failed"));

@@ -7,6 +7,7 @@
 #include "EnemyBaseCharacter.generated.h"
 
 class AMainCharacter;
+class AEnemyNestActor;
 
 UCLASS()
 class PUPQUEST_API AEnemyBaseCharacter : public ABaseCharacter
@@ -14,7 +15,6 @@ class PUPQUEST_API AEnemyBaseCharacter : public ABaseCharacter
 	GENERATED_BODY()
 	
 public:
-	
 	AEnemyBaseCharacter(); 
 
 protected:
@@ -22,7 +22,7 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category= "Detection Variable")
 	float SphereRadius {90.f};
 	
 public:
@@ -31,10 +31,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Damage {50.f};
 
-	TArray<AActor*> GetOverLappingActorsToFireBox() const;
-
-	UPROPERTY(BlueprintReadOnly)
-	bool bIsEnemyKnockedOut {false};
+	TArray<AActor*> GetOverLappingActorsFromSphere() const;
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsAttacking {false};
@@ -43,9 +40,12 @@ public:
 
 	float KnockOutTime {0.f};
 	
+	TArray<AEnemyNestActor*> GetEnemyNestActors() const;
 private:
 	
 	UPROPERTY(EditAnywhere)
 	float AttackDistance{100.f};
 
+	UPROPERTY(EditAnywhere,Category = "Nest")
+	TArray<AEnemyNestActor*> NestActors {nullptr};
 };

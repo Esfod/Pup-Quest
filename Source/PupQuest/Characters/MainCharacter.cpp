@@ -418,11 +418,17 @@ void AMainCharacter::PlayerTakeDamage(float DamageTaken)
 	UE_LOG(LogTemp,Warning,TEXT("Players Health is %f"), Health);
 	if(Health < 0.f)
 		Health =  0.f;
+
+	IsCharacterDead();
+	if(bCharacterDead)
+	{
+		HandleDeath();
+	}
 }
 
 void AMainCharacter::HandleDeath()
 {
-	//Super::HandleDeath();
+	Super::HandleDeath();
 	//GetWorld()->GetTimerManager().SetTimer(TimeGone, this, &AMainCharacter::Test, 5.f, false);
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 	//if (CheckpointLocation == true) {
