@@ -48,4 +48,9 @@ private:
 
 	UPROPERTY(EditAnywhere,Category = "Nest")
 	TArray<AEnemyNestActor*> NestActors {nullptr};
+
+	UFUNCTION()
+		void OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
+			bool bFromSweep, const FHitResult& SweepResult);
 };

@@ -13,6 +13,7 @@
 
 AEnemyBaseCharacter::AEnemyBaseCharacter()
 {
+	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBaseCharacter::OnOverlapHitBox);
 }
 
 void AEnemyBaseCharacter::BeginPlay()
@@ -29,23 +30,7 @@ void AEnemyBaseCharacter::Attack(float OwnerDamage)
 {
 	UE_LOG(LogTemp,Warning,TEXT("%s is Attacking"), *GetName());
 	HitBox->SetGenerateOverlapEvents(true);
-	TArray<AActor*> OverlappingActors;
-	HitBox->GetOverlappingActors(OverlappingActors);
-	for (AActor* Actor : OverlappingActors)
-	{
-		UE_LOG(LogTemp,Warning,TEXT("%s attacks %s"),*GetName(), *Actor->GetName());
-		if(Actor->IsA(AMainCharacter::StaticClass()))
-		{
-			//UE_LOG(LogTemp,Warning,TEXT("Spider treffer "), *Actor->GetName());
-			AMainCharacter* MainCharacter = Cast<AMainCharacter>(Actor);
-			if (MainCharacter == nullptr)
-			{
-				UE_LOG(LogTemp,Warning,TEXT("MainCharacter fail"));
-				return;
-			}
-			MainCharacter->PlayerTakeDamage(OwnerDamage);
-		}
-	}
+	
 	HitBox->SetGenerateOverlapEvents(false);
 }
 
@@ -77,4 +62,21 @@ void AEnemyBaseCharacter::GetHit(int32 ObjectInHand)
 TArray<AEnemyNestActor*> AEnemyBaseCharacter::GetEnemyNestActors() const
 {
 	return NestActors;
+}
+
+void AEnemyBaseCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	UE_LOG(LogTemp,Warning,TEXT("%s attacks %s"),*GetName(), *OtherActor->GetName());
+	if(OtherActor->IsA(AMainCharacter::StaticClass()))
+	{
+		//UE_LOG(LogTemp,Warning,TEXT("Spider treffer "), *Actor->GetName());
+		AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
+		if (MainCharacter == nullptr)
+		{
+			UE_LOG(LogTemp,Warning,TEXT("MainCharacter fail"));
+			return;
+		}
+		MainCharacter->PlayerTakeDamage(Damage);
+	}
 }
