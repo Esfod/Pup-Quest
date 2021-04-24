@@ -8,11 +8,6 @@
 ABaseCharacter::ABaseCharacter()
 {	
 	PrimaryActorTick.bCanEverTick = true;
-
-	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
-	HitBox->SetupAttachment(GetMesh());
-	HitBox->SetGenerateOverlapEvents(false);
-
 }
 
 void ABaseCharacter::BeginPlay()
@@ -43,6 +38,8 @@ void ABaseCharacter::HandleDeath()
 
 void ABaseCharacter::IsCharacterDead()
 {
-	if(Health == 0.f) bCharacterDead = true;
-    	bCharacterDead = false;
+	if(Health == 0.f)
+		bCharacterDead = true;
+	else
+		bCharacterDead = false;
 }

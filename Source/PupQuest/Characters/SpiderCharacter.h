@@ -18,7 +18,7 @@ public:
 
 	virtual void Attack(float OwnerDamage) override;
 
-	virtual void GetHit(int32 ObjectInHand) override;
+	virtual void SpiderGettingHit(int32 ObjectInHand) ;
 
 	UPROPERTY(EditAnywhere, Category = "Values")
 	float RotationSpeed {150};

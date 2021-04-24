@@ -35,7 +35,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 
 	for(AActor* Actor : OverlappingActors)
 	{
-		UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
+		//UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
 		if(OwnerComp.GetAIOwner()->LineOfSightTo(Actor))
 		{
 			if(Actor->IsA(ABrazierActor::StaticClass()))

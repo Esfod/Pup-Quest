@@ -44,8 +44,9 @@ AMainCharacter::AMainCharacter()
 	//StandOnHitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapBegin);
 	//StandOnHitBox->OnComponentEndOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapEnd);
 
-
-	HitBox->SetRelativeLocation(FVector(70.f,0.f, 0.f));
+	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
+	HitBox->SetupAttachment(GetMesh());
+	HitBox->SetGenerateOverlapEvents(false);
 	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlapHitBox);
 
 	AttackBoxComponent = CreateDefaultSubobject<UBoxComponent>("Attack HitBox");
@@ -297,14 +298,17 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 	}
 	else if (OtherActor->IsA(ASpiderWebActor::StaticClass()))
 	{
-		if (Torch->bTorchLit == true)
+		if(bHoldingTorch)
 		{
-			//Hvis torch er lit
-			{//Hvis det er spider web
-				ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
-				//UE_LOG(LogTemp, Warning, TEXT("player detects %s"), *OtherActor->GetName());
-				if (Web->bBurning == false) {
-					Web->StartBurnWeb();
+			if (Torch->bTorchLit == true)
+			{
+				//Hvis torch er lit
+				{//Hvis det er spider web
+					ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
+					//UE_LOG(LogTemp, Warning, TEXT("player detects %s"), *OtherActor->GetName());
+					if (Web->bBurning == false) {
+						Web->StartBurnWeb();
+					}
 				}
 			}
 		}
@@ -412,24 +416,24 @@ void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent
 			if(bHoldingTorch)
 			{
 				if(bTorchLit) //torch on fire
-					SpiderHit->GetHit(2);
+					SpiderHit->SpiderGettingHit(2);
 				else //torch not on fire
-					SpiderHit->GetHit(1);
+					SpiderHit->SpiderGettingHit(1);
 			}
 			else if(bHoldingPlank) //plank
-				SpiderHit->GetHit(3);
+				SpiderHit->SpiderGettingHit(3);
 			else //melee
-				SpiderHit->GetHit(0);
+				SpiderHit->SpiderGettingHit(0);
 		}
 }
 
 void AMainCharacter::PlayerTakeDamage(float DamageTaken)
 {
 	Health -= DamageTaken;
-	UE_LOG(LogTemp,Warning,TEXT("Players Health is %f"), Health);
 	if(Health < 0.f)
 		Health =  0.f;
-
+	UE_LOG(LogTemp,Warning,TEXT("Players Health is %f"), Health);
+	
 	IsCharacterDead();
 	if(bCharacterDead)
 	{

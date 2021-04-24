@@ -13,7 +13,6 @@
 
 AEnemyBaseCharacter::AEnemyBaseCharacter()
 {
-	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBaseCharacter::OnOverlapHitBox);
 }
 
 void AEnemyBaseCharacter::BeginPlay()
@@ -28,15 +27,16 @@ void AEnemyBaseCharacter::Tick(float DeltaTime)
 
 void AEnemyBaseCharacter::Attack(float OwnerDamage)
 {
-	UE_LOG(LogTemp,Warning,TEXT("%s is Attacking"), *GetName());
-	HitBox->SetGenerateOverlapEvents(true);
-	
-	HitBox->SetGenerateOverlapEvents(false);
+	//UE_LOG(LogTemp,Warning,TEXT("%s is Attacking"), *GetName());
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+	TArray<AActor*> OverlappedActors;
+	TArray<AActor*> ActorsToIgnore;
+	DrawDebugBox(GetWorld(),GetActorLocation() + FVector(100.f,0.f,0.f), FVector(10.f), FColor::Red, true,2);
+	UKismetSystemLibrary::BoxOverlapActors(GetWorld(), GetActorLocation() + FVector(10.f,0.f,0.f), FVector(10.f), ObjectTypes, nullptr, ActorsToIgnore, OverlappedActors);
 }
 
 TArray<AActor*> AEnemyBaseCharacter::GetOverLappingActorsFromSphere() const
 {
-	TArray<AActor*> OverlappingActors;
 	TArray<AActor*> OverlappedActors;
 	TArray<AActor*> ActorsToIgnore;
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
@@ -64,10 +64,11 @@ TArray<AEnemyNestActor*> AEnemyBaseCharacter::GetEnemyNestActors() const
 	return NestActors;
 }
 
+/*
 void AEnemyBaseCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp,Warning,TEXT("%s attacks %s"),*GetName(), *OtherActor->GetName());
+	//UE_LOG(LogTemp,Warning,TEXT("%s attacks %s"),*GetName(), *OtherActor->GetName());
 	if(OtherActor->IsA(AMainCharacter::StaticClass()))
 	{
 		//UE_LOG(LogTemp,Warning,TEXT("Spider treffer "), *Actor->GetName());
@@ -77,6 +78,9 @@ void AEnemyBaseCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedCompone
 			UE_LOG(LogTemp,Warning,TEXT("MainCharacter fail"));
 			return;
 		}
+		UE_LOG(LogTemp,Warning,TEXT("Spider attacks Player"));
 		MainCharacter->PlayerTakeDamage(Damage);
 	}
+	HitBox->SetGenerateOverlapEvents(false);
 }
+*/

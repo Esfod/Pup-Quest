@@ -31,6 +31,9 @@ private:
 	UBoxComponent* AttackBoxComponent {nullptr};
 
 	UPROPERTY(EditAnywhere)
+	UBoxComponent* HitBox { nullptr };
+	
+	UPROPERTY(EditAnywhere)
 	float RotateSpeed = 30.f;
 
 	void AttackStart();
