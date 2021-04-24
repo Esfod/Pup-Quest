@@ -146,7 +146,7 @@ void AMainCharacter::AttachItem(AActor* Item)//(F.M) Attaches the given item in 
 			bHoldingTorch = true;
 			UE_LOG(LogTemp, Warning, TEXT("Torch picked up"));
 			if(TorchActor == nullptr) return;
-			bTorchLit = TorchActor->bTorchLit;
+			bTorchLit = TorchActor->bTorchActorLit;
 		}
 		else if (Item == Plank && DroppedItem != Plank) {
 			Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("PlankSocket"));//Attach plank til main character
@@ -254,7 +254,7 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 		ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
 		Torch = TorchHit;
 		AttachItem(Torch);
-		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
+		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
 	}
 	else if (OtherActor->IsA(APlankActor::StaticClass()) && !bHoldingPlank)//If it is a plank
 	{
@@ -271,8 +271,9 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 	else if (OtherActor->IsA(ATorchHolderActor::StaticClass()))//If it is a torch holder
 	{
 		ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(OtherActor); 
+
 		if (bHoldingTorch == true) {//If the character is holding a torch
-			if (Torch->bTorchLit == true) {//If torch is lit
+			if (Torch->bTorchActorLit == true) {//If torch is lit
 				Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach torch fra main character
 				Torch->SetActorEnableCollision(true);//Turns on collision
 				Torch->SetActorLocation(TorchHolder->GetTorchPlacementPoint().GetLocation());//Sets torch in the right location
@@ -295,12 +296,13 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 			TorchHolder->bHasATorch = false;
 			UE_LOG(LogTemp,Warning,TEXT("%s"),*Torch->GetName());
 			AttachItem(Torch);
-			UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
+			UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
 		}
 	}
 	else if (OtherActor->IsA(ASpiderWebActor::StaticClass()))//If it is a spider web
 	{
-		if (bHoldingTorch)
+		if (Torch->bTorchActorLit == true)
+
 		{
 			if (Torch->bTorchLit == true) {//If the torch is lit
 				ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
@@ -314,10 +316,10 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 		ABrazierActor* UBrazier = Cast<ABrazierActor>(OtherActor);
 		Brazier = UBrazier;
 		UE_LOG(LogTemp, Warning, TEXT("Brazier lit is %s"), Brazier->bBrazierLit ? TEXT("true") : TEXT("false"));
-		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchLit ? TEXT("true") : TEXT("false"));
+		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
 
 		if (Brazier->bBrazierLit == true) {//If brazier is lit
-			if (Torch->bTorchLit == true) {//If torch is lit
+			if (Torch->bTorchActorLit == true) {//If torch is lit
 				UE_LOG(LogTemp, Warning, TEXT("Brazier and torch is already lit"));
 			}
 			else {//If torch is not lit
@@ -325,7 +327,8 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 			}
 		}
 		else {//If brazier is not lit
-			if (Torch->bTorchLit == true) {//If torch is lit
+			if (Torch->bTorchActorLit == true) {//If torch is lit
+
 				Brazier->BrazierFlameOn();
 			}
 			else {//If torch is not lit

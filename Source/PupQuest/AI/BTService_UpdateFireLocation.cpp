@@ -59,7 +59,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 				ATorchActor* TorchActor = Cast<ATorchActor>(Actor);
 				if(TorchActor)
 				{
-					if(TorchActor->bTorchLit)
+					if(TorchActor->bTorchActorLit)
 					{
 						//UE_LOG(LogTemp,Warning,TEXT("Can see Lit Torch"));
 						DistanceVector = TorchActor->GetActorLocation() - OwnerCharacter->GetActorLocation();

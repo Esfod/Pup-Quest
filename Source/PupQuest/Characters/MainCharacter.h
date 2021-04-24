@@ -51,15 +51,15 @@ public:
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* StandOnHitBox { nullptr };//To see if player is standing on item when he picks it up(movement does not work if he does)
 
-
 	UPROPERTY(VisibleAnywhere)
 	float Health {0.f};
 	
 	FRotator DropRotation;//Used to set the dropping rotation of dropped items
 
-
+	UFUNCTION(BlueprintCallable)
 	ATorchActor* GetTorchActor();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bTorchLit {false};//See if the torch is lit or not
 	
 	bool InPlankTriggerBox = false;
