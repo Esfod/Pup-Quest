@@ -30,8 +30,6 @@ ASpiderWebActor::ASpiderWebActor()
 	Flame = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("FlameParticle"));
 	Flame->SetupAttachment(MeshComp); 
 
-	
-
 	HitBoxWeb->OnComponentBeginOverlap.AddDynamic(this, &ASpiderWebActor::BeginOverlapWeb);
 
 }
@@ -43,8 +41,6 @@ void ASpiderWebActor::BeginPlay()
 	Flame->SetVisibility(false);
 	LightSorce->SetVisibility(false);
 	HitBoxWeb->SetGenerateOverlapEvents(false);
-
-	
 }
 
 // Called every frame
@@ -54,16 +50,6 @@ void ASpiderWebActor::Tick(float DeltaTime)
 
 
 	//DrawDebugBox(GetWorld(), GetActorLocation(), GetComponentsBoundingBox().GetExtent(), FColor::Red, true, -1, 0, 5);
-
-
-	//SetActorScale3D(FVector(Scale));//Krymper Web
-
-	//while (burning == true) {
-	//	Scale -= FVector(0.001f);
-	//}
-	//AddActorLocalTransform(FTransform(FVector(-0.1f)));
-	//SetActorScale3D
-
 }
 void ASpiderWebActor::StartBurnWeb() {
 	bBurning = true;
@@ -90,7 +76,6 @@ void ASpiderWebActor::EndBurnWeb() {
 
 	Flame->SetVisibility(false);
 	LightSorce->SetVisibility(false);
-	//burning = false;
 }
 
 
@@ -108,13 +93,11 @@ void ASpiderWebActor::BeginOverlapWeb(UPrimitiveComponent* OverlappedComponent, 
 			}
 		}
 
-		if (OtherActor->IsA(ABrazierActor::StaticClass()) && OtherActor != this) {
+		/*if (OtherActor->IsA(ABrazierActor::StaticClass()) && OtherActor != this) {
 			ABrazierActor* Brazier = Cast<ABrazierActor>(OtherActor);
 			UE_LOG(LogTemp, Warning, TEXT("Web detects %s"), *OtherActor->GetName());
-
 				StartBurnWeb();
-			
-		}
+		}*/
 }
 
 

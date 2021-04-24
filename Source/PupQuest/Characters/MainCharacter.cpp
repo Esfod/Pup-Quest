@@ -86,6 +86,7 @@ void AMainCharacter::BeginPlay()
 
 	//(F.M)If the player has passed through a checkpoint, the player will instantly teleport to that location when respawning
 	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
+	
 	if (GameInstance->NewSpawn == true) {
 		SetActorLocation(FVector(GameInstance->RespawnPoint));
 	}
@@ -182,14 +183,14 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 
 		if (Item == Plank) {
 			DropRotation = FRotator(0.f, GetMesh()->GetRelativeRotation().Yaw + 90.f, 270.f);//Sets the rotation of the plank when it is dropped
-			LocationAdjustment = FVector(0.f, 0.f, -10.f);//Adjusts the height of the plank when it gets dropped
+			ItemLocationAdjustment = FVector(0.f, 0.f, -10.f);//Adjusts the height of the plank when it gets dropped
 			bHoldingPlank = false;
 			UE_LOG(LogTemp, Warning, TEXT("Plank dropped"));
 			DroppedItem = Plank;
 		}
 		else if (Item == Torch) {
 			DropRotation = FRotator(-85.f, GetMesh()->GetRelativeRotation().Yaw - 45.f, 0.f);// Sets the rotation of the torch when it is dropped
-			LocationAdjustment = FVector(0.f, 0.f, -9.f);//Adjusts the height of the torch when it gets dropped
+			ItemLocationAdjustment = FVector(0.f, 0.f, -9.f);//Adjusts the height of the torch when it gets dropped
 			bHoldingTorch = false;
 			Torch->TorchFlameOff();
 			UE_LOG(LogTemp, Warning, TEXT("Torch dropped"));
@@ -197,13 +198,13 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 		}
 		else if (Item == Bucket) {
 			DropRotation = FRotator(0.f);// Sets the rotation of the bucket when it is dropped
-			LocationAdjustment = FVector(0.f, 0.f, -3.f);//Adjusts the height of the bucket when it gets dropped
+			ItemLocationAdjustment = FVector(0.f, 0.f, -3.f);//Adjusts the height of the bucket when it gets dropped
 			bHoldingBucket = false;
 			UE_LOG(LogTemp, Warning, TEXT("Bucket dropped"));
 			DroppedItem = Bucket;
 		}
 
-		FVector DropLocation = CharacterLocation + (GetMesh()->GetForwardVector() * 60.f) + LocationAdjustment;//Sets the location where the item will get dropped
+		FVector DropLocation = CharacterLocation + (GetMesh()->GetForwardVector() * 60.f) + ItemLocationAdjustment;//Sets the location where the item will get dropped
 
 
 		Item->SetActorRotation(FQuat(DropRotation));
@@ -213,7 +214,7 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 
 void AMainCharacter::PlacePlank()//F.M 
 {
-	if (bHoldingPlank == true && InTriggerBox == true) {
+	if (bHoldingPlank == true && InPlankTriggerBox == true) {
 
 		Plank->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach plank from main character
 
@@ -333,7 +334,6 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 			Bucket->BucketFill();
 		}
 	}
-	
 }
 
 
@@ -434,5 +434,9 @@ void AMainCharacter::PlayerTakeDamage(float DamageTaken)
 void AMainCharacter::HandleDeath()
 {
 	Super::HandleDeath();
+
+	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
+	GameInstance->GameStarted = true;
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);//Restarts level
+	
 }

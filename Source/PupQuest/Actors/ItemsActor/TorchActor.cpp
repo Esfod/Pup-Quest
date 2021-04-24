@@ -22,17 +22,12 @@ void ATorchActor::BeginPlay()
 {
 	Super::BeginPlay(); 
 
-	//MeshComp->SetSimulatePhysics(true);
-
 	if (bTorchLit == false) {
 		TorchFlameOff();
 	}
 	else if (bTorchLit == true) {
 		TorchFlameOn();
 	}
-
-	//SetEnableGravity();
-
 }
 
 void ATorchActor::TorchFlameOn() {

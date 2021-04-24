@@ -50,7 +50,7 @@ public:
 
 	bool bTorchLit {false};//See if the torch is lit or not
 	
-	bool InTriggerBox = false;
+	bool InPlankTriggerBox = false;
 
 	bool OnTopOff = false;
 
@@ -74,7 +74,7 @@ public:
 
 	FVector Location;
 
-	FVector LocationAdjustment;
+	FVector ItemLocationAdjustment;
 
 	FRotator Rotation;
 
