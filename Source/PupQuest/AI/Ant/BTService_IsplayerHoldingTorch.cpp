@@ -24,7 +24,7 @@ void UBTService_IsplayerHoldingTorch::TickNode(UBehaviorTreeComponent& OwnerComp
 		UE_LOG(LogTemp,Warning,TEXT("UBTService_IsplayerHoldingTorch fail cast Maincharacter"));
 		OwnerComp.GetBlackboardComponent()->ClearValue(BlackboardKey.SelectedKeyName);
 	}
-	else if(MainCharacter->bHoldingTorch && MainCharacter->GetTorchActor()->bTorchLit)
+	else if(MainCharacter->bHoldingTorch && MainCharacter->GetTorchActor()->bTorchActorLit)
 	{
 		OwnerComp.GetBlackboardComponent()->SetValueAsBool(BlackboardKey.SelectedKeyName, true);
 	}

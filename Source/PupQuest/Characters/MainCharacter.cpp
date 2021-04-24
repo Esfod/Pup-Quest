@@ -270,7 +270,7 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 	}
 	else if (OtherActor->IsA(ATorchHolderActor::StaticClass()))//If it is a torch holder
 	{
-		ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(OtherActor); 
+		ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(OtherActor);
 
 		if (bHoldingTorch == true) {//If the character is holding a torch
 			if (Torch->bTorchActorLit == true) {//If torch is lit
@@ -283,18 +283,18 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 				TorchHolder->bHasATorch = true;
 
 				DroppedItem = Torch;
-				UE_LOG(LogTemp,Warning,TEXT("%s"),*Torch->GetName());
+				UE_LOG(LogTemp, Warning, TEXT("%s"), *Torch->GetName());
 				bHoldingTorch = false;
 				Torch->TorchFlameOn();//There was a bug here where the torch will turn off if you place it in a torch holder, so we just turn it on again here
 			}
 			else UE_LOG(LogTemp, Warning, TEXT("Door will not open because the torch is not lit"));
 		}
-		else if(TorchHolder->GetTorchActor() != nullptr)
+		else if (TorchHolder->GetTorchActor() != nullptr)
 		{
 			Torch = TorchHolder->GetTorchActor();
 			TorchHolder->SetTorchActor(nullptr);
 			TorchHolder->bHasATorch = false;
-			UE_LOG(LogTemp,Warning,TEXT("%s"),*Torch->GetName());
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *Torch->GetName());
 			AttachItem(Torch);
 			UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
 		}
@@ -302,13 +302,13 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 	else if (OtherActor->IsA(ASpiderWebActor::StaticClass()))//If it is a spider web
 	{
 		if (Torch->bTorchActorLit == true)
-
 		{
-			if (Torch->bTorchLit == true) {//If the torch is lit
+			if (Torch->bTorchActorLit == true) {//If the torch is lit
 				ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
-			if (Web->bBurning == false) {//If the web is not already burning
-				Web->StartBurnWeb();
+				if (Web->bBurning == false) {//If the web is not already burning
+					Web->StartBurnWeb();
 
+				}
 			}
 		}
 	}
