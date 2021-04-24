@@ -24,10 +24,10 @@ void ATorchActor::BeginPlay()
 
 	//MeshComp->SetSimulatePhysics(true);
 
-	if (bTorchLit == false) {
+	if (bTorchActorLit == false) {
 		TorchFlameOff();
 	}
-	else if (bTorchLit == true) {
+	else if (bTorchActorLit == true) {
 		TorchFlameOn();
 	}
 
@@ -38,11 +38,11 @@ void ATorchActor::BeginPlay()
 void ATorchActor::TorchFlameOn() {
 	Flame->SetVisibility(true);
 	LightSorce->SetVisibility(true);
-	bTorchLit = true;
+	bTorchActorLit = true;
 }
 
 void ATorchActor::TorchFlameOff() {
 	Flame->SetVisibility(false);
 	LightSorce->SetVisibility(false);
-	bTorchLit = false;
+	bTorchActorLit = false;
 }

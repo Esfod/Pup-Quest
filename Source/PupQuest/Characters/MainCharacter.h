@@ -48,6 +48,7 @@ public:
 
 	ATorchActor* GetTorchActor();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bTorchLit {false};
 
 	bool bBucketFilled{ false };
