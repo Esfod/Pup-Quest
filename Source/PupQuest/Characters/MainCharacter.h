@@ -46,6 +46,7 @@ public:
 
 	FRotator DropRotation;
 
+	UFUNCTION(BlueprintCallable)
 	ATorchActor* GetTorchActor();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
