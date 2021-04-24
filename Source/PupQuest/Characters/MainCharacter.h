@@ -40,28 +40,29 @@ private:
 
 	void AttackEnd();
 
+
 	void UnilitedHealth();
 
-	AActor* DroppedItem = nullptr;
-	
+	AActor* DroppedItem = nullptr;//This is used to see what the latest dropped item was
+
 public:
 	AMainCharacter();
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* StandOnHitBox { nullptr };//To see if player is standing on item when he picks it up(movement does not work if he does)
 
+
 	UPROPERTY(VisibleAnywhere)
 	float Health {0.f};
 	
-	FRotator DropRotation;
+	FRotator DropRotation;//Used to set the dropping rotation of dropped items
+
 
 	ATorchActor* GetTorchActor();
 
-	bool bTorchLit {false};
-
-	bool bBucketFilled{ false };
+	bool bTorchLit {false};//See if the torch is lit or not
 	
-	bool InTriggerBox = false;
+	bool InPlankTriggerBox = false;
 
 	bool OnTopOff = false;
 
@@ -85,12 +86,13 @@ public:
 
 	FVector Location;
 
-	FVector LocationAdjustment;
+	FVector ItemLocationAdjustment;
 
 	FRotator Rotation;
 
 	virtual void HandleDeath() override;
 
+	UFUNCTION()
 	void PlacePlank();
 
 	void IsCharacterDead();

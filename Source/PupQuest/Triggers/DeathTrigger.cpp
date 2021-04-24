@@ -2,7 +2,7 @@
 
 
 #include "DeathTrigger.h"
-#include "Characters/MainCharacter.h"
+#include "PupQuest/Characters/MainCharacter.h"
 
 ADeathTrigger::ADeathTrigger()
 {
