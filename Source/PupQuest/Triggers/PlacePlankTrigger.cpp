@@ -2,7 +2,7 @@
 
 
 #include "PlacePlankTrigger.h"
-#include "Characters/MainCharacter.h"
+#include "PupQuest/Characters/MainCharacter.h"
 
 APlacePlankTrigger::APlacePlankTrigger()
 {
