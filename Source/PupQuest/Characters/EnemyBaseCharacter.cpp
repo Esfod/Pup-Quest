@@ -31,8 +31,22 @@ void AEnemyBaseCharacter::Attack(float OwnerDamage)
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 	TArray<AActor*> OverlappedActors;
 	TArray<AActor*> ActorsToIgnore;
-	DrawDebugBox(GetWorld(),GetActorLocation() + FVector(100.f,0.f,0.f), FVector(10.f), FColor::Red, true,2);
-	UKismetSystemLibrary::BoxOverlapActors(GetWorld(), GetActorLocation() + FVector(10.f,0.f,0.f), FVector(10.f), ObjectTypes, nullptr, ActorsToIgnore, OverlappedActors);
+	//DrawDebugBox(GetWorld(),GetActorLocation() + GetActorForwardVector()*100, FVector(50.f), FColor::Red, true,2);
+	UKismetSystemLibrary::BoxOverlapActors(GetWorld(), GetActorLocation() + GetActorForwardVector()*100, FVector(50.f), ObjectTypes, nullptr, ActorsToIgnore, OverlappedActors);
+	//UE_LOG(LogTemp,Warning,TEXT("%s attacks %s"),*GetName(), *OtherActor->GetName());
+	for(AActor* Actor : OverlappedActors)
+	if(Actor->IsA(AMainCharacter::StaticClass()))
+	{
+		//UE_LOG(LogTemp,Warning,TEXT("Spider treffer "), *Actor->GetName());
+		AMainCharacter* MainCharacter = Cast<AMainCharacter>(Actor);
+		if (MainCharacter == nullptr)
+		{
+			UE_LOG(LogTemp,Warning,TEXT("MainCharacter fail"));
+			return;
+		}
+		UE_LOG(LogTemp,Warning,TEXT("Spider attacks Player"));
+		MainCharacter->PlayerTakeDamage(Damage);
+	}
 }
 
 TArray<AActor*> AEnemyBaseCharacter::GetOverLappingActorsFromSphere() const
@@ -63,24 +77,3 @@ TArray<AEnemyNestActor*> AEnemyBaseCharacter::GetEnemyNestActors() const
 {
 	return NestActors;
 }
-
-/*
-void AEnemyBaseCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	//UE_LOG(LogTemp,Warning,TEXT("%s attacks %s"),*GetName(), *OtherActor->GetName());
-	if(OtherActor->IsA(AMainCharacter::StaticClass()))
-	{
-		//UE_LOG(LogTemp,Warning,TEXT("Spider treffer "), *Actor->GetName());
-		AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
-		if (MainCharacter == nullptr)
-		{
-			UE_LOG(LogTemp,Warning,TEXT("MainCharacter fail"));
-			return;
-		}
-		UE_LOG(LogTemp,Warning,TEXT("Spider attacks Player"));
-		MainCharacter->PlayerTakeDamage(Damage);
-	}
-	HitBox->SetGenerateOverlapEvents(false);
-}
-*/

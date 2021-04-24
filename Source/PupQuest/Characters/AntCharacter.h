@@ -13,5 +13,10 @@ UCLASS()
 class PUPQUEST_API AAntCharacter : public AEnemyBaseCharacter
 {
 	GENERATED_BODY()
-	
+public:
+	AAntCharacter();
+protected:
+
+private:
+
 };
