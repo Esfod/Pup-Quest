@@ -4,7 +4,6 @@
 
 #include "EnemyBaseCharacter.h"
 #include "Kismet/GameplayStatics.h"
-#include "Components/BoxComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "DrawDebugHelpers.h"
 
@@ -49,7 +48,7 @@ void AEnemyBaseCharacter::Attack(float OwnerDamage)
 	}
 }
 
-TArray<AActor*> AEnemyBaseCharacter::GetOverLappingActorsFromSphere() const
+TArray<AActor*> AEnemyBaseCharacter::GetOverLappingActorsFromSphere()
 {
 	TArray<AActor*> OverlappedActors;
 	TArray<AActor*> ActorsToIgnore;
@@ -59,11 +58,12 @@ TArray<AActor*> AEnemyBaseCharacter::GetOverLappingActorsFromSphere() const
 	//DrawDebugSphere(GetWorld(), GetActorLocation(), SphereRadius, 20, FColor::Red, true,2);
 	
 	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetActorLocation(), SphereRadius, ObjectTypes,nullptr,ActorsToIgnore,OverlappedActors);
-
+/*
 	for(AActor* Actor : OverlappedActors)
 	{
 		UE_LOG(LogTemp,Warning,TEXT("%s's Sphere overlaps with %s"),*GetName(), *Actor->GetName());
 	}
+	*/
 	return OverlappedActors;
 }
 

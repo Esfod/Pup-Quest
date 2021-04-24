@@ -66,6 +66,10 @@ void ASpiderCharacter::SpiderGettingHit(int32 ObjectInHand)
 			KnockOutTime = PlankKnockOutTime;
 			//UE_LOG(LogTemp,Warning,TEXT("Spider is hit by an plank"));
 			break;
+		case 4:
+			KnockOutTime = BucketKnockOutTime;
+			//UE_LOG(LogTemp,Warning,TEXT("Spider is hit by an Bucket"));
+			break;
 		default:
 			break;
 	}

@@ -40,13 +40,19 @@ private:
 
 	void AttackEnd();
 
+	void UnilitedHealth();
+
 	AActor* DroppedItem = nullptr;
+	
 public:
 	AMainCharacter();
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* StandOnHitBox { nullptr };//To see if player is standing on item when he picks it up(movement does not work if he does)
 
+	UPROPERTY(VisibleAnywhere)
+	float Health {0.f};
+	
 	FRotator DropRotation;
 
 	ATorchActor* GetTorchActor();
@@ -86,6 +92,8 @@ public:
 	virtual void HandleDeath() override;
 
 	void PlacePlank();
+
+	void IsCharacterDead();
 
 	UFUNCTION()
 	void IsPushing();
@@ -144,12 +152,12 @@ protected:
 			bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-		void OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-            UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
-            bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
 		void StandOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
+			bool bFromSweep, const FHitResult& SweepResult);
+	
+	UFUNCTION()
+		void OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 			bool bFromSweep, const FHitResult& SweepResult);
 

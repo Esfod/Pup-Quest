@@ -79,6 +79,7 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("Reset", IE_Pressed, this, &AMainCharacter::HandleDeath);
 
 	PlayerInputComponent->BindAction("Push", IE_Pressed, this, &AMainCharacter::IsPushing);
+	PlayerInputComponent->BindAction("HealthBoost",IE_Pressed,this, &AMainCharacter::UnilitedHealth);
 }
 
 void AMainCharacter::BeginPlay()
@@ -407,8 +408,7 @@ void AMainCharacter::AttackEnd()
 	bIsAttacking = false;
 }
 
-void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-    UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if(OtherActor->IsA(ASpiderCharacter::StaticClass()))
 	{
@@ -423,6 +423,16 @@ void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent
 		}
 		else if(bHoldingPlank) //plank
 			SpiderHit->SpiderGettingHit(3);
+		else if(bHoldingBucket)
+		{
+			if(!Bucket->bBucketFilled)
+				SpiderHit->SpiderGettingHit(4);
+			else
+			{
+				SpiderHit->SpiderGettingHit(4);
+				Bucket->bBucketFilled = false;
+			}
+		}
 		else //melee
 			SpiderHit->SpiderGettingHit(0);
 	}
@@ -433,6 +443,7 @@ void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent
 		{
 			AAntCharacter* AntCharacter = Cast<AAntCharacter>(OtherActor);
 			AntCharacter->AntGettingHit();
+			Bucket->bBucketFilled = false;
 		}
 	}
 }
@@ -458,4 +469,18 @@ void AMainCharacter::HandleDeath()
 
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 
+}
+
+void AMainCharacter::IsCharacterDead()
+{
+	if(Health == 0.f)
+		bCharacterDead = true;
+	else
+		bCharacterDead = false;
+}
+
+//Under is cheats
+void AMainCharacter::UnilitedHealth()
+{
+	Health = 1000000000.f;
 }

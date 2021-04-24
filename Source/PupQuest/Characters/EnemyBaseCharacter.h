@@ -31,7 +31,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Damage {50.f};
 
-	TArray<AActor*> GetOverLappingActorsFromSphere() const;
+	TArray<AActor*> GetOverLappingActorsFromSphere();
 	
 	TArray<AEnemyNestActor*> GetEnemyNestActors() const;
 private:

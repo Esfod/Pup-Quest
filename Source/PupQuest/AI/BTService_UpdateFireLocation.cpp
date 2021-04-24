@@ -88,13 +88,13 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 			}
 			else if(Actor->IsA(ATorchHolderActor::StaticClass()))
 			{
-				UE_LOG(LogTemp,Warning,TEXT("hellllllooooooo"));
+				//UE_LOG(LogTemp,Warning,TEXT("hellllllooooooo I am an TorchHolder"));
 				ATorchHolderActor* TorchHolderActor = Cast<ATorchHolderActor>(Actor);
 				if(TorchHolderActor)
 				{
 					if(TorchHolderActor->bHasATorch)
 					{
-						UE_LOG(LogTemp,Warning,TEXT("Can se torchholder with lit torch"));
+						//UE_LOG(LogTemp,Warning,TEXT("Can se torchholder with lit torch"));
 						DistanceVector = TorchHolderActor->GetActorLocation() - OwnerCharacter->GetActorLocation();
 						VectorA = TorchHolderActor->GetActorLocation();
 						DistanceA = DistanceVector.Size();

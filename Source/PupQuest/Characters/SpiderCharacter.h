@@ -35,7 +35,10 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = "KnockOut Times")
 	float PlankKnockOutTime {7.f};
-	
+
+	UPROPERTY(EditAnywhere, Category = "KnockOut Times")
+	float BucketKnockOutTime {3.f};
+
 private:
 	float Timer {0.f};
 

@@ -34,12 +34,3 @@ void ABaseCharacter::HandleDeath()
 	DetachFromControllerPendingDestroy();
     GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
-
-
-void ABaseCharacter::IsCharacterDead()
-{
-	if(Health == 0.f)
-		bCharacterDead = true;
-	else
-		bCharacterDead = false;
-}
