@@ -75,17 +75,14 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 				AMainCharacter* MainCharacter = Cast<AMainCharacter>(Actor);
 				if(MainCharacter)
 				{
-					if(MainCharacter->bHoldingTorch)
+					if(MainCharacter->bHoldingTorch &&  MainCharacter->bTorchLit && MainCharacter->GetTorchActor()->bTorchLit)
 					{
 						//UE_LOG(LogTemp,Warning,TEXT("Kim holds a torch"));
-						if(MainCharacter->bTorchLit)
-						{
-							//UE_LOG(LogTemp,Warning,TEXT("Kim holdes a lit torch"));
-							DistanceVector = MainCharacter->GetActorLocation() - OwnerCharacter->GetActorLocation();
-							VectorA = MainCharacter->GetActorLocation();
-							DistanceA = DistanceVector.Size();
-							bDistanceASet = true;
-						}
+						//UE_LOG(LogTemp,Warning,TEXT("Kim holdes a lit torch"));
+						DistanceVector = MainCharacter->GetActorLocation() - OwnerCharacter->GetActorLocation();
+						VectorA = MainCharacter->GetActorLocation();
+						DistanceA = DistanceVector.Size();
+						bDistanceASet = true;
 					}
 				}
 			}

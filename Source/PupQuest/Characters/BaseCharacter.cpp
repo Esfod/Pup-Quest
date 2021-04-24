@@ -33,8 +33,8 @@ void ABaseCharacter::HandleDeath()
 	//unviersal death and sound
 	DetachFromControllerPendingDestroy();
     GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	
 }
+
 
 void ABaseCharacter::IsCharacterDead()
 {

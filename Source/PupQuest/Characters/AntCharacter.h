@@ -15,7 +15,13 @@ class PUPQUEST_API AAntCharacter : public AEnemyBaseCharacter
 	GENERATED_BODY()
 public:
 	AAntCharacter();
+
+	void AntGettingHit();
+
+	virtual void Attack(float OwnerDamage) override;
 protected:
+	virtual void Tick(float DeltaSeconds) override;
+	
 
 private:
 

@@ -20,9 +20,6 @@ public:
 
 	virtual void SpiderGettingHit(int32 ObjectInHand) ;
 
-	UPROPERTY(EditAnywhere, Category = "Values")
-	float RotationSpeed {150};
-
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsEnemyKnockedOut {false};
 	
@@ -40,5 +37,7 @@ protected:
 	float PlankKnockOutTime {7.f};
 	
 private:
-	float Timer {0.f}; 
+	float Timer {0.f};
+
+	float KnockOutTime {0.f};
 };

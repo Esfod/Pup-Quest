@@ -32,19 +32,9 @@ public:
 	float Damage {50.f};
 
 	TArray<AActor*> GetOverLappingActorsFromSphere() const;
-
-	UPROPERTY(BlueprintReadOnly)
-	bool bIsAttacking {false};
-	
-	virtual void GetHit(int32 ObjectInHand);
-
-	float KnockOutTime {0.f};
 	
 	TArray<AEnemyNestActor*> GetEnemyNestActors() const;
 private:
-	
-	UPROPERTY(EditAnywhere)
-	float AttackDistance{100.f};
 
 	UPROPERTY(EditAnywhere,Category = "Nest")
 	TArray<AEnemyNestActor*> NestActors {nullptr};

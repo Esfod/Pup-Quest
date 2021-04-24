@@ -48,7 +48,6 @@ void ASpiderCharacter::Attack(float OwnerDamage)
 
 void ASpiderCharacter::SpiderGettingHit(int32 ObjectInHand)
 {
-	Super::GetHit(ObjectInHand);
 	switch (ObjectInHand)
 	{
 		case 0:

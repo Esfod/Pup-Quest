@@ -24,6 +24,7 @@
 #include "PupQuest/PupQuestGameInstance.h"
 
 #include "PupQuest/Characters/SpiderCharacter.h"
+#include "PupQuest/Characters/AntCharacter.h"
 
 #include "Kismet/GameplayStatics.h"
 
@@ -409,22 +410,31 @@ void AMainCharacter::AttackEnd()
 void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
     UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-		if(OtherActor->IsA(ASpiderCharacter::StaticClass()))
+	if(OtherActor->IsA(ASpiderCharacter::StaticClass()))
+	{
+		ASpiderCharacter* SpiderHit = Cast<ASpiderCharacter>(OtherActor);
+		UE_LOG(LogTemp,Warning,TEXT("Player hits Spider"));
+		if(bHoldingTorch)
 		{
-			ASpiderCharacter* SpiderHit = Cast<ASpiderCharacter>(OtherActor);
-			UE_LOG(LogTemp,Warning,TEXT("Player hits Spider"));
-			if(bHoldingTorch)
-			{
-				if(bTorchLit) //torch on fire
-					SpiderHit->SpiderGettingHit(2);
-				else //torch not on fire
-					SpiderHit->SpiderGettingHit(1);
-			}
-			else if(bHoldingPlank) //plank
-				SpiderHit->SpiderGettingHit(3);
-			else //melee
-				SpiderHit->SpiderGettingHit(0);
+			if(bTorchLit) //torch on fire
+				SpiderHit->SpiderGettingHit(2);
+			else //torch not on fire
+				SpiderHit->SpiderGettingHit(1);
 		}
+		else if(bHoldingPlank) //plank
+			SpiderHit->SpiderGettingHit(3);
+		else //melee
+			SpiderHit->SpiderGettingHit(0);
+	}
+	else if(OtherActor->IsA(AAntCharacter::StaticClass()))
+	{
+		UE_LOG(LogTemp,Warning,TEXT("Player hits Ant"));
+		if(bHoldingBucket && Bucket->bBucketFilled)
+		{
+			AAntCharacter* AntCharacter = Cast<AAntCharacter>(OtherActor);
+			AntCharacter->AntGettingHit();
+		}
+	}
 }
 
 void AMainCharacter::PlayerTakeDamage(float DamageTaken)

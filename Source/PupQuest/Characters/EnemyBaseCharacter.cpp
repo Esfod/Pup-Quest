@@ -60,17 +60,11 @@ TArray<AActor*> AEnemyBaseCharacter::GetOverLappingActorsFromSphere() const
 	
 	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetActorLocation(), SphereRadius, ObjectTypes,nullptr,ActorsToIgnore,OverlappedActors);
 
-	/*for(AActor* Actor : OverlappedActors)
+	for(AActor* Actor : OverlappedActors)
 	{
 		UE_LOG(LogTemp,Warning,TEXT("%s's Sphere overlaps with %s"),*GetName(), *Actor->GetName());
 	}
-	*/
 	return OverlappedActors;
-}
-
-void AEnemyBaseCharacter::GetHit(int32 ObjectInHand)
-{
-	
 }
 
 TArray<AEnemyNestActor*> AEnemyBaseCharacter::GetEnemyNestActors() const
