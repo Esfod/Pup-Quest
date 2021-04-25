@@ -7,6 +7,8 @@
 #include "Particles/ParticleSystem.h"
 #include "Components/BoxComponent.h"
 #include "DrawDebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
+
 
 
 // Sets default values
@@ -28,12 +30,12 @@ ABrazierActor::ABrazierActor()
 	BrazierFlame = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("FlameParticle"));
 	BrazierFlame->SetupAttachment(MeshComp);
 
-	HitBoxBrazier = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBoxBrazier"));
-	HitBoxBrazier->InitBoxExtent(FVector(50.f, 50.f, 50.f)); 
-	HitBoxBrazier->SetupAttachment(RootComponent);
+	//HitBoxBrazier = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBoxBrazier"));
+	//HitBoxBrazier->InitBoxExtent(FVector(50.f, 50.f, 50.f)); 
+	//HitBoxBrazier->SetupAttachment(RootComponent);
 
-	HitBoxBrazier->OnComponentBeginOverlap.AddDynamic(this, &ABrazierActor::BeginOverlapBrazier);
-	HitBoxBrazier->SetGenerateOverlapEvents(false);
+	//HitBoxBrazier->OnComponentBeginOverlap.AddDynamic(this, &ABrazierActor::BeginOverlapBrazier);
+	//HitBoxBrazier->SetGenerateOverlapEvents(false);
 	
 }
 
@@ -62,6 +64,7 @@ void ABrazierActor::BrazierFlameOn() {
 
 	BrazierFlame->SetVisibility(true);
 	BrazierLightSource->SetVisibility(true);
+	UGameplayStatics::PlaySoundAtLocation(this, BurningSound, GetActorLocation());
 
 	/*GetWorld()->GetTimerManager().SetTimer(TimeGone, this, &ABrazierActor::SearchForWeb, 1.f, false);*/
 }

@@ -14,6 +14,7 @@ class APlankActor;
 class ABrazierActor;
 class ABucketActor;
 class AWellActor;
+class ABarrelActor;
 
 UCLASS()
 class PUPQUEST_API AMainCharacter : public ABaseCharacter
@@ -45,6 +46,18 @@ private:
 
 	AActor* DroppedItem = nullptr;//This is used to see what the latest dropped item was
 
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* PlaceItem;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* LookingForNolan;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* NolanBarking;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* AmbienceSound;
+
 public:
 	AMainCharacter();
 
@@ -55,6 +68,8 @@ public:
 	float Health {0.f};
 	
 	FRotator DropRotation;//Used to set the dropping rotation of dropped items
+
+	FVector ItemLocationAdjustment;
 
 	UFUNCTION(BlueprintCallable)
 	ATorchActor* GetTorchActor();
@@ -84,11 +99,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Variables")
 	int Pushing = 1;
 
-	FVector Location;
+	FVector PlacePlankLocation;
 
-	FVector ItemLocationAdjustment;
-
-	FRotator Rotation;
+	FRotator PlacePlankRotation;
 
 	virtual void HandleDeath() override;
 
@@ -129,6 +142,9 @@ protected:
 
 	UPROPERTY()
 		ATorchActor* Torch;
+
+	UPROPERTY()
+		ABarrelActor* Barrel;
 
 	UPROPERTY()
 		ABucketActor* Bucket;

@@ -48,6 +48,9 @@ public:
 
 	UFUNCTION()
 		void BrazierFlameOff();
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* BurningSound;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

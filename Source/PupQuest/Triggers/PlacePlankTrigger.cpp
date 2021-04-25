@@ -17,8 +17,8 @@ void APlacePlankTrigger::OnOverlapBegin(class AActor* OverlappedActor, class AAc
 		AMainCharacter* Main = Cast<AMainCharacter>(OtherActor);
 		Main->InPlankTriggerBox = true;
 		UE_LOG(LogTemp, Warning, TEXT("You need a plank to get over here"));
-		Main->Location = Location;
-		Main->Rotation = Rotation;
+		Main->PlacePlankLocation = Location;
+		Main->PlacePlankRotation = Rotation;
 	}
 }
 

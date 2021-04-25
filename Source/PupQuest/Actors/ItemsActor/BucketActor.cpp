@@ -23,7 +23,7 @@ void ABucketActor::BeginPlay()
 	else if (bBucketFilled == true) {
 		Water->SetVisibility(true);
 		bBucketFilled = true;
-		//The reason this is separated from the function is because we dont want to hear the bucket fill when we start the game
+		//The reason this is separated from the function is because we dont want to hear the bucket fill sound when we start the game
 	}
 }
 

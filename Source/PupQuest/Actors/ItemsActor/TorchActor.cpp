@@ -4,7 +4,7 @@
 #include "TorchActor.h"
 #include "Components/PointLightComponent.h"
 #include "Particles/ParticleSystem.h"
-
+#include "Kismet/GameplayStatics.h"
 
 ATorchActor::ATorchActor()
 {
@@ -16,6 +16,7 @@ ATorchActor::ATorchActor()
 
 	Flame = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("FlameParticle"));
 	Flame->SetupAttachment(MeshComp);
+	//Flame->SetCollisionProfileName("NoCollision", false);
 }
 
 void ATorchActor::BeginPlay()
@@ -26,7 +27,9 @@ void ATorchActor::BeginPlay()
 		TorchFlameOff();
 	}
 	else if (bTorchActorLit == true) {
-		TorchFlameOn();
+		Flame->SetVisibility(true);
+		LightSorce->SetVisibility(true);
+		bTorchActorLit = true;
 	}
 }
 
@@ -34,6 +37,7 @@ void ATorchActor::TorchFlameOn() {
 	Flame->SetVisibility(true);
 	LightSorce->SetVisibility(true);
 	bTorchActorLit = true;
+	UGameplayStatics::PlaySoundAtLocation(this, LightTorchSound, GetActorLocation());
 }
 
 void ATorchActor::TorchFlameOff() {

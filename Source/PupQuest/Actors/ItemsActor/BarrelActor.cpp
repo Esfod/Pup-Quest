@@ -2,6 +2,8 @@
 
 
 #include "BarrelActor.h"
+#include "Kismet/GameplayStatics.h"
+
 
 // Sets default values
 ABarrelActor::ABarrelActor()
@@ -11,6 +13,9 @@ ABarrelActor::ABarrelActor()
 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
 	RootComponent = MeshComp;
+
+	Water = CreateDefaultSubobject<UStaticMeshComponent>("Water");
+	Water->SetupAttachment(MeshComp);
 }
 
 
@@ -20,15 +25,33 @@ ABarrelActor::ABarrelActor()
 void ABarrelActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	if (bBarrelFilled == false) {
+		BarrelEmpty();
+	}
+	else if (bBarrelFilled == true) {
+		bBarrelFilled = true;
+		Water->SetVisibility(true);
+		//The reason this is separated from the function is because we dont want to hear the barrel fill sound when we start the game
+	}
 }
 
 // Called every frame
 void ABarrelActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
+
+void ABarrelActor::BarrelFill() {
+	Water->SetVisibility(true);
+	bBarrelFilled = true;
+	UGameplayStatics::PlaySoundAtLocation(this, FillBarrel, GetActorLocation());
+}
+
+void ABarrelActor::BarrelEmpty() {
+	Water->SetVisibility(false);
+	bBarrelFilled = false;
+}
+
 
 
 //void ABarrelActor::FindClosestPush()

@@ -33,6 +33,8 @@ public:
 	UPROPERTY(EditAnywhere)
 		class UStaticMeshComponent* MeshComp;
 
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* LightTorchSound;
 
 protected:
 

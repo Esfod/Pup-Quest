@@ -22,10 +22,24 @@ public:
 	//UFUNCTION(BlueprintCallable)
 	//	void HandleInteraction();
 
-
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Bools")
+	bool bBarrelFilled;
 
 	UPROPERTY(EditAnywhere)
 		class UStaticMeshComponent* MeshComp;
+
+	UPROPERTY(EditAnywhere)
+		class UStaticMeshComponent* Water;
+
+	UFUNCTION()
+		void BarrelFill();
+
+	UFUNCTION()
+		void BarrelEmpty();
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* FillBarrel;
+
 
 protected:
 	// Called when the game starts or when spawned

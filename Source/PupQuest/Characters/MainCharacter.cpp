@@ -20,6 +20,8 @@
 #include "PupQuest/Actors/TorchHolderActor.h"
 #include "PupQuest/Actors/BrazierActor.h"
 #include "PupQuest/Actors/WellActor.h"
+#include "PupQuest/Actors/ItemsActor/BarrelActor.h"
+
 
 #include "PupQuest/PupQuestGameInstance.h"
 
@@ -93,6 +95,14 @@ void AMainCharacter::BeginPlay()
 	if (GameInstance->NewSpawn == true) {
 		SetActorLocation(FVector(GameInstance->RespawnPoint));
 	}
+
+	//FGetAudioListenerPos();
+	//APlayerController::SetAudioListenerAttenuationOverride;
+	//APlayerController::SetAudioListenerOverride;
+
+	UGameplayStatics::PlaySoundAtLocation(this, LookingForNolan, GetActorLocation());
+	UGameplayStatics::PlaySoundAtLocation(this, NolanBarking, GetActorLocation());
+	UGameplayStatics::PlaySoundAtLocation(this, AmbienceSound, GetActorLocation());
 }
 
 void AMainCharacter::Tick(float DeltaTime)
@@ -179,6 +189,7 @@ void AMainCharacter::DropHoldingItem()//(F.M)If the player is holding one of the
 void AMainCharacter::DropItem(AActor* Item)//F.M
 {
 	if (Item) {
+		UGameplayStatics::PlaySoundAtLocation(this, PlaceItem, GetActorLocation());
 		Item->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach item fra main character
 		Item->SetActorEnableCollision(true);//Turns on collision
 
@@ -218,19 +229,19 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 void AMainCharacter::PlacePlank()//F.M 
 {
 	if (bHoldingPlank == true && InPlankTriggerBox == true) {
+		UGameplayStatics::PlaySoundAtLocation(this, PlaceItem, GetActorLocation());
 
 		Plank->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach plank from main character
 
-		Plank->SetActorLocation(Location);//Places the plank on the right location
+		Plank->SetActorLocation(PlacePlankLocation);//Places the plank on the right location
 		Plank->SetActorScale3D(FVector(13.f));//Gives plank the right scale
-		Plank->SetActorRelativeRotation(FQuat(Rotation));//Gives plank the right rotation
+		Plank->SetActorRelativeRotation(FQuat(PlacePlankRotation));//Gives plank the right rotation
 
 		Plank->SetActorEnableCollision(true);//Turns on collision
 		bHoldingPlank = false;
 		UE_LOG(LogTemp, Warning, TEXT("Plank placed"));
 	}
 }
-
 
 void AMainCharacter::StartInteract() {//F.M
 	//UE_LOG(LogTemp, Warning, TEXT("Interact!"));
@@ -285,7 +296,7 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 				DroppedItem = Torch;
 				UE_LOG(LogTemp, Warning, TEXT("%s"), *Torch->GetName());
 				bHoldingTorch = false;
-				Torch->TorchFlameOn();//There was a bug here where the torch will turn off if you place it in a torch holder, so we just turn it on again here
+				//Torch->TorchFlameOn();//There was a bug here where the torch will turn off if you place it in a torch holder, so we just turn it on again here
 			}
 			else UE_LOG(LogTemp, Warning, TEXT("Door will not open because the torch is not lit"));
 		}
@@ -341,6 +352,14 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 		Well = UWell;
 		if (Bucket->bBucketFilled == false) {
 			Bucket->BucketFill();
+		}
+	}
+	else if (OtherActor->IsA(ABarrelActor::StaticClass()) && bHoldingBucket == true) {
+		ABarrelActor* UBarrel = Cast<ABarrelActor>(OtherActor);
+		Barrel = UBarrel;
+		if (Barrel->bBarrelFilled == false) {
+			Barrel->BarrelFill();
+			Bucket->BucketEmpty();
 		}
 	}
 }
