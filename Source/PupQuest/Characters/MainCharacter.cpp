@@ -30,6 +30,7 @@
 
 #include "Kismet/GameplayStatics.h"
 
+
 //#include "PupQuest/Hud/P_Torch"
 
 AMainCharacter::AMainCharacter()
@@ -82,6 +83,10 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAction("Push", IE_Pressed, this, &AMainCharacter::IsPushing);
 	PlayerInputComponent->BindAction("HealthBoost",IE_Pressed,this, &AMainCharacter::UnilitedHealth);
+
+	PlayerInputComponent->BindAction("Video", IE_Pressed, this, &AMainCharacter::VideoTest);
+
+	
 }
 
 void AMainCharacter::BeginPlay()
@@ -500,4 +505,9 @@ void AMainCharacter::IsCharacterDead()
 void AMainCharacter::UnilitedHealth()
 {
 	Health = 1000000000.f;
+}
+
+void AMainCharacter::VideoTest() {
+	UE_LOG(LogTemp, Warning, TEXT("Video playing"));
+	Video->Play();
 }

@@ -4,7 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "BaseCharacter.h"
+#include <Runtime/MediaAssets/Public/MediaComponent.h>
+#include "MediaPlayer.h"
+#include <Runtime/MediaAssets/Public/MediaPlayer.h>
 #include "MainCharacter.generated.h"
+
+
 
 class USpringArmComponent;
 class UCameraComponent;
@@ -57,6 +62,12 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* AmbienceSound;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	UMediaPlayer* Video;
+
+	UFUNCTION()
+		void VideoTest();
 
 public:
 	AMainCharacter();
