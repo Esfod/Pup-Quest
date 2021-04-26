@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Runtime/Engine/Classes/Particles/ParticleSystemComponent.h"
+#include "../../../../../../UE_4.26/Engine/Plugins/Media/MediaPlayerEditor/Source/MediaPlayerEditor/Private/Widgets/SMediaPlayerEditorOutput.h"
 #include "BrazierActor.generated.h"
 
 class UPointLightComponent;
@@ -51,6 +52,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* BurningSound;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

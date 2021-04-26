@@ -68,8 +68,9 @@ void ABrazierActor::BrazierFlameOn() {
 
 	BrazierFlame->SetVisibility(true);
 	BrazierLightSource->SetVisibility(true);
-	UGameplayStatics::PlaySoundAtLocation(this, BurningSound, GetActorLocation() - FVector(624.f, 625.f, 884.f));
+	UGameplayStatics::PlaySoundAtLocation(this, BurningSound, GetActorLocation() - FVector(624.f, 625.f, -884.f));//The added FVector is a temporary solution, the sound gets picked up by the camera instead of the player, so I added the distance between the player and the camera to where the sound will play
 
+	// - FVector(624.f, 625.f, 884.f)
 	/*GetWorld()->GetTimerManager().SetTimer(TimeGone, this, &ABrazierActor::SearchForWeb, 1.f, false);*/
 }
 
