@@ -30,6 +30,10 @@ ABrazierActor::ABrazierActor()
 	BrazierFlame = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("FlameParticle"));
 	BrazierFlame->SetupAttachment(MeshComp);
 
+	//BurningSound = CreateDefaultSubobject<USoundBase>(TEXT("BurningSound"));
+	//BurningSound->SetupAttachment(MeshComp);
+	//BurningSound->attach
+
 	//HitBoxBrazier = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBoxBrazier"));
 	//HitBoxBrazier->InitBoxExtent(FVector(50.f, 50.f, 50.f)); 
 	//HitBoxBrazier->SetupAttachment(RootComponent);
@@ -64,7 +68,7 @@ void ABrazierActor::BrazierFlameOn() {
 
 	BrazierFlame->SetVisibility(true);
 	BrazierLightSource->SetVisibility(true);
-	UGameplayStatics::PlaySoundAtLocation(this, BurningSound, GetActorLocation());
+	UGameplayStatics::PlaySoundAtLocation(this, BurningSound, GetActorLocation() - FVector(624.f, 625.f, 884.f));
 
 	/*GetWorld()->GetTimerManager().SetTimer(TimeGone, this, &ABrazierActor::SearchForWeb, 1.f, false);*/
 }
