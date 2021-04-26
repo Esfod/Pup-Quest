@@ -42,9 +42,6 @@ void ABrazierActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-
-
-
 	if (bBrazierLit == false) {
 		BrazierFlameOff();
 	}
@@ -66,10 +63,13 @@ void ABrazierActor::BrazierFlameOn() {
 	BrazierFlame->SetVisibility(true);
 	BrazierLightSource->SetVisibility(true);
 
-	//SetActorRelativeLocation(GetActorLocation() + 20.f);
-
 	/*GetWorld()->GetTimerManager().SetTimer(TimeGone, this, &ABrazierActor::SearchForWeb, 1.f, false);*/
+}
 
+void ABrazierActor::BrazierFlameOff() {
+	BrazierFlame->SetVisibility(false);
+	BrazierLightSource->SetVisibility(false);
+	bBrazierLit = false;
 }
 
 void ABrazierActor::SearchForWeb() {
@@ -77,15 +77,6 @@ void ABrazierActor::SearchForWeb() {
 	HitBoxBrazier->SetRelativeLocation(HitBoxBrazier->GetRelativeLocation() + 1.f);
 
 	UE_LOG(LogTemp, Warning, TEXT("Brazier detects stuff"));*/
-
-	
-}
-
-
-void ABrazierActor::BrazierFlameOff() {
-	BrazierFlame->SetVisibility(false);
-	BrazierLightSource->SetVisibility(false);
-	bBrazierLit = false;
 }
 
 void ABrazierActor::BeginOverlapBrazier(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,

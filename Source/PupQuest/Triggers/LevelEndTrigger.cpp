@@ -2,9 +2,9 @@
 
 
 #include "LevelEndTrigger.h"
-#include "Characters/MainCharacter.h"
+#include "PupQuest/Characters/MainCharacter.h"
 #include <Runtime/Engine/Classes/Kismet/GameplayStatics.h>
-#include "PupQuestGameInstance.h"
+#include "PupQuest/PupQuestGameInstance.h"
 
 ALevelEndTrigger::ALevelEndTrigger()
 {

@@ -18,10 +18,7 @@ public:
 
 	virtual void Attack(float OwnerDamage) override;
 
-	virtual void GetHit(int32 ObjectInHand) override;
-
-	UPROPERTY(EditAnywhere, Category = "Values")
-	float RotationSpeed {150};
+	virtual void SpiderGettingHit(int32 ObjectInHand) ;
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsEnemyKnockedOut {false};
@@ -38,7 +35,12 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = "KnockOut Times")
 	float PlankKnockOutTime {7.f};
-	
+
+	UPROPERTY(EditAnywhere, Category = "KnockOut Times")
+	float BucketKnockOutTime {3.f};
+
 private:
-	float Timer {0.f}; 
+	float Timer {0.f};
+
+	float KnockOutTime {0.f};
 };

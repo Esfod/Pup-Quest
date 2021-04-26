@@ -2,7 +2,7 @@
 
 
 #include "PlacePlankTrigger.h"
-#include "Characters/MainCharacter.h"
+#include "PupQuest/Characters/MainCharacter.h"
 
 APlacePlankTrigger::APlacePlankTrigger()
 {
@@ -15,7 +15,7 @@ void APlacePlankTrigger::OnOverlapBegin(class AActor* OverlappedActor, class AAc
 
 	if (OtherActor->IsA(AMainCharacter::StaticClass())) {
 		AMainCharacter* Main = Cast<AMainCharacter>(OtherActor);
-		Main->InTriggerBox = true;
+		Main->InPlankTriggerBox = true;
 		UE_LOG(LogTemp, Warning, TEXT("You need a plank to get over here"));
 		Main->Location = Location;
 		Main->Rotation = Rotation;
@@ -25,7 +25,7 @@ void APlacePlankTrigger::OnOverlapBegin(class AActor* OverlappedActor, class AAc
 void APlacePlankTrigger::OnOverlapEnd(class AActor* OverlappedActor, class AActor* OtherActor) {
 	if (OtherActor->IsA(AMainCharacter::StaticClass())) {
 		AMainCharacter* Main = Cast<AMainCharacter>(OtherActor);
-		Main->InTriggerBox = false;
+		Main->InPlankTriggerBox = false;
 	}
 }
 

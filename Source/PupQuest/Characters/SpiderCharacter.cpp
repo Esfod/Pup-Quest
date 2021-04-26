@@ -7,7 +7,7 @@
 
 ASpiderCharacter::ASpiderCharacter()
 {
-	HitBox->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("AttackSocket"));
+	//HitBox->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("AttackSocket"));
 }
 
 void ASpiderCharacter::Tick(float DeltaSeconds)
@@ -46,9 +46,8 @@ void ASpiderCharacter::Attack(float OwnerDamage)
 	Super::Attack(OwnerDamage);
 }
 
-void ASpiderCharacter::GetHit(int32 ObjectInHand)
+void ASpiderCharacter::SpiderGettingHit(int32 ObjectInHand)
 {
-	Super::GetHit(ObjectInHand);
 	switch (ObjectInHand)
 	{
 		case 0:
@@ -66,6 +65,10 @@ void ASpiderCharacter::GetHit(int32 ObjectInHand)
 		case 3:
 			KnockOutTime = PlankKnockOutTime;
 			//UE_LOG(LogTemp,Warning,TEXT("Spider is hit by an plank"));
+			break;
+		case 4:
+			KnockOutTime = BucketKnockOutTime;
+			//UE_LOG(LogTemp,Warning,TEXT("Spider is hit by an Bucket"));
 			break;
 		default:
 			break;

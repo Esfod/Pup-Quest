@@ -35,7 +35,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 
 	for(AActor* Actor : OverlappingActors)
 	{
-		UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
+		//UE_LOG(LogTemp,Warning,TEXT("%s"), *Actor->GetName());
 		if(OwnerComp.GetAIOwner()->LineOfSightTo(Actor))
 		{
 			if(Actor->IsA(ABrazierActor::StaticClass()))
@@ -59,7 +59,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 				ATorchActor* TorchActor = Cast<ATorchActor>(Actor);
 				if(TorchActor)
 				{
-					if(TorchActor->bTorchLit)
+					if(TorchActor->bTorchActorLit)
 					{
 						//UE_LOG(LogTemp,Warning,TEXT("Can see Lit Torch"));
 						DistanceVector = TorchActor->GetActorLocation() - OwnerCharacter->GetActorLocation();
@@ -75,29 +75,26 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 				AMainCharacter* MainCharacter = Cast<AMainCharacter>(Actor);
 				if(MainCharacter)
 				{
-					if(MainCharacter->bHoldingTorch)
+					if(MainCharacter->bHoldingTorch &&  MainCharacter->bTorchLit && MainCharacter->GetTorchActor()->bTorchActorLit)
 					{
 						//UE_LOG(LogTemp,Warning,TEXT("Kim holds a torch"));
-						if(MainCharacter->bTorchLit)
-						{
-							//UE_LOG(LogTemp,Warning,TEXT("Kim holdes a lit torch"));
-							DistanceVector = MainCharacter->GetActorLocation() - OwnerCharacter->GetActorLocation();
-							VectorA = MainCharacter->GetActorLocation();
-							DistanceA = DistanceVector.Size();
-							bDistanceASet = true;
-						}
+						//UE_LOG(LogTemp,Warning,TEXT("Kim holdes a lit torch"));
+						DistanceVector = MainCharacter->GetActorLocation() - OwnerCharacter->GetActorLocation();
+						VectorA = MainCharacter->GetActorLocation();
+						DistanceA = DistanceVector.Size();
+						bDistanceASet = true;
 					}
 				}
 			}
 			else if(Actor->IsA(ATorchHolderActor::StaticClass()))
 			{
-				UE_LOG(LogTemp,Warning,TEXT("hellllllooooooo"));
+				//UE_LOG(LogTemp,Warning,TEXT("hellllllooooooo I am an TorchHolder"));
 				ATorchHolderActor* TorchHolderActor = Cast<ATorchHolderActor>(Actor);
 				if(TorchHolderActor)
 				{
 					if(TorchHolderActor->bHasATorch)
 					{
-						UE_LOG(LogTemp,Warning,TEXT("Can se torchholder with lit torch"));
+						//UE_LOG(LogTemp,Warning,TEXT("Can se torchholder with lit torch"));
 						DistanceVector = TorchHolderActor->GetActorLocation() - OwnerCharacter->GetActorLocation();
 						VectorA = TorchHolderActor->GetActorLocation();
 						DistanceA = DistanceVector.Size();

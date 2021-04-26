@@ -16,4 +16,6 @@ public:
 		FVector RespawnPoint = FVector(11000.f, 9490.f, 620.f);
 
 	bool NewSpawn = false;
+
+	bool GameStarted = false;
 };

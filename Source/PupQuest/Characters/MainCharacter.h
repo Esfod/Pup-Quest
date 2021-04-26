@@ -31,28 +31,38 @@ private:
 	UBoxComponent* AttackBoxComponent {nullptr};
 
 	UPROPERTY(EditAnywhere)
+	UBoxComponent* HitBox { nullptr };
+	
+	UPROPERTY(EditAnywhere)
 	float RotateSpeed = 30.f;
 
 	void AttackStart();
 
 	void AttackEnd();
 
-	AActor* DroppedItem = nullptr;
+
+	void UnilitedHealth();
+
+	AActor* DroppedItem = nullptr;//This is used to see what the latest dropped item was
+
 public:
 	AMainCharacter();
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* StandOnHitBox { nullptr };//To see if player is standing on item when he picks it up(movement does not work if he does)
 
-	FRotator DropRotation;
+	UPROPERTY(VisibleAnywhere)
+	float Health {0.f};
+	
+	FRotator DropRotation;//Used to set the dropping rotation of dropped items
 
+	UFUNCTION(BlueprintCallable)
 	ATorchActor* GetTorchActor();
 
-	bool bTorchLit {false};
-
-	bool bBucketFilled{ false };
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
+	bool bTorchLit {false};//See if the torch is lit or not
 	
-	bool InTriggerBox = false;
+	bool InPlankTriggerBox = false;
 
 	bool OnTopOff = false;
 
@@ -76,13 +86,16 @@ public:
 
 	FVector Location;
 
-	FVector LocationAdjustment;
+	FVector ItemLocationAdjustment;
 
 	FRotator Rotation;
 
 	virtual void HandleDeath() override;
 
+	UFUNCTION()
 	void PlacePlank();
+
+	void IsCharacterDead();
 
 	UFUNCTION()
 	void IsPushing();
@@ -141,12 +154,12 @@ protected:
 			bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-		void OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-            UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
-            bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
 		void StandOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
+			bool bFromSweep, const FHitResult& SweepResult);
+	
+	UFUNCTION()
+		void OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 			bool bFromSweep, const FHitResult& SweepResult);
 

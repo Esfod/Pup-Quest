@@ -13,8 +13,6 @@ class PUPQUEST_API ABaseCharacter : public ACharacter
 {
 	GENERATED_BODY()
 protected:
-	UPROPERTY(EditAnywhere)
-	UBoxComponent* HitBox { nullptr };
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
@@ -22,11 +20,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth {100.0f};
-
-	UPROPERTY(VisibleAnywhere)
-	float Health {0.f}; 
-
-	void IsCharacterDead();
 	
 public:
 	ABaseCharacter();
