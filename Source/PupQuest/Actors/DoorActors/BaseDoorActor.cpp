@@ -63,6 +63,13 @@ bool ABaseDoorActor::CheckTorchHolder(ATorchHolderActor* a, ATorchHolderActor* b
 	return false;
 }
 
+bool ABaseDoorActor::CheckPressurePlate(APressurePlate_Actor* a)
+{
+	//if(a->)
+	//	return true;
+	return false;
+}
+
 void ABaseDoorActor::OpenDoor(float DeltaTime)
 {
 	//add universale lyder og effekter
