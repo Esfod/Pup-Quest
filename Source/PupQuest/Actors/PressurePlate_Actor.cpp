@@ -35,7 +35,9 @@ ABarrelActor* APressurePlate_Actor::GetBarrelActor() const
 void APressurePlate_Actor::PlaceBarrelRight(ABarrelActor* a)
 {
 	BarrelActor = a;
-	BarrelActor->SetActorRotation(FRotator(0.f,180.f,0.f));
-	BarrelActor->SetActorLocation(GetActorLocation() + FVector(0.f,0.f,10.f));
+
+	BarrelActor->SetActorRotation(FRotator(180.f,0.f,0.f));
+	BarrelActor->SetActorLocation(GetActorLocation() + FVector(0.f,0.f, 10.f));
+
 }
 

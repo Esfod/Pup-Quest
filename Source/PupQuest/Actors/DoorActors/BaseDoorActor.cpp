@@ -72,12 +72,12 @@ bool ABaseDoorActor::CheckTorchHolder(ATorchHolderActor* a, ATorchHolderActor* b
 
 bool ABaseDoorActor::CheckPressurePlate(APressurePlate_Actor* a)
 {
-	if(!a->GetBarrelActor())
-		return false;
+
+	if(!a->GetBarrelActor()) return false;
+
 	if(a->GetBarrelActor()->bBarrelFilled)
-	{
 		return true;
-	}
+
 	return false;
 }
 
