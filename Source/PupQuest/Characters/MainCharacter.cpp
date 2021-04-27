@@ -41,6 +41,7 @@ AMainCharacter::AMainCharacter()
 	SpringArm->SetRelativeRotation(FRotator(0.f, -30.f, 15.f));
 	SpringArm->bDoCollisionTest = false;
 	SpringArm->bInheritYaw = false;
+
 	CameraComp  = CreateDefaultSubobject<UCameraComponent>("Camera Component");
 	CameraComp->SetupAttachment(SpringArm);
 
@@ -209,7 +210,7 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 			DroppedItem = Plank;
 		}
 		else if (Item == Torch) {
-			DropRotation = FRotator(-85.f, GetMesh()->GetRelativeRotation().Yaw - 45.f, 0.f);// Sets the rotation of the torch when it is dropped
+			DropRotation = FRotator(-85.f, GetActorRotation().Yaw - 45.f, 0.f);// Sets the rotation of the torch when it is dropped
 			ItemLocationAdjustment = FVector(0.f, 0.f, -9.f);//Adjusts the height of the torch when it gets dropped
 			bHoldingTorch = false;
 			Torch->TorchFlameOff();
@@ -217,7 +218,7 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 			DroppedItem = Torch;
 		}
 		else if (Item == Bucket) {
-			DropRotation = FRotator(0.f);// Sets the rotation of the bucket when it is dropped
+			DropRotation = FRotator(0.f, GetActorRotation().Yaw, 0.f);// Sets the rotation of the bucket when it is dropped
 			ItemLocationAdjustment = FVector(0.f, 0.f, -3.f);//Adjusts the height of the bucket when it gets dropped
 			bHoldingBucket = false;
 			UE_LOG(LogTemp, Warning, TEXT("Bucket dropped"));
@@ -315,7 +316,7 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 			UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
 		}
 	}
-	else if (OtherActor->IsA(ASpiderWebActor::StaticClass()))//If it is a spider web
+	else if (OtherActor->IsA(ASpiderWebActor::StaticClass()) && bHoldingTorch == true)//If it is a spider web
 	{
 		if (Torch->bTorchActorLit == true)
 		{
@@ -362,7 +363,7 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 	else if (OtherActor->IsA(ABarrelActor::StaticClass()) && bHoldingBucket == true) {
 		ABarrelActor* UBarrel = Cast<ABarrelActor>(OtherActor);
 		Barrel = UBarrel;
-		if (Barrel->bBarrelFilled == false) {
+		if (Barrel->bBarrelFilled == false && Bucket->bBucketFilled == true) {
 			Barrel->BarrelFill();
 			Bucket->BucketEmpty();
 		}

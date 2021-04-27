@@ -21,15 +21,18 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category = "Components", meta =(AllowPrivateAccess = "true"))
 	ATorchActor* TorchActor {nullptr};
+
+
 protected:
 	virtual void BeginPlay() override;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool bHasATorch {false};
 public:
 	ATorchHolderActor(); 
 
 	ATorchActor* GetTorchActor();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		bool bHasATorch{ false };
 
 	bool HasATorch();
 	
