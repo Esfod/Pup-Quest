@@ -16,7 +16,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	virtual void HandleDeath();
+	virtual void HandleDeath();                                         
 
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth {100.0f};

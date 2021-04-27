@@ -2,9 +2,12 @@
 
 
 #include "BaseDoorActor.h"
+
+#include "PupQuest/Actors/PressurePlate_Actor.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
 #include "PupQuest/Characters/MainCharacter.h"
 #include "PupQuest/Actors/TorchHolderActor.h"
+#include "PupQuest/Actors/ItemsActor/BarrelActor.h"
 
 // Sets default values
 ABaseDoorActor::ABaseDoorActor()
@@ -19,9 +22,9 @@ void ABaseDoorActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if(!bTorchHolder)
+	if(!bTorchHolder && PressurePlate_Actor)
 	{
-		UE_LOG(LogTemp,Warning,TEXT("Haven't implemented pressurePlate yet"));
+		UE_LOG(LogTemp,Warning,TEXT("One pressurePlate yet"));
 		TypeOfDoor = 0;
 	}
 	else if (TorchHolder1 && TorchHolder2)
@@ -40,7 +43,11 @@ void ABaseDoorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if(TypeOfDoor == 1)
+	if(TypeOfDoor == 0)
+	{
+		bOpenDoor = CheckPressurePlate(PressurePlate_Actor);
+	}
+	else if(TypeOfDoor == 1)
 	{
 		bOpenDoor = CheckTorchHolder(TorchHolder1, TorchHolder2);
 	}
@@ -52,14 +59,24 @@ void ABaseDoorActor::Tick(float DeltaTime)
 
 bool ABaseDoorActor::CheckTorchHolder(ATorchHolderActor* a)
 {
-	if (a->bHasATorch) return true;
-	return false;
+	if (a->HasATorch()) return true;
+	return false; 
 }
 
 bool ABaseDoorActor::CheckTorchHolder(ATorchHolderActor* a, ATorchHolderActor* b)
 {
-	if(a->bHasATorch && b->bHasATorch)
+	if(a->HasATorch() && b->HasATorch())
 		return true;
+	return false;
+}
+
+bool ABaseDoorActor::CheckPressurePlate(APressurePlate_Actor* a)
+{
+	if(!a->GetBarrelActor()) return false;
+
+	if(a->GetBarrelActor()->bBarrelFilled)
+		return true;
+
 	return false;
 }
 

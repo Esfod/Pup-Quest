@@ -23,14 +23,15 @@ private:
 	ATorchActor* TorchActor {nullptr};
 protected:
 	virtual void BeginPlay() override;
-
-public:
-	ATorchHolderActor(); 
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bHasATorch {false};
+public:
+	ATorchHolderActor(); 
 
 	ATorchActor* GetTorchActor();
+
+	bool HasATorch();
 	
 	void SetTorchActor(ATorchActor* TorchActor);
 	

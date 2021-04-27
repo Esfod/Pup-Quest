@@ -8,6 +8,7 @@
 
 class ATriggerVolume;
 class ATorchHolderActor;
+class APressurePlate_Actor;
 UCLASS()
 class PUPQUEST_API ABaseDoorActor : public AActor
 {
@@ -17,11 +18,12 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* StaticMeshComp { nullptr };
 
-	UPROPERTY(EditAnywhere, Category= "Variables")
+	UPROPERTY(EditAnywhere, Category= "Variables",meta = (AllowPrivateAccess = "true"))
 	bool bTorchHolder { true }; 
 
 	bool CheckTorchHolder(ATorchHolderActor* a);
 	bool CheckTorchHolder(ATorchHolderActor* a, ATorchHolderActor* b);
+	bool CheckPressurePlate(APressurePlate_Actor* a);
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "TorchHolder")
@@ -29,6 +31,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "TorchHolder")
 	ATorchHolderActor* TorchHolder2 { nullptr };
+
+	UPROPERTY(EditAnywhere, Category = "TorchHolder")
+	APressurePlate_Actor* PressurePlate_Actor { nullptr };
 	
 	UPROPERTY(EditAnywhere,Category="Variables")
 	float MoveLength{300.f};

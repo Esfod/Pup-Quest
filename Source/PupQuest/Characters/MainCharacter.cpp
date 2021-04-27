@@ -30,6 +30,8 @@
 
 #include "Kismet/GameplayStatics.h"
 
+#include "MediaPlayer.h"
+
 
 //#include "PupQuest/Hud/P_Torch"
 
@@ -50,7 +52,6 @@ AMainCharacter::AMainCharacter()
 
 	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
 	HitBox->SetupAttachment(GetMesh());
-	HitBox->SetGenerateOverlapEvents(false);
 	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlapHitBox);
 
 	AttackBoxComponent = CreateDefaultSubobject<UBoxComponent>("Attack HitBox");
@@ -81,7 +82,6 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAction("Reset", IE_Pressed, this, &AMainCharacter::HandleDeath);
 
-	PlayerInputComponent->BindAction("Push", IE_Pressed, this, &AMainCharacter::IsPushing);
 	PlayerInputComponent->BindAction("HealthBoost",IE_Pressed,this, &AMainCharacter::UnilitedHealth);
 
 	PlayerInputComponent->BindAction("Video", IE_Pressed, this, &AMainCharacter::VideoTest);
@@ -96,11 +96,13 @@ void AMainCharacter::BeginPlay()
 
 	//(F.M)If the player has passed through a checkpoint, the player will instantly teleport to that location when respawning
 	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
-	
+
 	if (GameInstance->NewSpawn == true) {
 		SetActorLocation(FVector(GameInstance->RespawnPoint));
 	}
 
+	AttackBoxComponent->SetGenerateOverlapEvents(false);
+	HitBox->SetGenerateOverlapEvents(false);
 	//FGetAudioListenerPos();
 	//APlayerController::SetAudioListenerAttenuationOverride;
 	//APlayerController::SetAudioListenerOverride;
@@ -296,7 +298,6 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 				Torch->SetActorRotation(TorchHolder->GetTorchPlacementPoint().GetRotation());//Gives torch the right rotation
 
 				TorchHolder->SetTorchActor(Torch);
-				TorchHolder->bHasATorch = true;
 
 				DroppedItem = Torch;
 				UE_LOG(LogTemp, Warning, TEXT("%s"), *Torch->GetName());
@@ -309,7 +310,6 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 		{
 			Torch = TorchHolder->GetTorchActor();
 			TorchHolder->SetTorchActor(nullptr);
-			TorchHolder->bHasATorch = false;
 			UE_LOG(LogTemp, Warning, TEXT("%s"), *Torch->GetName());
 			AttachItem(Torch);
 			UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
@@ -401,14 +401,14 @@ ATorchActor* AMainCharacter::GetTorchActor()
 
 void AMainCharacter::IsPushing()
 {
-	if (Pushing == 1 && bPushBool == true) 
+	if (Pushing == 1)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Started Pushing"));
 		Pushing++;
 		GetCharacterMovement()->bOrientRotationToMovement = false;
 		GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	}
-	else if (Pushing == 2 && bPushBool == false)
+	else if (Pushing == 2)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Stopped Pushing"));
 		Pushing--;
