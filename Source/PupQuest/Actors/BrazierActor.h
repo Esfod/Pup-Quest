@@ -33,8 +33,8 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		UParticleSystemComponent* BrazierFlame { nullptr };
 
-	UPROPERTY(EditAnywhere)
-		UBoxComponent* HitBoxBrazier { nullptr };
+	/*UPROPERTY(EditAnywhere)
+		UBoxComponent* HitBoxBrazier { nullptr };*/
 
 	UFUNCTION()
 		void BeginOverlapBrazier(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
