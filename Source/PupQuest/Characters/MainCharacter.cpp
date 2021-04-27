@@ -296,7 +296,6 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 				Torch->SetActorRotation(TorchHolder->GetTorchPlacementPoint().GetRotation());//Gives torch the right rotation
 
 				TorchHolder->SetTorchActor(Torch);
-				TorchHolder->bHasATorch = true;
 
 				DroppedItem = Torch;
 				UE_LOG(LogTemp, Warning, TEXT("%s"), *Torch->GetName());
@@ -309,7 +308,6 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 		{
 			Torch = TorchHolder->GetTorchActor();
 			TorchHolder->SetTorchActor(nullptr);
-			TorchHolder->bHasATorch = false;
 			UE_LOG(LogTemp, Warning, TEXT("%s"), *Torch->GetName());
 			AttachItem(Torch);
 			UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));

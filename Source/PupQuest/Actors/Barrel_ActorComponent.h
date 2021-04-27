@@ -21,6 +21,7 @@ public:
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Variables")
 		float PushRange;
+	
 
 protected:
 	// Called when the game starts

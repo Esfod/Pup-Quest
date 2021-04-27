@@ -24,9 +24,18 @@ ATorchActor* ATorchHolderActor::GetTorchActor()
 	return TorchActor;
 }
 
+bool ATorchHolderActor::HasATorch()
+{
+	return bHasATorch;
+}
+
 void ATorchHolderActor::SetTorchActor(ATorchActor* NewTorchActor)
 {
-	TorchActor = NewTorchActor; 
+	TorchActor = NewTorchActor;
+	if(TorchActor)
+		bHasATorch = true;
+	else
+		bHasATorch = false;
 }
 
 FTransform ATorchHolderActor::GetTorchPlacementPoint() 
