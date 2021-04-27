@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "PupQuest/Actors/PressurePlate_Actor.h"
 #include "PupQuest/Characters/MainCharacter.h"
+#include "DrawDebugHelpers.h"
 
 
 // Sets default values
@@ -26,8 +27,8 @@ void ABarrelActor::CheckIfOnPressurePlate()
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 	TArray<AActor*> OverlappedActors;
 	TArray<AActor*> ActorsToIgnore;
-	//DrawDebugBox(GetWorld(),GetActorLocation() + GetActorForwardVector()*100, FVector(50.f), FColor::Red, true,2);
-	UKismetSystemLibrary::BoxOverlapActors(GetWorld(), GetActorLocation() , FVector(10), ObjectTypes, nullptr, ActorsToIgnore, OverlappedActors);
+	//DrawDebugBox(GetWorld(),GetActorLocation(), FVector(10.f), FColor::Red, true,2);
+	UKismetSystemLibrary::BoxOverlapActors(GetWorld(), GetActorLocation() , FVector(10.f), ObjectTypes, nullptr, ActorsToIgnore, OverlappedActors);
 	for (AActor* Actor : OverlappedActors)
 	{
 		if(Actor->IsA(APressurePlate_Actor::StaticClass()))
