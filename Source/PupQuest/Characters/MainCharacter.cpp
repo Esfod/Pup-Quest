@@ -20,6 +20,7 @@
 #include "PupQuest/Actors/TorchHolderActor.h"
 #include "PupQuest/Actors/BrazierActor.h"
 #include "PupQuest/Actors/WellActor.h"
+#include "PupQuest/Actors/SecretChestActor.h"
 #include "PupQuest/Actors/ItemsActor/BarrelActor.h"
 
 
@@ -201,7 +202,7 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 		FVector CharacterLocation = GetMesh()->GetComponentLocation();
 
 		if (Item == Plank) {
-			DropRotation = FRotator(0.f, GetMesh()->GetRelativeRotation().Yaw + 90.f, 270.f);//Sets the rotation of the plank when it is dropped
+			DropRotation = FRotator(0.f, GetActorRotation().Yaw + 90.f, 270.f);
 			ItemLocationAdjustment = FVector(0.f, 0.f, -10.f);//Adjusts the height of the plank when it gets dropped
 			bHoldingPlank = false;
 			UE_LOG(LogTemp, Warning, TEXT("Plank dropped"));
@@ -224,7 +225,6 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 		}
 
 		FVector DropLocation = CharacterLocation + (GetMesh()->GetForwardVector() * 60.f) + ItemLocationAdjustment;//Sets the location where the item will get dropped
-
 
 		Item->SetActorRotation(FQuat(DropRotation));
 		Item->SetActorLocation(DropLocation);
@@ -366,6 +366,11 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 			Barrel->BarrelFill();
 			Bucket->BucketEmpty();
 		}
+	}
+	else if (OtherActor->IsA(ASecretChestActor::StaticClass())) {//If it is a brazier
+	ASecretChestActor* Chest = Cast<ASecretChestActor>(OtherActor);
+		//Brazier = UBrazier;
+	UE_LOG(LogTemp, Warning, TEXT("Chest Found!"));
 	}
 }
 
