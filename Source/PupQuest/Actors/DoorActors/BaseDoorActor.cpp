@@ -42,19 +42,19 @@ void ABaseDoorActor::BeginPlay()
 void ABaseDoorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+		if(TypeOfDoor == 0)
+		{
+			bOpenDoor = CheckPressurePlate(PressurePlate_Actor);
+		}
+		else if(TypeOfDoor == 1)
+		{
+			bOpenDoor = CheckTorchHolder(TorchHolder1, TorchHolder2);
+		}
+		else if (TypeOfDoor == 2)
+		{
+			bOpenDoor = CheckTorchHolder(TorchHolder1);	
+		}
 
-	if(TypeOfDoor == 0)
-	{
-		bOpenDoor = CheckPressurePlate(PressurePlate_Actor);
-	}
-	else if(TypeOfDoor == 1)
-	{
-		bOpenDoor = CheckTorchHolder(TorchHolder1, TorchHolder2);
-	}
-	else if (TypeOfDoor == 2)
-	{
-		bOpenDoor = CheckTorchHolder(TorchHolder1);	
-	}
 }
 
 bool ABaseDoorActor::CheckTorchHolder(ATorchHolderActor* a)
@@ -83,4 +83,9 @@ bool ABaseDoorActor::CheckPressurePlate(APressurePlate_Actor* a)
 void ABaseDoorActor::OpenDoor(float DeltaTime)
 {
 	//add universale lyder og effekter
+}
+
+void ABaseDoorActor::CloseDoor()
+{
+	UltimateDoorOverride = true;
 }

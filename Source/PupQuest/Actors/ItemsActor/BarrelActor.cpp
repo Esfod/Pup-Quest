@@ -21,7 +21,7 @@ ABarrelActor::ABarrelActor()
 	Water->SetupAttachment(MeshComp);
 }
 
-/*
+
 void ABarrelActor::CheckIfOnPressurePlate()
 {
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
@@ -39,7 +39,7 @@ void ABarrelActor::CheckIfOnPressurePlate()
 		}
 	}
 }
-*/
+
 // Called when the game starts or when spawned
 void ABarrelActor::BeginPlay()
 {

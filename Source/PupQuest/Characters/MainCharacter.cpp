@@ -465,6 +465,7 @@ void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent
 			AAntCharacter* AntCharacter = Cast<AAntCharacter>(OtherActor);
 			AntCharacter->AntGettingHit();
 			Bucket->bBucketFilled = false;
+			Bucket->BucketEmpty();
 		}
 	}
 }

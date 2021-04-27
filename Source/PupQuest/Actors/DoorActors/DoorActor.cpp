@@ -27,12 +27,14 @@ void ADoorActor::Tick(float DeltaTime)
 void ADoorActor::OpenDoor(float DeltaTime)
 {
 	Super::OpenDoor(DeltaTime);
-	if(bOpenDoor)
+	if(bOpenDoor && !UltimateDoorOverride)
 	{
+		UE_LOG(LogTemp,Warning,TEXT("åpne"));
 		Current = FMath::Lerp(Current, MoveLength, DeltaTime * DoorOpenSpeed); //Open Door
 	}
 	else
 	{
+		UE_LOG(LogTemp,Warning,TEXT("Lukke"));
 		Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Open Door
 	}
 	FRotator DooRotator = GetActorRotation();
