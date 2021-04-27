@@ -17,12 +17,12 @@ ASpiderWebActor::ASpiderWebActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
+	RootComponent = MeshComp;
+
 	HitBoxWeb = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBoxWeb"));
 	HitBoxWeb->InitBoxExtent(FVector(50.f, 50.f, 50.f));
 	HitBoxWeb->SetupAttachment(RootComponent);
-
-	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
-	RootComponent = MeshComp;
 
 	LightSorce = CreateDefaultSubobject<UPointLightComponent>("PointLight");
 	LightSorce->SetupAttachment(MeshComp);
