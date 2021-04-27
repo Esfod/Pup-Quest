@@ -4,9 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "BaseCharacter.h"
-#include <Runtime/MediaAssets/Public/MediaComponent.h>
-#include "MediaPlayer.h"
-#include <Runtime/MediaAssets/Public/MediaPlayer.h>
 #include "MainCharacter.generated.h"
 
 
@@ -46,7 +43,6 @@ private:
 
 	void AttackEnd();
 
-
 	void UnilitedHealth();
 
 	AActor* DroppedItem = nullptr;//This is used to see what the latest dropped item was
@@ -64,7 +60,7 @@ private:
 		USoundBase* AmbienceSound;
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
-	UMediaPlayer* Video;
+	class UMediaPlayer* Video;
 
 	UFUNCTION()
 		void VideoTest();
@@ -121,7 +117,7 @@ public:
 
 	void IsCharacterDead();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void IsPushing();
 	
 	UFUNCTION()

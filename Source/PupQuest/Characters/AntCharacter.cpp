@@ -17,6 +17,7 @@ void AAntCharacter::AntGettingHit()
 {
 	HandleDeath();
 	bCharacterDead = true;
+	UE_LOG(LogTemp,Warning,TEXT("Ant Dead"));
 }
 
 void AAntCharacter::Attack(float OwnerDamage)

@@ -30,6 +30,8 @@
 
 #include "Kismet/GameplayStatics.h"
 
+#include "MediaPlayer.h"
+
 
 //#include "PupQuest/Hud/P_Torch"
 
@@ -50,7 +52,6 @@ AMainCharacter::AMainCharacter()
 
 	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
 	HitBox->SetupAttachment(GetMesh());
-	HitBox->SetGenerateOverlapEvents(false);
 	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlapHitBox);
 
 	AttackBoxComponent = CreateDefaultSubobject<UBoxComponent>("Attack HitBox");
@@ -96,11 +97,13 @@ void AMainCharacter::BeginPlay()
 
 	//(F.M)If the player has passed through a checkpoint, the player will instantly teleport to that location when respawning
 	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
-	
+
 	if (GameInstance->NewSpawn == true) {
 		SetActorLocation(FVector(GameInstance->RespawnPoint));
 	}
 
+	AttackBoxComponent->SetGenerateOverlapEvents(false);
+	HitBox->SetGenerateOverlapEvents(false);
 	//FGetAudioListenerPos();
 	//APlayerController::SetAudioListenerAttenuationOverride;
 	//APlayerController::SetAudioListenerOverride;
