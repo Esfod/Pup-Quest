@@ -20,6 +20,8 @@ ASecretChestActor::ASecretChestActor()
 void ASecretChestActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//OpenChest(DeltaTime);
 }
 
 // Called every frame
@@ -29,3 +31,10 @@ void ASecretChestActor::Tick(float DeltaTime)
 
 }
 
+UStaticMeshComponent* ASecretChestActor::GetChestTopMesh() {
+	return ChestTop;
+}
+
+//void ASecretChestActor::OpenChest(float DeltaTime) {
+//	//Current = FMath::Lerp(0.f, MoveLength, DeltaTime * DoorOpenSpeed); //Open Door
+//}

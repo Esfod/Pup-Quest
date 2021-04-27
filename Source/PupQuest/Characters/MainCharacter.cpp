@@ -370,8 +370,8 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 	}
 	else if (OtherActor->IsA(ASecretChestActor::StaticClass())) {//If it is a brazier
 	ASecretChestActor* Chest = Cast<ASecretChestActor>(OtherActor);
-		//Brazier = UBrazier;
 	UE_LOG(LogTemp, Warning, TEXT("Chest Found!"));
+	Chest->GetChestTopMesh()->SetRelativeRotation(FRotator(0.f, 0.f, -50.f));
 	}
 }
 
