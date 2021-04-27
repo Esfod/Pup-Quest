@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "BaseCharacter.h"
 #include <Runtime/MediaAssets/Public/MediaComponent.h>
-#include "MediaPlayer.h"
+//#include "MediaPlayer.h"
 #include <Runtime/MediaAssets/Public/MediaPlayer.h>
 #include "MainCharacter.generated.h"
 
