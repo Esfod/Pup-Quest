@@ -21,7 +21,7 @@ ABarrelActor::ABarrelActor()
 	Water->SetupAttachment(MeshComp);
 }
 
-
+/*
 void ABarrelActor::CheckIfOnPressurePlate()
 {
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
@@ -39,7 +39,7 @@ void ABarrelActor::CheckIfOnPressurePlate()
 		}
 	}
 }
-
+*/
 // Called when the game starts or when spawned
 void ABarrelActor::BeginPlay()
 {
@@ -60,7 +60,8 @@ void ABarrelActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ABarrelActor::BarrelFill() {
+void ABarrelActor::BarrelFill()
+{
 	Water->SetVisibility(true);
 	bBarrelFilled = true;
 	UGameplayStatics::PlaySoundAtLocation(this, FillBarrel, GetActorLocation());

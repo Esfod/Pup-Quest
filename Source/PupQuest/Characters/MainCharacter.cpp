@@ -82,7 +82,6 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAction("Reset", IE_Pressed, this, &AMainCharacter::HandleDeath);
 
-	PlayerInputComponent->BindAction("Push", IE_Pressed, this, &AMainCharacter::IsPushing);
 	PlayerInputComponent->BindAction("HealthBoost",IE_Pressed,this, &AMainCharacter::UnilitedHealth);
 
 	PlayerInputComponent->BindAction("Video", IE_Pressed, this, &AMainCharacter::VideoTest);

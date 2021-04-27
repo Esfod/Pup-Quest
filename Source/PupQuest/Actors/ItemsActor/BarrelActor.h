@@ -40,8 +40,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* FillBarrel;
 
-	UFUNCTION(BlueprintCallable)
-	void CheckIfOnPressurePlate();
+	//UFUNCTION(BlueprintCallable)
+	//void CheckIfOnPressurePlate();
 
 
 protected:
