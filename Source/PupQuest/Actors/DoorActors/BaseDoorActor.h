@@ -47,6 +47,8 @@ protected:
 	float Current;
 	float Initial;
 	bool bOpenDoor;
+	bool CloseDoorOverride {false};
+	
 
 	int32 TypeOfDoor { 0 };
 
@@ -58,5 +60,7 @@ public:
 	ABaseDoorActor();
 	
 	virtual void Tick(float DeltaTime) override;
+
+	void CloseDoor();
 
 };

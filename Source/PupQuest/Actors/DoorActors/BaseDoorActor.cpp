@@ -57,6 +57,8 @@ void ABaseDoorActor::Tick(float DeltaTime)
 	}
 }
 
+
+
 bool ABaseDoorActor::CheckTorchHolder(ATorchHolderActor* a)
 {
 	if (a->HasATorch()) return true;
@@ -84,4 +86,9 @@ bool ABaseDoorActor::CheckPressurePlate(APressurePlate_Actor* a)
 void ABaseDoorActor::OpenDoor(float DeltaTime)
 {
 	//add universale lyder og effekter
+}
+
+void ABaseDoorActor::CloseDoor()
+{
+	CloseDoorOverride = true;
 }

@@ -27,7 +27,7 @@ void ADoorActor::Tick(float DeltaTime)
 void ADoorActor::OpenDoor(float DeltaTime)
 {
 	Super::OpenDoor(DeltaTime);
-	if(bOpenDoor)
+	if(bOpenDoor && !CloseDoorOverride)
 	{
 		Current = FMath::Lerp(Current, MoveLength, DeltaTime * DoorOpenSpeed); //Open Door
 	}
