@@ -120,6 +120,10 @@ void AMainCharacter::Tick(float DeltaTime)
 	if (DroppedItem) {
 		DroppedItem = nullptr;
 	}
+	if(GetActorRotation().Roll != 0.f || GetActorRotation().Pitch != 0.f)
+	{
+		SetActorRotation(FRotator(0.f,0.f,45.f));
+	}
 }
 
 void AMainCharacter::MoveForward(float Value)
