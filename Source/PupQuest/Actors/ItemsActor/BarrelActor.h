@@ -41,8 +41,8 @@ public:
 		USoundBase* FillBarrel;
 
 	UFUNCTION(BlueprintCallable)
-		void CheckIfOnPressurePlate();
 
+	void CheckIfOnPressurePlate();
 
 protected:
 	// Called when the game starts or when spawned

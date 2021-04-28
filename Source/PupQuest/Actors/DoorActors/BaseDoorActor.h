@@ -48,7 +48,8 @@ protected:
 	float Current;
 	float Initial;
 	bool bOpenDoor;
-	bool UltimateDoorOverride {false};
+
+	bool CloseDoorOverride {false};
 	
 	int32 TypeOfDoor { 0 };
 
@@ -61,5 +62,5 @@ public:
 	
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void CloseDoor();
+	void CloseDoor();
 };

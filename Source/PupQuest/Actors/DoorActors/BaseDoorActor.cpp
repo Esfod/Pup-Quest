@@ -57,6 +57,8 @@ void ABaseDoorActor::Tick(float DeltaTime)
 
 }
 
+
+
 bool ABaseDoorActor::CheckTorchHolder(ATorchHolderActor* a)
 {
 	if (a->HasATorch()) return true;
@@ -72,6 +74,7 @@ bool ABaseDoorActor::CheckTorchHolder(ATorchHolderActor* a, ATorchHolderActor* b
 
 bool ABaseDoorActor::CheckPressurePlate(APressurePlate_Actor* a)
 {
+
 	if(!a->GetBarrelActor()) return false;
 
 	if(a->GetBarrelActor()->bBarrelFilled)
@@ -87,5 +90,6 @@ void ABaseDoorActor::OpenDoor(float DeltaTime)
 
 void ABaseDoorActor::CloseDoor()
 {
-	UltimateDoorOverride = true;
+
+	CloseDoorOverride = true;
 }
