@@ -102,6 +102,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 					}
 				}
 			}
+			
 			if(bDistanceASet && DistanceA < DistanceB)
 			{
 				DistanceB = DistanceA;
