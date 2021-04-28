@@ -27,7 +27,6 @@ void ABarrelActor::CheckIfOnPressurePlate()
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 	TArray<AActor*> OverlappedActors;
 	TArray<AActor*> ActorsToIgnore;
-
 	//DrawDebugBox(GetWorld(),GetActorLocation() + FVector(-50.f,0.f,-50) , FVector(100.f,50.f,20.f), FColor::Red, true,2);
 	UKismetSystemLibrary::BoxOverlapActors(GetWorld(), GetActorLocation() + FVector(-50.f,0.f,-50) , FVector(100.f,50.f,20.f), ObjectTypes, nullptr, ActorsToIgnore, OverlappedActors);
 
@@ -41,7 +40,6 @@ void ABarrelActor::CheckIfOnPressurePlate()
 		}
 	}
 }
-
 
 // Called when the game starts or when spawned
 void ABarrelActor::BeginPlay()
@@ -74,8 +72,6 @@ void ABarrelActor::BarrelEmpty() {
 	Water->SetVisibility(false);
 	bBarrelFilled = false;
 }
-
-
 
 //void ABarrelActor::FindClosestPush()
 //{

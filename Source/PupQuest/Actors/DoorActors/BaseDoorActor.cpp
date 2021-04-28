@@ -42,19 +42,19 @@ void ABaseDoorActor::BeginPlay()
 void ABaseDoorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+		if(TypeOfDoor == 0)
+		{
+			bOpenDoor = CheckPressurePlate(PressurePlate_Actor);
+		}
+		else if(TypeOfDoor == 1)
+		{
+			bOpenDoor = CheckTorchHolder(TorchHolder1, TorchHolder2);
+		}
+		else if (TypeOfDoor == 2)
+		{
+			bOpenDoor = CheckTorchHolder(TorchHolder1);	
+		}
 
-	if(TypeOfDoor == 0)
-	{
-		bOpenDoor = CheckPressurePlate(PressurePlate_Actor);
-	}
-	else if(TypeOfDoor == 1)
-	{
-		bOpenDoor = CheckTorchHolder(TorchHolder1, TorchHolder2);
-	}
-	else if (TypeOfDoor == 2)
-	{
-		bOpenDoor = CheckTorchHolder(TorchHolder1);	
-	}
 }
 
 
@@ -90,5 +90,6 @@ void ABaseDoorActor::OpenDoor(float DeltaTime)
 
 void ABaseDoorActor::CloseDoor()
 {
+
 	CloseDoorOverride = true;
 }

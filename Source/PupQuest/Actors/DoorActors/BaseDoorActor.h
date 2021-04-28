@@ -25,6 +25,7 @@ private:
 	bool CheckTorchHolder(ATorchHolderActor* a, ATorchHolderActor* b);
 	bool CheckPressurePlate(APressurePlate_Actor* a);
 
+	
 protected:
 	UPROPERTY(EditAnywhere, Category = "TorchHolder")
 	ATorchHolderActor* TorchHolder1 { nullptr };
@@ -47,20 +48,19 @@ protected:
 	float Current;
 	float Initial;
 	bool bOpenDoor;
+
 	bool CloseDoorOverride {false};
 	
-
 	int32 TypeOfDoor { 0 };
 
 	virtual void BeginPlay() override;
 	
 	virtual void OpenDoor(float DeltaTime);
-	
+
 public:
 	ABaseDoorActor();
 	
 	virtual void Tick(float DeltaTime) override;
 
 	void CloseDoor();
-
 };
