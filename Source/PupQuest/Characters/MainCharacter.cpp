@@ -227,7 +227,7 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 			DroppedItem = Bucket;
 		}
 
-		FVector DropLocation = CharacterLocation + (GetMesh()->GetForwardVector() * 60.f) + ItemLocationAdjustment;//Sets the location where the item will get dropped
+		FVector DropLocation = CharacterLocation + (GetMesh()->GetForwardVector() * 30.f) + ItemLocationAdjustment;//Sets the location where the item will get dropped
 
 		Item->SetActorRotation(FQuat(DropRotation));
 		Item->SetActorLocation(DropLocation);
