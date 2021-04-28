@@ -75,7 +75,7 @@ void UBTService_UpdateFireLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 				AMainCharacter* MainCharacter = Cast<AMainCharacter>(Actor);
 				if(MainCharacter)
 				{
-					if(MainCharacter->bHoldingTorch &&  MainCharacter->bTorchLit && MainCharacter->GetTorchActor()->bTorchActorLit)
+					if(MainCharacter->bHoldingTorch && MainCharacter->GetTorchActor()->bTorchActorLit)
 					{
 						//UE_LOG(LogTemp,Warning,TEXT("Kim holds a torch"));
 						//UE_LOG(LogTemp,Warning,TEXT("Kim holdes a lit torch"));
