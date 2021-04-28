@@ -95,8 +95,10 @@ void ASpiderWebActor::BeginOverlapWeb(UPrimitiveComponent* OverlappedComponent, 
 
 		if (OtherActor->IsA(ABrazierActor::StaticClass()) && OtherActor != this) {
 			ABrazierActor* Brazier = Cast<ABrazierActor>(OtherActor);
-			UE_LOG(LogTemp, Warning, TEXT("Burn brazier"), *OtherActor->GetName());
-			Brazier->BrazierFlameOn();
+			if (Brazier->bBrazierLit == false) {
+				UE_LOG(LogTemp, Warning, TEXT("Burn brazier"), *OtherActor->GetName());
+				Brazier->BrazierFlameOn();
+			}
 		}
 }
 
