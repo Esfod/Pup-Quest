@@ -109,7 +109,7 @@ public:
 	FVector PlacePlankLocation;
 
 	FRotator PlacePlankRotation;
-
+	UFUNCTION(BlueprintCallable)
 	virtual void HandleDeath() override;
 
 	UFUNCTION()
