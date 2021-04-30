@@ -160,6 +160,7 @@ void AMainCharacter::AttachItem(AActor* Item)//(F.M) Attaches the given item in 
 		DropHoldingItem();
 
 		Item->SetActorEnableCollision(false);//Turns off collision
+
 		Jump();
 		//UE_LOG(LogTemp, Warning, TEXT("Dropped item is %s"), *DroppedItem->GetName());
 
@@ -216,8 +217,8 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 			DroppedItem = Plank;
 		}
 		else if (Item == Torch) {
-			DropRotation = FRotator(-85.f, GetActorRotation().Yaw - 45.f, 0.f);// Sets the rotation of the torch when it is dropped
-			ItemLocationAdjustment = FVector(0.f, 0.f, -9.f);//Adjusts the height of the torch when it gets dropped
+			DropRotation = FRotator(-85.f, GetActorRotation().Yaw + 45.f, 0.f);// Sets the rotation of the torch when it is dropped
+			ItemLocationAdjustment = FVector(0.f, 0.f, -9.f) + GetMesh()->GetRightVector() * 40;//Adjusts the height of the torch when it gets dropped
 			bHoldingTorch = false;
 			Torch->TorchFlameOff();
 			UE_LOG(LogTemp, Warning, TEXT("Torch dropped"));
@@ -225,11 +226,13 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 		}
 		else if (Item == Bucket) {
 			DropRotation = FRotator(0.f, GetActorRotation().Yaw, 0.f);// Sets the rotation of the bucket when it is dropped
-			ItemLocationAdjustment = FVector(0.f, 0.f, -3.f);//Adjusts the height of the bucket when it gets dropped
+			ItemLocationAdjustment = FVector(0.f, 0.f, -3.f) + GetMesh()->GetRightVector() * 50;//Adjusts the height of the bucket when it gets dropped
 			bHoldingBucket = false;
 			UE_LOG(LogTemp, Warning, TEXT("Bucket dropped"));
 			DroppedItem = Bucket;
 		}
+
+
 
 		FVector DropLocation = CharacterLocation + (GetMesh()->GetForwardVector() * 30.f) + ItemLocationAdjustment;//Sets the location where the item will get dropped
 
