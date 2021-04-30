@@ -30,7 +30,7 @@ public:
 	UFUNCTION()
 		void TorchFlameOff();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		class UStaticMeshComponent* MeshComp;
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
