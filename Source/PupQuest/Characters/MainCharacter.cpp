@@ -160,7 +160,7 @@ void AMainCharacter::AttachItem(AActor* Item)//(F.M) Attaches the given item in 
 		DropHoldingItem();
 
 		Item->SetActorEnableCollision(false);//Turns off collision
-
+		Jump();
 		//UE_LOG(LogTemp, Warning, TEXT("Dropped item is %s"), *DroppedItem->GetName());
 
 		if (Item == Torch && DroppedItem != Torch) {
