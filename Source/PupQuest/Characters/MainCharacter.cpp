@@ -120,6 +120,10 @@ void AMainCharacter::Tick(float DeltaTime)
 	if (DroppedItem) {
 		DroppedItem = nullptr;
 	}
+	if(GetActorRotation().Roll != 0.f || GetActorRotation().Pitch != 0.f)
+	{
+		SetActorRotation(FRotator(0.f,0.f,45.f));
+	}
 }
 
 void AMainCharacter::MoveForward(float Value)
@@ -156,7 +160,7 @@ void AMainCharacter::AttachItem(AActor* Item)//(F.M) Attaches the given item in 
 		DropHoldingItem();
 
 		Item->SetActorEnableCollision(false);//Turns off collision
-
+		Jump();
 		//UE_LOG(LogTemp, Warning, TEXT("Dropped item is %s"), *DroppedItem->GetName());
 
 		if (Item == Torch && DroppedItem != Torch) {
