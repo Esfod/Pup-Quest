@@ -24,5 +24,8 @@ public:
 
 	//UMediaPlayer* Test;
 
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		class UMediaPlayer* Video;
+
 	bool bVideoPlayed = false;
 };
