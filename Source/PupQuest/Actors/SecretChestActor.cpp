@@ -2,6 +2,7 @@
 
 
 #include "SecretChestActor.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ASecretChestActor::ASecretChestActor()
@@ -38,3 +39,12 @@ UStaticMeshComponent* ASecretChestActor::GetChestTopMesh() {
 //void ASecretChestActor::OpenChest(float DeltaTime) {
 //	//Current = FMath::Lerp(0.f, MoveLength, DeltaTime * DoorOpenSpeed); //Open Door
 //}
+
+void ASecretChestActor::OpenChest() {
+	GetChestTopMesh()->SetRelativeRotation(FRotator(0.f, 0.f, -50.f));
+	SecretsFound++;
+	UGameplayStatics::PlaySoundAtLocation(this, OpenSound, GetActorLocation());
+	if (SecretName == TEXT("Potato")) {
+		UE_LOG(LogTemp, Warning, TEXT("Well done!"));
+	}
+}

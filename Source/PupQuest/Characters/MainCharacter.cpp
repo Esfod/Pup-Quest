@@ -47,11 +47,6 @@ AMainCharacter::AMainCharacter()
 	CameraComp  = CreateDefaultSubobject<UCameraComponent>("Camera Component");
 	CameraComp->SetupAttachment(SpringArm);
 
-	//StandOnHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBoxWeb"));
-	//StandOnHitBox->SetupAttachment(RootComponent);
-	//StandOnHitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapBegin);
-	//StandOnHitBox->OnComponentEndOverlap.AddDynamic(this, &AMainCharacter::StandOnOverlapEnd);
-
 	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
 	HitBox->SetupAttachment(GetMesh());
 	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlapHitBox);
@@ -61,9 +56,6 @@ AMainCharacter::AMainCharacter()
 	//AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("Attack_Box_Attach")); //TODO Add when attack-animation is implemented
 	AttackBoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlapAttackBox);
 	AttackBoxComponent->SetGenerateOverlapEvents(false);
-
-	
-	//MoveIgnoreActorAdd(Plank);
 }
 
 void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -84,11 +76,7 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAction("Reset", IE_Pressed, this, &AMainCharacter::HandleDeath);
 
-	PlayerInputComponent->BindAction("HealthBoost",IE_Pressed,this, &AMainCharacter::UnilitedHealth);
-
-	PlayerInputComponent->BindAction("Video", IE_Pressed, this, &AMainCharacter::VideoTest);
-
-	
+	PlayerInputComponent->BindAction("HealthBoost",IE_Pressed,this, &AMainCharacter::UnilitedHealth);	
 }
 
 void AMainCharacter::BeginPlay()
@@ -378,30 +366,8 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 	else if (OtherActor->IsA(ASecretChestActor::StaticClass())) {//If it is a brazier
 	ASecretChestActor* Chest = Cast<ASecretChestActor>(OtherActor);
 	UE_LOG(LogTemp, Warning, TEXT("Chest Found!"));
-	Chest->GetChestTopMesh()->SetRelativeRotation(FRotator(0.f, 0.f, -50.f));
+	Chest->OpenChest();
 	}
-}
-
-
-void AMainCharacter::StandOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
-	bool bFromSweep, const FHitResult& SweepResult) //F.M
-{
-	//if (OtherActor->IsA(ATorchActor::StaticClass()) || OtherActor->IsA(APlankActor::StaticClass()))//Hvis det er torch
-	//{
-	//	OnTopOff = true;
-	//}
-}
-
-
-void AMainCharacter::StandOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-                                       UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
-                                       bool bFromSweep, const FHitResult& SweepResult) //F.M
-{
-	//if (OtherActor->IsA(ATorchActor::StaticClass()) || OtherActor->IsA(APlankActor::StaticClass()))//Hvis det er torch
-	//{
-	//	OnTopOff = false;
-	//}
 }
 
 ATorchActor* AMainCharacter::GetTorchActor()
@@ -519,9 +485,4 @@ void AMainCharacter::IsCharacterDead()
 void AMainCharacter::UnilitedHealth()
 {
 	Health = 1000000000.f;
-}
-
-void AMainCharacter::VideoTest() {
-	UE_LOG(LogTemp, Warning, TEXT("Video playing"));
-	Video->Play();
 }

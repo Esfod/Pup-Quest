@@ -6,8 +6,6 @@
 #include "BaseCharacter.h"
 #include "MainCharacter.generated.h"
 
-
-
 class USpringArmComponent;
 class UCameraComponent;
 class ATorchActor;
@@ -59,17 +57,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* AmbienceSound;
 
-	UPROPERTY(EditAnywhere, Category = "Effects")
-	class UMediaPlayer* Video;
-
-	UFUNCTION()
-		void VideoTest();
-
 public:
 	AMainCharacter();
-
-	UPROPERTY(EditAnywhere)
-	UBoxComponent* StandOnHitBox { nullptr };//To see if player is standing on item when he picks it up(movement does not work if he does)
 
 	UPROPERTY(VisibleAnywhere)
 	float Health {0.f};
@@ -109,6 +98,7 @@ public:
 	FVector PlacePlankLocation;
 
 	FRotator PlacePlankRotation;
+
 	UFUNCTION(BlueprintCallable)
 	virtual void HandleDeath() override;
 
@@ -168,16 +158,6 @@ protected:
 
 	UFUNCTION()
 		void OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
-			bool bFromSweep, const FHitResult& SweepResult);
-	
-	UFUNCTION()
-		void StandOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
-			bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
-		void StandOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 			bool bFromSweep, const FHitResult& SweepResult);
 	
