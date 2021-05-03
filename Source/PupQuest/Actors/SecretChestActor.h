@@ -34,4 +34,27 @@ public:
 	UFUNCTION()
 		UStaticMeshComponent* GetChestTopMesh();
 
+	UPROPERTY(EditAnywhere, Category = "Name of secret")
+		FName SecretName;
+
+	int32 SecretsFound = 0;
+
+	void OpenChest();
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* OpenSound;
+	/*
+	secrets = 3
+	if openchest
+		check which chest
+		that chest secret = found
+		secretsfoundcounter ++
+	
+	
+	
+	
+	
+	*/
+
+
 };
