@@ -412,6 +412,14 @@ ATorchActor* AMainCharacter::GetTorchActor()
 	return nullptr;
 }
 
+ABucketActor* AMainCharacter::GetBucketActor()
+{
+	if (Bucket != nullptr)
+		return Bucket;
+
+	return nullptr;
+}
+
 void AMainCharacter::IsPushing()
 {
 	if (Pushing == 1)
