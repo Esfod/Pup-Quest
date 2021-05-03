@@ -70,6 +70,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	ATorchActor* GetTorchActor();
 
+	UFUNCTION(BlueprintCallable)
+	ABucketActor* GetBucketActor();
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bTorchLit {false};//See if the torch is lit or not
 	
