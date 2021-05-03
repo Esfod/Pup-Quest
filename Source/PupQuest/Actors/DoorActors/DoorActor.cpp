@@ -2,6 +2,8 @@
 
 
 #include "DoorActor.h"
+#include "Kismet/GameplayStatics.h"
+
 
 ADoorActor::ADoorActor()
 {
@@ -32,11 +34,15 @@ void ADoorActor::OpenDoor(float DeltaTime)
 	{
 		//UE_LOG(LogTemp,Warning,TEXT("åpne"));
 		Current = FMath::Lerp(Current, MoveLength, DeltaTime * DoorOpenSpeed); //Open Door
+		//UGameplayStatics::PlaySoundAtLocation(this, OpenSound, GetActorLocation());
+
 	}
 	else
 	{
 		//UE_LOG(LogTemp,Warning,TEXT("Lukke"));
 		Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Open Door
+		//UGameplayStatics::PlaySoundAtLocation(this, CloseSound, GetActorLocation());
+
 	}
 	FRotator DooRotator = GetActorRotation();
 	DooRotator.Yaw = Current;
