@@ -34,6 +34,20 @@ private:
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* HitBox { nullptr };
 	
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	USoundBase* PlaceItem;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	USoundBase* LookingForNolan;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	USoundBase* NolanBarking;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	USoundBase* AmbienceSound;
+
+	AActor* DroppedItem = nullptr;//This is used to see what the latest dropped item was
+
 	UPROPERTY(EditAnywhere)
 	float RotateSpeed = 30.f;
 
@@ -43,25 +57,14 @@ private:
 
 	void UnilitedHealth();
 
-	AActor* DroppedItem = nullptr;//This is used to see what the latest dropped item was
-
-	UPROPERTY(EditAnywhere, Category = "Effects")
-		USoundBase* PlaceItem;
-
-	UPROPERTY(EditAnywhere, Category = "Effects")
-		USoundBase* LookingForNolan;
-
-	UPROPERTY(EditAnywhere, Category = "Effects")
-		USoundBase* NolanBarking;
-
-	UPROPERTY(EditAnywhere, Category = "Effects")
-		USoundBase* AmbienceSound;
-
+	void RegainHealth(float DeltaTime);
 public:
 	AMainCharacter();
 
 	UPROPERTY(VisibleAnywhere)
 	float Health {0.f};
+
+	float RegainHealthTimer{0.f};
 	
 	FRotator DropRotation;//Used to set the dropping rotation of dropped items
 
@@ -154,6 +157,11 @@ protected:
 
 	UPROPERTY()
 		AWellActor* Well;
+
+	UPROPERTY(EditAnywhere,Category="HealthRegain")
+		float TimeToRegain{5.f};
+	UPROPERTY(EditAnywhere,Category="HealthRegain")
+		float AmountOfHealthRegain {20.f};
 
 	bool bBrazierLit;
 

@@ -108,10 +108,19 @@ void AMainCharacter::Tick(float DeltaTime)
 	if (DroppedItem) {
 		DroppedItem = nullptr;
 	}
-	if(GetActorRotation().Roll != 0.f || GetActorRotation().Pitch != 0.f)
+	
+	if(Health != MaxHealth)
 	{
-		SetActorRotation(FRotator(0.f,0.f,45.f));
+		if(RegainHealthTimer == 0.0f)
+			RegainHealthTimer = GetWorld()->GetTimeSeconds();
+		if(RegainHealthTimer + TimeToRegain <= GetWorld()->GetTimeSeconds())
+		{
+			RegainHealth(DeltaTime);
+			if(Health > MaxHealth) Health = MaxHealth;
+		}
 	}
+	else RegainHealthTimer = 0.f;
+	UE_LOG(LogTemp,Warning,TEXT("%f Health"), Health);
 }
 
 void AMainCharacter::MoveForward(float Value)
@@ -466,9 +475,12 @@ void AMainCharacter::PlayerTakeDamage(float DamageTaken)
 	
 	IsCharacterDead();
 	if(bCharacterDead)
-	{
 		HandleDeath();
-	}
+}
+
+void AMainCharacter::RegainHealth(float DeltaTime)
+{
+		Health += AmountOfHealthRegain * DeltaTime;
 }
 
 void AMainCharacter::HandleDeath()
@@ -478,7 +490,6 @@ void AMainCharacter::HandleDeath()
 	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
 	GameInstance->GameStarted = true;
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);//Restarts level
-	
 }
 
 void AMainCharacter::IsCharacterDead()
