@@ -56,11 +56,10 @@ protected:
 	virtual void BeginPlay() override;
 	
 	virtual void OpenDoor(float DeltaTime);
-
 public:
 	ABaseDoorActor();
 	
 	virtual void Tick(float DeltaTime) override;
 
-	void CloseDoor();
+	void CloseDoor();	
 };

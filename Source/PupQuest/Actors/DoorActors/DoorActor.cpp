@@ -3,6 +3,8 @@
 
 #include "DoorActor.h"
 
+#include "Kismet/KismetSystemLibrary.h"
+
 ADoorActor::ADoorActor()
 {
 	PrimaryActorTick.bCanEverTick = true;	
@@ -27,15 +29,21 @@ void ADoorActor::Tick(float DeltaTime)
 void ADoorActor::OpenDoor(float DeltaTime)
 {
 	Super::OpenDoor(DeltaTime);
-
+	
 	if(bOpenDoor && !CloseDoorOverride)
 	{
+		if(Current==MoveLength) return;
 		//UE_LOG(LogTemp,Warning,TEXT("åpne"));
+		if(Current==Initial) //playsound here
+
 		Current = FMath::Lerp(Current, MoveLength, DeltaTime * DoorOpenSpeed); //Open Door
 	}
 	else
 	{
+		if(Current==Initial) return;
 		//UE_LOG(LogTemp,Warning,TEXT("Lukke"));
+		if(Current==MoveLength) //playsound here
+
 		Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Open Door
 	}
 	FRotator DooRotator = GetActorRotation();
