@@ -24,7 +24,7 @@ public:
 	bool bIsEnemyKnockedOut {false};
 	
 protected:
-
+	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 
 	UPROPERTY(EditAnywhere, Category = "KnockOut Times")
@@ -39,8 +39,20 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "KnockOut Times")
 	float BucketKnockOutTime {3.f};
 
+	UPROPERTY(EditAnywhere,Category="Run")
+	bool ComplexSpider{true};
+
+	UPROPERTY(EditAnywhere,Category="Run")
+	class ABrazierActor* BrazierActor {nullptr};
+
+	UPROPERTY(EditAnywhere,Category="Run")
+	FVector RunToLocation {0.f};
 private:
 	float Timer {0.f};
 
 	float KnockOutTime {0.f};
+
+	void Run();
+
+	FVector RunDirecton{0.f};
 };

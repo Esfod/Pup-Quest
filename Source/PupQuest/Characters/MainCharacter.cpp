@@ -375,7 +375,7 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 				Bucket->BucketEmpty();
 			}
 		}
-		else
+		else if(Barrel->IsRotateble)
 		{
 			Barrel->RotateBarrel();
 		}

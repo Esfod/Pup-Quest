@@ -23,9 +23,11 @@ public:
 	//	void HandleInteraction();
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Bools")
-	bool bBarrelFilled;
-	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+		bool bBarrelFilled;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Bools")
 		bool IsLaying {true};
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Bools")
+		bool IsRotateble {false};
 	
 	UPROPERTY(EditAnywhere)
 		class UStaticMeshComponent* MeshComp;
@@ -45,7 +47,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void CheckIfOnPressurePlate();
 
-	void RotateBarrel();
+		void RotateBarrel();
 
 protected:
 	// Called when the game starts or when spawned
