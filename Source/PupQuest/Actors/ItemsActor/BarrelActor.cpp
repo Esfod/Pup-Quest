@@ -36,9 +36,15 @@ void ABarrelActor::CheckIfOnPressurePlate()
 		{
 			APressurePlate_Actor* PressurePlate = Cast<APressurePlate_Actor>(Actor);
 			PressurePlate->PlaceBarrelRight(this);
+			IsLaying = false;
 			return;
 		}
 	}
+}
+
+void ABarrelActor::RotateBarrel()
+{
+	SetActorRotation(GetActorRotation()+FRotator(0.f,90.f,0.f));
 }
 
 // Called when the game starts or when spawned

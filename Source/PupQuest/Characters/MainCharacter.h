@@ -55,7 +55,7 @@ private:
 
 	void AttackEnd();
 
-	void UnilitedHealth();
+	void UnlimtedHealth();
 
 	void RegainHealth(float DeltaTime);
 public:

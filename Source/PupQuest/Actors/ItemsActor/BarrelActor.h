@@ -24,7 +24,9 @@ public:
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Bools")
 	bool bBarrelFilled;
-
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+		bool IsLaying {true};
+	
 	UPROPERTY(EditAnywhere)
 		class UStaticMeshComponent* MeshComp;
 
@@ -41,8 +43,9 @@ public:
 		USoundBase* FillBarrel;
 
 	UFUNCTION(BlueprintCallable)
+		void CheckIfOnPressurePlate();
 
-	void CheckIfOnPressurePlate();
+	void RotateBarrel();
 
 protected:
 	// Called when the game starts or when spawned
