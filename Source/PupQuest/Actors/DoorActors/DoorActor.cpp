@@ -5,6 +5,8 @@
 #include "Kismet/GameplayStatics.h"
 
 
+#include "Kismet/KismetSystemLibrary.h"
+
 ADoorActor::ADoorActor()
 {
 	PrimaryActorTick.bCanEverTick = true;	
@@ -30,40 +32,31 @@ void ADoorActor::OpenDoor(float DeltaTime)
 {
 	Super::OpenDoor(DeltaTime);
 
-
-	if (bOpenDoor && !CloseDoorOverride)
+	
+	if(bOpenDoor && !CloseDoorOverride)
 	{
-		if (Current == MoveLength) return;
-		//UE_LOG(LogTemp,Warning,TEXT("åpne"));
-		if (Current == Initial) //playsound here
-			UGameplayStatics::PlaySoundAtLocation(this, OpenSound, GetActorLocation());
-			Current = FMath::Lerp(Current, MoveLength, DeltaTime * DoorOpenSpeed); //Open Door
+		UE_LOG(LogTemp,Warning,TEXT("åpne"));
+		if(Current==Initial)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, OpenDoorSound, GetActorLocation());
+		}
+		Current = FMath::Lerp(Current, MoveLength, DeltaTime * DoorOpenSpeed); //Open Door
+		if(MoveLength > 0.f && Current+1 >= MoveLength+Initial) Current = MoveLength;//|| MoveLength < 0.f && Current <= MoveLength+1
 	}
 	else
 	{
-		if (Current == Initial) return;
-		//UE_LOG(LogTemp,Warning,TEXT("Lukke"));
-		if (Current == MoveLength) //playsound here
-			UGameplayStatics::PlaySoundAtLocation(this, CloseSound, GetActorLocation());
-			Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Open Door
+		UE_LOG(LogTemp,Warning,TEXT("Lukke"));
+		if(Current==MoveLength)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, CloseDoorSound, GetActorLocation());
+		}
+		Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Open Door
+		if(MoveLength > 0.f && Current-1 <= Initial) Current = Initial; //|| MoveLength < 0.f && Current <= Initial+1
 	}
+	
+	FRotator DoorRotator = GetActorRotation();
+	DoorRotator.Yaw = Current;
+	SetActorRotation(DoorRotator);
 
-	//if(bOpenDoor && !CloseDoorOverride)
-	//{
-	//	//UE_LOG(LogTemp,Warning,TEXT("åpne"));
-	//	Current = FMath::Lerp(Current, MoveLength, DeltaTime * DoorOpenSpeed); //Open Door
-	//	//UGameplayStatics::PlaySoundAtLocation(this, OpenSound, GetActorLocation());
-
-	//}
-	//else
-	//{
-	//	//UE_LOG(LogTemp,Warning,TEXT("Lukke"));
-	//	Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Open Door
-	//	//UGameplayStatics::PlaySoundAtLocation(this, CloseSound, GetActorLocation());
-
-	//}
-	FRotator DooRotator = GetActorRotation();
-	DooRotator.Yaw = Current;
-	SetActorRotation(DooRotator);
 }
 

@@ -76,7 +76,7 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAction("Reset", IE_Pressed, this, &AMainCharacter::HandleDeath);
 
-	PlayerInputComponent->BindAction("HealthBoost",IE_Pressed,this, &AMainCharacter::UnilitedHealth);	
+	PlayerInputComponent->BindAction("HealthBoost",IE_Pressed,this, &AMainCharacter::UnlimtedHealth);	
 }
 
 void AMainCharacter::BeginPlay()
@@ -108,10 +108,19 @@ void AMainCharacter::Tick(float DeltaTime)
 	if (DroppedItem) {
 		DroppedItem = nullptr;
 	}
-	if(GetActorRotation().Roll != 0.f || GetActorRotation().Pitch != 0.f)
+	
+	if(Health != MaxHealth)
 	{
-		SetActorRotation(FRotator(0.f,0.f,45.f));
+		if(RegainHealthTimer == 0.0f)
+			RegainHealthTimer = GetWorld()->GetTimeSeconds();
+		if(RegainHealthTimer + TimeToRegain <= GetWorld()->GetTimeSeconds())
+		{
+			RegainHealth(DeltaTime);
+			if(Health > MaxHealth) Health = MaxHealth;
+		}
 	}
+	else RegainHealthTimer = 0.f;
+	//UE_LOG(LogTemp,Warning,TEXT("%f Health"), Health);
 }
 
 void AMainCharacter::MoveForward(float Value)
@@ -320,7 +329,6 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 				ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
 				if (Web->bBurning == false) {//If the web is not already burning
 					Web->StartBurnWeb();
-
 				}
 			}
 		}
@@ -359,9 +367,16 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 	else if (OtherActor->IsA(ABarrelActor::StaticClass()) && bHoldingBucket == true) {
 		ABarrelActor* UBarrel = Cast<ABarrelActor>(OtherActor);
 		Barrel = UBarrel;
-		if (Barrel->bBarrelFilled == false && Bucket->bBucketFilled == true) {
-			Barrel->BarrelFill();
-			Bucket->BucketEmpty();
+		if(!UBarrel->IsLaying)
+		{
+			if (Barrel->bBarrelFilled == false && Bucket->bBucketFilled == true) {
+				Barrel->BarrelFill();
+				Bucket->BucketEmpty();
+			}
+		}
+		else
+		{
+			Barrel->RotateBarrel();
 		}
 	}
 	else if (OtherActor->IsA(ASecretChestActor::StaticClass())) {//If it is a brazier
@@ -470,9 +485,12 @@ void AMainCharacter::PlayerTakeDamage(float DamageTaken)
 	
 	IsCharacterDead();
 	if(bCharacterDead)
-	{
 		HandleDeath();
-	}
+}
+
+void AMainCharacter::RegainHealth(float DeltaTime)
+{
+		Health += AmountOfHealthRegain * DeltaTime;
 }
 
 void AMainCharacter::HandleDeath()
@@ -482,7 +500,6 @@ void AMainCharacter::HandleDeath()
 	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
 	GameInstance->GameStarted = true;
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);//Restarts level
-	
 }
 
 void AMainCharacter::IsCharacterDead()
@@ -494,7 +511,7 @@ void AMainCharacter::IsCharacterDead()
 }
 
 //Under is cheats
-void AMainCharacter::UnilitedHealth()
+void AMainCharacter::UnlimtedHealth()
 {
 	Health = 1000000000.f;
 }
