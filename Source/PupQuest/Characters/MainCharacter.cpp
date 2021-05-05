@@ -150,6 +150,7 @@ void AMainCharacter::AttachItem(AActor* Item)//(F.M) Attaches the given item in 
 		Item->SetActorEnableCollision(false);//Turns off collision
 
 		Jump();
+		UGameplayStatics::PlaySoundAtLocation(this, PickUpItem, GetActorLocation());
 		//UE_LOG(LogTemp, Warning, TEXT("Dropped item is %s"), *DroppedItem->GetName());
 
 		if (Item == Torch && DroppedItem != Torch) {
@@ -340,8 +341,8 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 		}
 		else {//If brazier is not lit
 			if (Torch->bTorchActorLit == true) {//If torch is lit
-
 				Brazier->BrazierFlameOn();
+				UGameplayStatics::PlaySoundAtLocation(this, LightBrazier, GetActorLocation());
 			}
 			else {//If torch is not lit
 				UE_LOG(LogTemp, Warning, TEXT("Your Torch has to be lit to light the brazier"));
@@ -424,8 +425,11 @@ void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent
 		UE_LOG(LogTemp,Warning,TEXT("Player hits Spider"));
 		if(bHoldingTorch)
 		{
-			if(bTorchLit) //torch on fire
+			//UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
+			if (bTorchLit) { //torch on fire
 				SpiderHit->SpiderGettingHit(2);
+
+			}
 			else //torch not on fire
 				SpiderHit->SpiderGettingHit(1);
 		}

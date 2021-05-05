@@ -25,6 +25,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category= "Detection Variable")
 	float SphereRadius {90.f};
 	
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* IdleInsect;
 public:
 	virtual void Attack(float OwnerDamage);
 	

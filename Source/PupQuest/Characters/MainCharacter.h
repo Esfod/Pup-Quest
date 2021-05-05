@@ -57,6 +57,16 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* AmbienceSound;
 
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* PickUpItem;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* AttackTorch;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* LightBrazier;
+
+
 public:
 	AMainCharacter();
 
@@ -65,7 +75,7 @@ public:
 	
 	FRotator DropRotation;//Used to set the dropping rotation of dropped items
 
-	FVector ItemLocationAdjustment;
+	FVector ItemLocationAdjustment;//Small adjustments for each dropped item, so they get the right location
 
 	UFUNCTION(BlueprintCallable)
 	ATorchActor* GetTorchActor();
