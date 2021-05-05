@@ -20,4 +20,10 @@ protected:
 
 	virtual void Tick(float DeltaTime) override; 
 	virtual void OpenDoor(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, Category="Sound")
+		USoundBase* OpenDoorSound {nullptr};
+	UPROPERTY(EditAnywhere, Category="Sound")
+		USoundBase* CloseDoorSound {nullptr};
+
 };

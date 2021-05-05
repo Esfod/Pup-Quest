@@ -5,7 +5,6 @@
 
 #include "PupQuest/Actors/PressurePlate_Actor.h"
 #include "PupQuest/Actors/ItemsActor/TorchActor.h"
-#include "PupQuest/Characters/MainCharacter.h"
 #include "PupQuest/Actors/TorchHolderActor.h"
 #include "PupQuest/Actors/ItemsActor/BarrelActor.h"
 
@@ -42,19 +41,18 @@ void ABaseDoorActor::BeginPlay()
 void ABaseDoorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-		if(TypeOfDoor == 0)
-		{
-			bOpenDoor = CheckPressurePlate(PressurePlate_Actor);
-		}
-		else if(TypeOfDoor == 1)
-		{
-			bOpenDoor = CheckTorchHolder(TorchHolder1, TorchHolder2);
-		}
-		else if (TypeOfDoor == 2)
-		{
-			bOpenDoor = CheckTorchHolder(TorchHolder1);	
-		}
-
+	if(TypeOfDoor == 0)
+	{
+		bOpenDoor = CheckPressurePlate(PressurePlate_Actor);
+	}
+	else if(TypeOfDoor == 1)
+	{
+		bOpenDoor = CheckTorchHolder(TorchHolder1, TorchHolder2);
+	}
+	else if (TypeOfDoor == 2)
+	{
+		bOpenDoor = CheckTorchHolder(TorchHolder1);	
+	}
 }
 
 
@@ -80,6 +78,8 @@ bool ABaseDoorActor::CheckPressurePlate(APressurePlate_Actor* a)
 	if(a->GetBarrelActor()->bBarrelFilled)
 		return true;
 
+
+
 	return false;
 }
 
@@ -90,6 +90,5 @@ void ABaseDoorActor::OpenDoor(float DeltaTime)
 
 void ABaseDoorActor::CloseDoor()
 {
-
 	CloseDoorOverride = true;
 }

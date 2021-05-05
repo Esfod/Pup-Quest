@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
 #include "BaseDoorActor.generated.h"
 
@@ -56,11 +57,10 @@ protected:
 	virtual void BeginPlay() override;
 	
 	virtual void OpenDoor(float DeltaTime);
-
 public:
 	ABaseDoorActor();
 	
 	virtual void Tick(float DeltaTime) override;
 
-	void CloseDoor();
+	void CloseDoor();	
 };

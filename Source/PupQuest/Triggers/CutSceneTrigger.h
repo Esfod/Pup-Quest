@@ -19,8 +19,6 @@ public:
 		void OnOverlap(class AActor* OverlappedActor, class AActor* OtherActor);
 
 	//Play video
-	/*UPROPERTY(EditAnywhere, Category = "Sound Effect")
-		USoundBase* SoundEffect;*/
 
 	//UMediaPlayer* Test;
 

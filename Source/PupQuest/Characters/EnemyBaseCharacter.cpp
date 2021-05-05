@@ -17,6 +17,7 @@ AEnemyBaseCharacter::AEnemyBaseCharacter()
 void AEnemyBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	UGameplayStatics::PlaySoundAtLocation(this, IdleInsect, GetActorLocation() - FVector(624.f, 625.f, -884.f));
 }
 
 void AEnemyBaseCharacter::Tick(float DeltaTime)
