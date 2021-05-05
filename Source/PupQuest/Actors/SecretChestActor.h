@@ -42,6 +42,9 @@ public:
 	//UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	//int SecretsFound;
 
+	UFUNCTION(BlueprintCallable)
+		int GetChestActor();
+
 	void OpenChest();
 
 	UPROPERTY(EditAnywhere, Category = "Effects")

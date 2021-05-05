@@ -48,3 +48,9 @@ void ASecretChestActor::OpenChest() {
 		UE_LOG(LogTemp, Warning, TEXT("Well done!"));
 	}
 }
+
+int ASecretChestActor::GetChestActor()
+{
+	int Secret = SecretsFound;
+	return Secret;
+}
