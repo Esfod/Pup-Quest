@@ -364,10 +364,11 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 			Bucket->BucketFill();
 		}
 	}
-	else if (OtherActor->IsA(ABarrelActor::StaticClass()) && bHoldingBucket == true) {
+	else if (OtherActor->IsA(ABarrelActor::StaticClass())) {
 		ABarrelActor* UBarrel = Cast<ABarrelActor>(OtherActor);
+		UE_LOG(LogTemp,Warning,TEXT("its a barrel"));
 		Barrel = UBarrel;
-		if(!UBarrel->IsLaying)
+		if(!UBarrel->IsLaying && bHoldingBucket)
 		{
 			if (Barrel->bBarrelFilled == false && Bucket->bBucketFilled == true) {
 				Barrel->BarrelFill();
