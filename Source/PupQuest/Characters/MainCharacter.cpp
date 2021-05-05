@@ -424,6 +424,8 @@ void AMainCharacter::AttackStart()
 {
 	AttackBoxComponent->SetGenerateOverlapEvents(true);
 	bIsAttacking = true;
+	UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
+
 }
 
 void AMainCharacter::AttackEnd()

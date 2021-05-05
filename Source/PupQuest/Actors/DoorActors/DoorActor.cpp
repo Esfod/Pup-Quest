@@ -35,7 +35,7 @@ void ADoorActor::OpenDoor(float DeltaTime)
 	
 	if(bOpenDoor && !CloseDoorOverride)
 	{
-		UE_LOG(LogTemp,Warning,TEXT("åpne"));
+		//UE_LOG(LogTemp,Warning,TEXT("åpne"));
 		if(Current==Initial)
 		{
 			UGameplayStatics::PlaySoundAtLocation(this, OpenDoorSound, GetActorLocation());
@@ -45,7 +45,7 @@ void ADoorActor::OpenDoor(float DeltaTime)
 	}
 	else
 	{
-		UE_LOG(LogTemp,Warning,TEXT("Lukke"));
+		//UE_LOG(LogTemp,Warning,TEXT("Lukke"));
 		if(Current==MoveLength)
 		{
 			UGameplayStatics::PlaySoundAtLocation(this, CloseDoorSound, GetActorLocation());
