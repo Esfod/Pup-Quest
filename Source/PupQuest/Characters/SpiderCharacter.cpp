@@ -2,9 +2,9 @@
 
 
 #include "SpiderCharacter.h"
-
-#include "GameFramework/PawnMovementComponent.h"
 #include "PupQuest/Actors/BrazierActor.h"
+#include "DrawDebugHelpers.h"
+#include "GameFramework/PawnMovementComponent.h"
 
 ASpiderCharacter::ASpiderCharacter()
 {
@@ -16,7 +16,7 @@ void ASpiderCharacter::BeginPlay()
 	Super::BeginPlay();
 	if(!ComplexSpider)
 	{
-		RunDirecton = GetActorLocation() + RunToLocation;
+		RunDirecton = RunToLocation-GetActorLocation();
 		RunDirecton.Normalize();
 	}
 }
@@ -64,8 +64,10 @@ void ASpiderCharacter::Tick(float DeltaSeconds)
 
 void ASpiderCharacter::Run()
 {
-	AddMovementInput(RunDirecton, 1);
+	SetActorLocation(GetActorLocation() + RunDirecton*600*GetWorld()->DeltaTimeSeconds);
 	SetActorRotation(RunDirecton.Rotation());
+	//DrawDebugLine(GetWorld(),GetActorLocation(),RunToLocation,FColor::Blue,false,2,1,3);
+	if(GetActorLocation().Y > RunToLocation.Y) Destroy();
 }
 
 void ASpiderCharacter::Attack(float OwnerDamage)
