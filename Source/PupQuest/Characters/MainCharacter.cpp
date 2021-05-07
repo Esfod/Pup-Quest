@@ -212,6 +212,7 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 			ItemLocationAdjustment = FVector(0.f, 0.f, -10.f);//Adjusts the height of the plank when it gets dropped
 			bHoldingPlank = false;
 			UE_LOG(LogTemp, Warning, TEXT("Plank dropped"));
+			Plank->SetActorEnableCollision(true);
 			DroppedItem = Plank;
 		}
 		else if (Item == Torch) {
@@ -220,6 +221,7 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 			bHoldingTorch = false;
 			Torch->TorchFlameOff();
 			UE_LOG(LogTemp, Warning, TEXT("Torch dropped"));
+			Torch->SetActorEnableCollision(true);
 			DroppedItem = Torch;
 		}
 		else if (Item == Bucket) {
@@ -227,6 +229,7 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 			ItemLocationAdjustment = FVector(0.f, 0.f, -3.f) + GetMesh()->GetRightVector() * 50;//Adjusts the height of the bucket when it gets dropped
 			bHoldingBucket = false;
 			UE_LOG(LogTemp, Warning, TEXT("Bucket dropped"));
+			Bucket->SetActorEnableCollision(true);
 			DroppedItem = Bucket;
 		}
 
@@ -299,7 +302,7 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 		if (bHoldingTorch == true) {//If the character is holding a torch
 			if (Torch->bTorchActorLit == true) {//If torch is lit
 				Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach torch fra main character
-				Torch->SetActorEnableCollision(true);//Turns on collision
+				Torch->SetActorEnableCollision(false);//Turns on collision
 				Torch->SetActorLocation(TorchHolder->GetTorchPlacementPoint().GetLocation());//Sets torch in the right location
 				Torch->SetActorRotation(TorchHolder->GetTorchPlacementPoint().GetRotation());//Gives torch the right rotation
 
