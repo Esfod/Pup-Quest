@@ -93,11 +93,7 @@ void AMainCharacter::BeginPlay()
 
 	AttackBoxComponent->SetGenerateOverlapEvents(false);
 	HitBox->SetGenerateOverlapEvents(false);
-	//FGetAudioListenerPos();
-	//APlayerController::SetAudioListenerAttenuationOverride;
-	//APlayerController::SetAudioListenerOverride;
 
-	UGameplayStatics::PlaySoundAtLocation(this, LookingForNolan, GetActorLocation());
 	UGameplayStatics::PlaySoundAtLocation(this, NolanBarking, GetActorLocation());
 	UGameplayStatics::PlaySoundAtLocation(this, AmbienceSound, GetActorLocation());
 }
@@ -385,7 +381,6 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 	}
 	else if (OtherActor->IsA(ASecretChestActor::StaticClass())) {//If it is a brazier
 	ASecretChestActor* Chest = Cast<ASecretChestActor>(OtherActor);
-	UE_LOG(LogTemp, Warning, TEXT("Chest Found!"));
 	Chest->OpenChest();
 	}
 }
@@ -484,6 +479,7 @@ void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent
 
 void AMainCharacter::PlayerTakeDamage(float DamageTaken)
 {
+	UGameplayStatics::PlaySoundAtLocation(this, TakingDamage, GetActorLocation());
 	Health -= DamageTaken;
 	if(Health < 0.f)
 		Health =  0.f;

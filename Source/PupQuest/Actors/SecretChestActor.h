@@ -43,6 +43,22 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* OpenSound;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* Angelic;
+
+	bool bPotatoFound = false;
+
+	bool bBeetrootFound = false;
+
+	bool bCarrotFound = false;
+
+	bool bOpened = false;
+
+	//UFUNCTION(BlueprintCallable)
+	//	int GetChestActor(int Secret);
+
+
 	/*
 	secrets = 3
 	if openchest

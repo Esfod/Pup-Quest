@@ -8,7 +8,7 @@
 #include "Components/BoxComponent.h"
 #include "DrawDebugHelpers.h"
 #include "BrazierActor.h"
-
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -60,6 +60,8 @@ void ASpiderWebActor::StartBurnWeb() {
 
 	Flame->SetVisibility(true);
 	LightSorce->SetVisibility(true);
+
+	UGameplayStatics::PlaySoundAtLocation(this, BurnWeb, GetActorLocation());
 
 	GetWorld()->GetTimerManager().SetTimer(TimeGone, this, &ASpiderWebActor::EndBurnWeb, 1.f, false);
 }

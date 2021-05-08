@@ -38,9 +38,6 @@ private:
 	USoundBase* PlaceItem;
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
-	USoundBase* LookingForNolan;
-
-	UPROPERTY(EditAnywhere, Category = "Effects")
 	USoundBase* NolanBarking;
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
@@ -65,6 +62,8 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* LightBrazier;
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* TakingDamage;
 
 	void RegainHealth(float DeltaTime);
 public:
