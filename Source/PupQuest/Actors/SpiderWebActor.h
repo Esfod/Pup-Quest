@@ -30,6 +30,9 @@ public:
 
 	void EndBurnWeb(); 
 
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* BurnWeb;
+
 private:
 
 	UFUNCTION()

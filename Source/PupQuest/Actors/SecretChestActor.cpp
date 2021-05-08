@@ -41,10 +41,32 @@ UStaticMeshComponent* ASecretChestActor::GetChestTopMesh() {
 //}
 
 void ASecretChestActor::OpenChest() {
-	GetChestTopMesh()->SetRelativeRotation(FRotator(0.f, 0.f, -50.f));
-	SecretsFound++;
-	UGameplayStatics::PlaySoundAtLocation(this, OpenSound, GetActorLocation());
-	if (SecretName == TEXT("Potato")) {
-		UE_LOG(LogTemp, Warning, TEXT("Well done!"));
+	if (bOpened == false) {
+		GetChestTopMesh()->SetRelativeRotation(FRotator(0.f, 0.f, -50.f));
+		SecretsFound++;
+		UE_LOG(LogTemp, Warning, TEXT("Secrets found: %d"), SecretsFound);
+
+		UGameplayStatics::PlaySoundAtLocation(this, OpenSound, GetActorLocation());
+		UGameplayStatics::PlaySoundAtLocation(this, Angelic, GetActorLocation());
+
+
+		if (SecretName == TEXT("Potato")) {
+			UE_LOG(LogTemp, Warning, TEXT("You found the Elinors Potato!"));
+			bPotatoFound = true;
+		}
+		else if (SecretName == TEXT("Beetroot")) {
+			UE_LOG(LogTemp, Warning, TEXT("You found the Beetroot!"));
+			bBeetrootFound = true;
+		}
+		else if (SecretName == TEXT("Carrot")) {
+			UE_LOG(LogTemp, Warning, TEXT("You found the Carrot!"));
+			bCarrotFound = true;
+		}
+		bOpened = true;
 	}
 }
+//int ASecretChestActor::GetChestActor()
+//{
+//	int Secrets = SecretsFound;
+//	return Secrets;
+//}
