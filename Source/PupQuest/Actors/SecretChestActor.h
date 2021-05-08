@@ -25,7 +25,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* ChestTop;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		int SecretsFound = 0;
+		int32 SecretsFound = 0;
 
 	//virtual void OpenChest(float DeltaTime) override;
 

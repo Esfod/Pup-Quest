@@ -406,6 +406,7 @@ void AMainCharacter::IsPushing()
 {
 	if (Pushing == 1)
 	{
+		HitBox->SetGenerateOverlapEvents(false);
 		UE_LOG(LogTemp, Warning, TEXT("Started Pushing"));
 		Pushing++;
 		GetCharacterMovement()->bOrientRotationToMovement = false;
@@ -413,6 +414,7 @@ void AMainCharacter::IsPushing()
 	}
 	else if (Pushing == 2)
 	{
+		HitBox->SetGenerateOverlapEvents(true);
 		UE_LOG(LogTemp, Warning, TEXT("Stopped Pushing"));
 		Pushing--;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
