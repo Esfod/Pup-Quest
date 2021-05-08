@@ -15,7 +15,6 @@ class PUPQUEST_API ABaseDoorActor : public AActor
 {
 	GENERATED_BODY()
 	
-private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* StaticMeshComp { nullptr };
 
@@ -37,27 +36,35 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "TorchHolder")
 	APressurePlate_Actor* PressurePlate_Actor { nullptr };
 	
-	UPROPERTY(EditAnywhere,Category="Variables")
-	float MoveLength{300.f};
+	UPROPERTY(EditAnywhere,Category = "Variables")
+	float TotalMoveLength{90.f};
 
 	UPROPERTY(EditAnywhere,Category="Variables")
 	float DoorOpenSpeed{5.f};
 	
 	UPROPERTY(EditAnywhere,Category="Variables")
 	float DoorCloseSpeed{7.5f};
-	
+
 	float Current;
 	float Initial;
-	bool bOpenDoor;
+	
+	UPROPERTY(EditAnywhere,Category="Variables")
+	bool IsDoorOpen {false};
 
 	bool CloseDoorOverride {false};
-	
+
+	bool bOpenDoor;
 	int32 TypeOfDoor { 0 };
 
 	virtual void BeginPlay() override;
 	
 	virtual void OpenDoor(float DeltaTime);
-public:
+
+	UPROPERTY(EditAnywhere, Category="Sound")
+		USoundBase* OpenDoorSound {nullptr};
+	UPROPERTY(EditAnywhere, Category="Sound")
+		USoundBase* CloseDoorSound {nullptr};
+	public:
 	ABaseDoorActor();
 	
 	virtual void Tick(float DeltaTime) override;

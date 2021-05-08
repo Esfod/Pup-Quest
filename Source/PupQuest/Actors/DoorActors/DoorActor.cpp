@@ -18,13 +18,12 @@ void ADoorActor::BeginPlay()
 
 	Initial = GetActorRotation().Yaw;
 	Current = Initial;
-	MoveLength += Initial;
+	TotalMoveLength += Initial;
 }
 
 void ADoorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime); 
-	
 	OpenDoor(DeltaTime);
 }
 
@@ -35,28 +34,25 @@ void ADoorActor::OpenDoor(float DeltaTime)
 	
 	if(bOpenDoor && !CloseDoorOverride)
 	{
-		//UE_LOG(LogTemp,Warning,TEXT("åpne"));
-		if(Current==Initial)
+		if(!IsDoorOpen)
 		{
 			UGameplayStatics::PlaySoundAtLocation(this, OpenDoorSound, GetActorLocation());
+			IsDoorOpen = true;
 		}
-		Current = FMath::Lerp(Current, MoveLength, DeltaTime * DoorOpenSpeed); //Open Door
-		if(MoveLength > 0.f && Current+1 >= MoveLength+Initial) Current = MoveLength;//|| MoveLength < 0.f && Current <= MoveLength+1
+		Current = FMath::Lerp(Current, TotalMoveLength, DeltaTime * DoorOpenSpeed); //Open Door
 	}
 	else
 	{
-		//UE_LOG(LogTemp,Warning,TEXT("Lukke"));
-		if(Current==MoveLength)
+		if(IsDoorOpen)
 		{
 			UGameplayStatics::PlaySoundAtLocation(this, CloseDoorSound, GetActorLocation());
+			IsDoorOpen = false;
 		}
-		Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Open Door
-		if(MoveLength > 0.f && Current-1 <= Initial) Current = Initial; //|| MoveLength < 0.f && Current <= Initial+1
+		Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Close Door
 	}
 	
 	FRotator DoorRotator = GetActorRotation();
 	DoorRotator.Yaw = Current;
 	SetActorRotation(DoorRotator);
-
 }
 

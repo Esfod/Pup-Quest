@@ -17,7 +17,7 @@ void AGateActor::BeginPlay()
 	
 	Initial = GetActorLocation().Z;
 	Current = Initial;
-	MoveLength += Initial;
+	TotalMoveLength += Initial;
 }
 
 void AGateActor::Tick(float DeltaTime)
@@ -31,7 +31,7 @@ void AGateActor::OpenDoor(float DeltaTime)
 	Super::OpenDoor(DeltaTime);
 	if(bOpenDoor)
 	{
-		Current = FMath::Lerp(Current, MoveLength, DeltaTime * DoorOpenSpeed); //Open Door
+		Current = FMath::Lerp(Current, TotalMoveLength, DeltaTime * DoorOpenSpeed); //Open Door
 	}
 	else
 	{

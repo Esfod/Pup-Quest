@@ -14,7 +14,7 @@ void ABridgeActor::BeginPlay()
 
 	Initial = GetActorRotation().Roll;
 	Current = Initial;
-	MoveLength += Initial;
+	TotalMoveLength += Initial;
 }
 
 void ABridgeActor::Tick(float DeltaTime)
@@ -27,12 +27,22 @@ void ABridgeActor::Tick(float DeltaTime)
 void ABridgeActor::OpenDoor(float DeltaTime)
 {
 	Super::OpenDoor(DeltaTime);
-	if(bOpenDoor)
+	if(bOpenDoor && !CloseDoorOverride)
 	{
-		Current = FMath::Lerp(Current, MoveLength, DeltaTime * DoorOpenSpeed); //Open Door
+		if(!IsDoorOpen)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, OpenDoorSound, GetActorLocation());
+			IsDoorOpen = true;
+		}
+		Current = FMath::Lerp(Current, TotalMoveLength, DeltaTime * DoorOpenSpeed); //Open Door
 	}
 	else
 	{
+		if(IsDoorOpen)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, CloseDoorSound, GetActorLocation());
+			IsDoorOpen = false;
+		}
 		Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Open Door
 	}
 	FRotator DoorRotator = GetActorRotation();
