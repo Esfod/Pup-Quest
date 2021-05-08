@@ -27,7 +27,7 @@ void ABarrelActor::CheckIfOnPressurePlate()
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 	TArray<AActor*> OverlappedActors;
 	TArray<AActor*> ActorsToIgnore;
-	DrawDebugBox(GetWorld(),GetActorLocation() + FVector(0.f,0,-120.f) , FVector(50.f), FColor::Red, true,2);
+	//DrawDebugBox(GetWorld(),GetActorLocation() + FVector(0.f,0,-120.f) , FVector(50.f), FColor::Red, true,2);
 	UKismetSystemLibrary::BoxOverlapActors(GetWorld(), GetActorLocation() + FVector(0.f,0,-120.f) , FVector(50.f), ObjectTypes, nullptr, ActorsToIgnore, OverlappedActors);
 
 	for (AActor* Actor : OverlappedActors)
