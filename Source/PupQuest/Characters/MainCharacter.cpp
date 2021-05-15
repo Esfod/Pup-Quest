@@ -472,7 +472,6 @@ void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent
 		UE_LOG(LogTemp,Warning,TEXT("Player hits Ant"));
 		if(bHoldingBucket && Bucket->bBucketFilled)
 		{
-			UGameplayStatics::PlaySoundAtLocation(this, AttackBucket, GetActorLocation());
 			AAntCharacter* AntCharacter = Cast<AAntCharacter>(OtherActor);
 			AntCharacter->AntGettingHit();
 			Bucket->bBucketFilled = false;
