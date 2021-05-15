@@ -59,6 +59,8 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* AttackTorch;
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* AttackBucket;
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* LightBrazier;
