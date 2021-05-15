@@ -65,8 +65,11 @@ void ASecretChestActor::OpenChest() {
 		bOpened = true;
 	}
 }
-//int ASecretChestActor::GetChestActor()
-//{
-//	int Secrets = SecretsFound;
-//	return Secrets;
-//}
+
+
+int ASecretChestActor::GetChestActor()
+{
+	int Secret = SecretsFound;
+	return Secret;
+}
+
