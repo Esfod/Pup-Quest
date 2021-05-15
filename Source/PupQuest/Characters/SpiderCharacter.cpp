@@ -5,6 +5,8 @@
 #include "PupQuest/Actors/BrazierActor.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/PawnMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+
 
 ASpiderCharacter::ASpiderCharacter()
 {
@@ -77,6 +79,7 @@ void ASpiderCharacter::Attack(float OwnerDamage)
 
 void ASpiderCharacter::SpiderGettingHit(int32 ObjectInHand)
 {
+	UGameplayStatics::PlaySoundAtLocation(this, TakingDamage, GetActorLocation());
 	switch (ObjectInHand)
 	{
 		case 0:
