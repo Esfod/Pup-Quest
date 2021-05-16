@@ -11,10 +11,14 @@ ALevelEndTrigger::ALevelEndTrigger()
 	OnActorBeginOverlap.AddDynamic(this, &ALevelEndTrigger::OnOverlap);
 }
 
+void ALevelEndTrigger::ChangeLevel() {
+	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
+	GameInstance->NewSpawn = false;
+	UGameplayStatics::OpenLevel(this, NextLevel, false);
+}
+
+
 void ALevelEndTrigger::OnOverlap(class AActor* OverlappedActor, class AActor* OtherActor) {
-	if (OtherActor->IsA(AMainCharacter::StaticClass())) {
-		UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
-		GameInstance->NewSpawn = false;
-		UGameplayStatics::OpenLevel(this, NextLevel, false);
-	}
+	if (OtherActor->IsA(AMainCharacter::StaticClass()))
+		ChangeLevel();
 }

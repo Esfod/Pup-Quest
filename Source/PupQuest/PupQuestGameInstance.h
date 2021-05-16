@@ -13,9 +13,12 @@ class PUPQUEST_API UPupQuestGameInstance : public UGameInstance
 	
 public:
 	UPROPERTY()
-		FVector RespawnPoint = FVector(11000.f, 9490.f, 620.f);
+		FVector RespawnPoint;
 
 	bool NewSpawn = false;
 
-	bool GameStarted = false;
+	bool bGameStarted = false;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		int32 SecretsFound = 0;
 };
