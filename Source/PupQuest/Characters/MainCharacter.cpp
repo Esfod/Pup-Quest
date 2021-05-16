@@ -423,7 +423,7 @@ void AMainCharacter::AttackStart()
 {
 	AttackBoxComponent->SetGenerateOverlapEvents(true);
 	bIsAttacking = true;
-	UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
+	//UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
 
 }
 
@@ -441,7 +441,7 @@ void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent
 		UE_LOG(LogTemp,Warning,TEXT("Player hits Spider"));
 		if(bHoldingTorch)
 		{
-			//UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
+			UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
 			if (bTorchLit) { //torch on fire
 				SpiderHit->SpiderGettingHit(2);
 
@@ -449,10 +449,13 @@ void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent
 			else //torch not on fire
 				SpiderHit->SpiderGettingHit(1);
 		}
-		else if(bHoldingPlank) //plank
+		else if (bHoldingPlank) { //plank
+			UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
 			SpiderHit->SpiderGettingHit(3);
+		}
 		else if(bHoldingBucket)
 		{
+			UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
 			if(!Bucket->bBucketFilled)
 				SpiderHit->SpiderGettingHit(4);
 			else
