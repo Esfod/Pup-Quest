@@ -91,7 +91,7 @@ private:
 public:
 	AMainCharacter();
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float Health {0.f};
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
