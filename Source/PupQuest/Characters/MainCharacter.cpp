@@ -82,7 +82,7 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	Health = 100.f;
+	Health = MaxHealth;
 
 	//(F.M)If the player has passed through a checkpoint, the player will instantly teleport to that location when respawning
 	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
