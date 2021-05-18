@@ -47,6 +47,9 @@ protected:
 
 	UPROPERTY(EditAnywhere,Category="Run")
 	FVector RunToLocation {0.f};
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* TakingDamage;
 private:
 	float Timer {0.f};
 

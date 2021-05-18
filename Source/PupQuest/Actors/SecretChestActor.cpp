@@ -3,6 +3,8 @@
 
 #include "SecretChestActor.h"
 #include "Kismet/GameplayStatics.h"
+#include <Runtime/Engine/Classes/Kismet/GameplayStatics.h>
+#include "PupQuest/PupQuestGameInstance.h"
 
 // Sets default values
 ASecretChestActor::ASecretChestActor()
@@ -43,15 +45,17 @@ UStaticMeshComponent* ASecretChestActor::GetChestTopMesh() {
 void ASecretChestActor::OpenChest() {
 	if (bOpened == false) {
 		GetChestTopMesh()->SetRelativeRotation(FRotator(0.f, 0.f, -50.f));
+		UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
+		GameInstance->SecretsFound++;
 		SecretsFound++;
-		UE_LOG(LogTemp, Warning, TEXT("Secrets found: %d"), SecretsFound);
+		UE_LOG(LogTemp, Warning, TEXT("Secrets found: %d"), GameInstance->SecretsFound);
 
 		UGameplayStatics::PlaySoundAtLocation(this, OpenSound, GetActorLocation());
 		UGameplayStatics::PlaySoundAtLocation(this, Angelic, GetActorLocation());
 
 
 		if (SecretName == TEXT("Potato")) {
-			UE_LOG(LogTemp, Warning, TEXT("You found the Elinors Potato!"));
+			UE_LOG(LogTemp, Warning, TEXT("You found Elinors Potato!"));
 			bPotatoFound = true;
 		}
 		else if (SecretName == TEXT("Beetroot")) {
@@ -70,6 +74,8 @@ void ASecretChestActor::OpenChest() {
 int ASecretChestActor::GetChestActor()
 {
 	int Secret = SecretsFound;
+	//UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
+	//int Secret = GameInstance->SecretsFound;
 	return Secret;
 }
 

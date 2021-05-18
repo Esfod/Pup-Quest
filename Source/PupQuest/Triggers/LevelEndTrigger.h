@@ -20,4 +20,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Next Level")
 		FName NextLevel;
+
+	UFUNCTION(BlueprintCallable)
+	void ChangeLevel();
 };
