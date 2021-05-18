@@ -69,7 +69,7 @@ private:
 public:
 	AMainCharacter();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere)
 	float Health {0.f};
 
 	float RegainHealthTimer{0.f};
