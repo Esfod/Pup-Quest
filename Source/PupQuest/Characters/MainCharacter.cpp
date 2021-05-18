@@ -30,6 +30,7 @@
 #include "PupQuest/Characters/AntCharacter.h"
 
 #include "Kismet/GameplayStatics.h"
+#include "Components/AudioComponent.h"
 
 #include "MediaPlayer.h"
 
@@ -56,6 +57,22 @@ AMainCharacter::AMainCharacter()
 	//AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("Attack_Box_Attach")); //TODO Add when attack-animation is implemented
 	AttackBoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlapAttackBox);
 	AttackBoxComponent->SetGenerateOverlapEvents(false);
+
+	PushingBarrelSound = CreateDefaultSubobject<UAudioComponent>(TEXT("PushingBarrelSound"));
+	PushingBarrelSound->SetupAttachment(RootComponent);
+	PushingBarrelSound->SetSound(PushingBarrelSoundBase);
+
+	MenuMusic = CreateDefaultSubobject<UAudioComponent>(TEXT("MenuMusic"));
+	MenuMusic->SetupAttachment(RootComponent);
+	MenuMusic->SetSound(MenuMusicBase);
+
+	IntroSound = CreateDefaultSubobject<UAudioComponent>(TEXT("IntroSound"));
+	IntroSound->SetupAttachment(RootComponent);
+	IntroSound->SetSound(IntroSoundBase);
+
+	CutsceneSound = CreateDefaultSubobject<UAudioComponent>(TEXT("CutsceneSound"));
+	CutsceneSound->SetupAttachment(RootComponent);
+	CutsceneSound->SetSound(CutsceneSoundBase);
 }
 
 void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -87,6 +104,7 @@ void AMainCharacter::BeginPlay()
 	//(F.M)If the player has passed through a checkpoint, the player will instantly teleport to that location when respawning
 	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
 
+	UE_LOG(LogTemp, Warning, TEXT("Game started is %s"), GameInstance->bGameStarted ? TEXT("true") : TEXT("false"));
 	if (GameInstance->NewSpawn == true) {
 		SetActorLocation(FVector(GameInstance->RespawnPoint));
 	}
@@ -96,6 +114,15 @@ void AMainCharacter::BeginPlay()
 
 	UGameplayStatics::PlaySoundAtLocation(this, NolanBarking, GetActorLocation());
 	UGameplayStatics::PlaySoundAtLocation(this, AmbienceSound, GetActorLocation());
+
+	PushingBarrelSound->Stop();//The sound started playing when the game started for some reason, so i just decided to stop the sound in begin play
+
+	IntroSound->Stop();
+	CutsceneSound->Stop();
+
+	if (GameInstance->bGameStarted == true) {
+		MenuMusic->Stop();
+	}
 }
 
 void AMainCharacter::Tick(float DeltaTime)
@@ -404,6 +431,16 @@ ABucketActor* AMainCharacter::GetBucketActor()
 	return nullptr;
 }
 
+UPupQuestGameInstance* AMainCharacter::GetChestActor()
+{
+	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
+	
+	if (GameInstance != nullptr)
+		return GameInstance;
+
+	return nullptr;
+}
+
 void AMainCharacter::IsPushing()
 {
 	if (Pushing == 1)
@@ -412,9 +449,12 @@ void AMainCharacter::IsPushing()
 		Pushing++;
 		GetCharacterMovement()->bOrientRotationToMovement = false;
 		GetCharacterMovement()->bUseControllerDesiredRotation = false;
+		//UGameplayStatics::PlaySoundAtLocation(this, PushingBarrelSound, GetActorLocation());
+		PushingBarrelSound->Play(0.f);
 	}
 	else if (Pushing == 2)
 	{
+		PushingBarrelSound->Stop();
 		UE_LOG(LogTemp, Warning, TEXT("Stopped Pushing"));
 		Pushing--;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -426,7 +466,7 @@ void AMainCharacter::AttackStart()
 {
 	AttackBoxComponent->SetGenerateOverlapEvents(true);
 	bIsAttacking = true;
-	UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
+	//UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
 
 }
 
@@ -444,7 +484,7 @@ void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent
 		UE_LOG(LogTemp,Warning,TEXT("Player hits Spider"));
 		if(bHoldingTorch)
 		{
-			//UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
+			UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
 			if (bTorchLit) { //torch on fire
 				SpiderHit->SpiderGettingHit(2);
 
@@ -452,10 +492,13 @@ void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent
 			else //torch not on fire
 				SpiderHit->SpiderGettingHit(1);
 		}
-		else if(bHoldingPlank) //plank
+		else if (bHoldingPlank) { //plank
+			UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
 			SpiderHit->SpiderGettingHit(3);
+		}
 		else if(bHoldingBucket)
 		{
+			UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
 			if(!Bucket->bBucketFilled)
 				SpiderHit->SpiderGettingHit(4);
 			else
@@ -503,7 +546,7 @@ void AMainCharacter::HandleDeath()
 	Super::HandleDeath();
 
 	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
-	GameInstance->GameStarted = true;
+	GameInstance->bGameStarted = true;
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);//Restarts level
 }
 
@@ -519,4 +562,9 @@ void AMainCharacter::IsCharacterDead()
 void AMainCharacter::UnlimtedHealth()
 {
 	Health = 1000000000.f;
+}
+
+void AMainCharacter::StopMenuMusic() 
+{
+	MenuMusic->Stop();
 }

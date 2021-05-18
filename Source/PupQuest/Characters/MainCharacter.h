@@ -15,6 +15,7 @@ class ABrazierActor;
 class ABucketActor;
 class AWellActor;
 class ABarrelActor;
+class UPupQuestGameInstance;
 
 UCLASS()
 class PUPQUEST_API AMainCharacter : public ABaseCharacter
@@ -65,12 +66,36 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* TakingDamage;
 
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* PushingBarrelSoundBase;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
+	class UAudioComponent* PushingBarrelSound;
+
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* MenuMusicBase;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
+		class UAudioComponent* MenuMusic;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* IntroSoundBase;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
+		class UAudioComponent* IntroSound;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* CutsceneSoundBase;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
+		class UAudioComponent* CutsceneSound;
+
 	void RegainHealth(float DeltaTime);
 public:
 	AMainCharacter();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float Health {0.f};
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
+	bool bPushingBarrel = true;
 
 	float RegainHealthTimer{0.f};
 	
@@ -83,6 +108,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	ABucketActor* GetBucketActor();
+
+	UFUNCTION(BlueprintCallable)
+		UPupQuestGameInstance* GetChestActor();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bTorchLit {false};//See if the torch is lit or not
@@ -123,6 +151,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void IsPushing();
+
+	UFUNCTION(BlueprintCallable)
+		void StopMenuMusic();
 	
 	UFUNCTION()
 	void AttachItem(AActor* Item);
