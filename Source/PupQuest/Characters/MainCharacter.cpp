@@ -45,7 +45,7 @@ AMainCharacter::AMainCharacter()
 	SpringArm->bDoCollisionTest = false;
 	SpringArm->bInheritYaw = false;
 
-	CameraComp  = CreateDefaultSubobject<UCameraComponent>("Camera Component");
+	CameraComp = CreateDefaultSubobject<UCameraComponent>("Camera Component");
 	CameraComp->SetupAttachment(SpringArm);
 
 	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
@@ -99,7 +99,7 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	Health = 100.f;
+	Health = MaxHealth;
 
 	//(F.M)If the player has passed through a checkpoint, the player will instantly teleport to that location when respawning
 	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
@@ -298,117 +298,120 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult& SweepResult) //(F.M)A box component that uses overlap event to detect items you can interact with
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
-	if (OtherActor->IsA(ATorchActor::StaticClass()) && !bHoldingTorch)//If it is a torch
+	if (Pushing == 1)
 	{
-		ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
-		Torch = TorchHit;
-		AttachItem(Torch);
-		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
-	}
-	else if (OtherActor->IsA(APlankActor::StaticClass()) && !bHoldingPlank)//If it is a plank
-	{
-		APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
-		Plank = PlankHit;
-		AttachItem(Plank);
-	}
-	else if (OtherActor->IsA(ABucketActor::StaticClass()) && !bHoldingBucket)//If it is a bucket
-	{
-		ABucketActor* BucketHit = Cast<ABucketActor>(OtherActor);
-		Bucket = BucketHit;
-		AttachItem(Bucket);
-	}
-	else if (OtherActor->IsA(ATorchHolderActor::StaticClass()))//If it is a torch holder
-	{
-		ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(OtherActor);
-
-		if (bHoldingTorch == true) {//If the character is holding a torch
-			if (Torch->bTorchActorLit == true) {//If torch is lit
-				Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach torch fra main character
-				Torch->SetActorEnableCollision(false);//Turns on collision
-				Torch->SetActorLocation(TorchHolder->GetTorchPlacementPoint().GetLocation());//Sets torch in the right location
-				Torch->SetActorRotation(TorchHolder->GetTorchPlacementPoint().GetRotation());//Gives torch the right rotation
-
-				TorchHolder->SetTorchActor(Torch);
-
-				DroppedItem = Torch;
-				UE_LOG(LogTemp, Warning, TEXT("%s"), *Torch->GetName());
-				bHoldingTorch = false;
-				//Torch->TorchFlameOn();//There was a bug here where the torch will turn off if you place it in a torch holder, so we just turn it on again here
-			}
-			else UE_LOG(LogTemp, Warning, TEXT("Door will not open because the torch is not lit"));
-		}
-		else if (TorchHolder->GetTorchActor() != nullptr)
-		{
-			Torch = TorchHolder->GetTorchActor();
-			TorchHolder->SetTorchActor(nullptr);
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *Torch->GetName());
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
+		if (OtherActor->IsA(ATorchActor::StaticClass()) && !bHoldingTorch)//If it is a torch
+			{
+			ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
+			Torch = TorchHit;
 			AttachItem(Torch);
 			UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
-		}
-	}
-	else if (OtherActor->IsA(ASpiderWebActor::StaticClass()) && bHoldingTorch == true)//If it is a spider web
-	{
-		if (Torch->bTorchActorLit == true)
-		{
-			if (Torch->bTorchActorLit == true) {//If the torch is lit
-				ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
-				if (Web->bBurning == false) {//If the web is not already burning
-					Web->StartBurnWeb();
+			}
+		else if (OtherActor->IsA(APlankActor::StaticClass()) && !bHoldingPlank)//If it is a plank
+			{
+			APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
+			Plank = PlankHit;
+			AttachItem(Plank);
+			}
+		else if (OtherActor->IsA(ABucketActor::StaticClass()) && !bHoldingBucket)//If it is a bucket
+			{
+			ABucketActor* BucketHit = Cast<ABucketActor>(OtherActor);
+			Bucket = BucketHit;
+			AttachItem(Bucket);
+			}
+		else if (OtherActor->IsA(ATorchHolderActor::StaticClass()))//If it is a torch holder
+			{
+			ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(OtherActor);
+
+			if (bHoldingTorch == true) {//If the character is holding a torch
+				if (Torch->bTorchActorLit == true) {//If torch is lit
+					Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach torch fra main character
+					Torch->SetActorEnableCollision(false);//Turns on collision
+					Torch->SetActorLocation(TorchHolder->GetTorchPlacementPoint().GetLocation());//Sets torch in the right location
+					Torch->SetActorRotation(TorchHolder->GetTorchPlacementPoint().GetRotation());//Gives torch the right rotation
+
+					TorchHolder->SetTorchActor(Torch);
+
+					DroppedItem = Torch;
+					UE_LOG(LogTemp, Warning, TEXT("%s"), *Torch->GetName());
+					bHoldingTorch = false;
+					//Torch->TorchFlameOn();//There was a bug here where the torch will turn off if you place it in a torch holder, so we just turn it on again here
+				}
+				else UE_LOG(LogTemp, Warning, TEXT("Door will not open because the torch is not lit"));
+			}
+			else if (TorchHolder->GetTorchActor() != nullptr)
+			{
+				Torch = TorchHolder->GetTorchActor();
+				TorchHolder->SetTorchActor(nullptr);
+				UE_LOG(LogTemp, Warning, TEXT("%s"), *Torch->GetName());
+				AttachItem(Torch);
+				UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
+			}
+			}
+		else if (OtherActor->IsA(ASpiderWebActor::StaticClass()) && bHoldingTorch == true)//If it is a spider web
+			{
+			if (Torch->bTorchActorLit == true)
+			{
+				if (Torch->bTorchActorLit == true) {//If the torch is lit
+					ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
+					if (Web->bBurning == false) {//If the web is not already burning
+						Web->StartBurnWeb();
+					}
+				}
+			}
+			}
+		else if (OtherActor->IsA(ABrazierActor::StaticClass()) && bHoldingTorch == true) {//If it is a brazier
+			ABrazierActor* UBrazier = Cast<ABrazierActor>(OtherActor);
+			Brazier = UBrazier;
+			UE_LOG(LogTemp, Warning, TEXT("Brazier lit is %s"), Brazier->bBrazierLit ? TEXT("true") : TEXT("false"));
+			UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
+
+			if (Brazier->bBrazierLit == true) {//If brazier is lit
+				if (Torch->bTorchActorLit == true) {//If torch is lit
+					UE_LOG(LogTemp, Warning, TEXT("Brazier and torch is already lit"));
+				}
+				else {//If torch is not lit
+					Torch->TorchFlameOn();
+				}
+			}
+			else {//If brazier is not lit
+				if (Torch->bTorchActorLit == true) {//If torch is lit
+					Brazier->BrazierFlameOn();
+					UGameplayStatics::PlaySoundAtLocation(this, LightBrazier, GetActorLocation());
+				}
+				else {//If torch is not lit
+					UE_LOG(LogTemp, Warning, TEXT("Your Torch has to be lit to light the brazier"));
 				}
 			}
 		}
-	}
-	else if (OtherActor->IsA(ABrazierActor::StaticClass()) && bHoldingTorch == true) {//If it is a brazier
-		ABrazierActor* UBrazier = Cast<ABrazierActor>(OtherActor);
-		Brazier = UBrazier;
-		UE_LOG(LogTemp, Warning, TEXT("Brazier lit is %s"), Brazier->bBrazierLit ? TEXT("true") : TEXT("false"));
-		UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
-
-		if (Brazier->bBrazierLit == true) {//If brazier is lit
-			if (Torch->bTorchActorLit == true) {//If torch is lit
-				UE_LOG(LogTemp, Warning, TEXT("Brazier and torch is already lit"));
-			}
-			else {//If torch is not lit
-				Torch->TorchFlameOn();
+		else if (OtherActor->IsA(AWellActor::StaticClass()) && bHoldingBucket == true) {//If it is a well
+			AWellActor* UWell = Cast<AWellActor>(OtherActor);
+			Well = UWell;
+			if (Bucket->bBucketFilled == false) {
+				Bucket->BucketFill();
 			}
 		}
-		else {//If brazier is not lit
-			if (Torch->bTorchActorLit == true) {//If torch is lit
-				Brazier->BrazierFlameOn();
-				UGameplayStatics::PlaySoundAtLocation(this, LightBrazier, GetActorLocation());
+		else if (OtherActor->IsA(ABarrelActor::StaticClass())) {
+			ABarrelActor* UBarrel = Cast<ABarrelActor>(OtherActor);
+			UE_LOG(LogTemp,Warning,TEXT("its a barrel"));
+			Barrel = UBarrel;
+			if(!UBarrel->IsLaying && bHoldingBucket)
+			{
+				if (Barrel->bBarrelFilled == false && Bucket->bBucketFilled == true) {
+					Barrel->BarrelFill();
+					Bucket->BucketEmpty();
+				}
 			}
-			else {//If torch is not lit
-				UE_LOG(LogTemp, Warning, TEXT("Your Torch has to be lit to light the brazier"));
-			}
-		}
-	}
-	else if (OtherActor->IsA(AWellActor::StaticClass()) && bHoldingBucket == true) {//If it is a well
-		AWellActor* UWell = Cast<AWellActor>(OtherActor);
-		Well = UWell;
-		if (Bucket->bBucketFilled == false) {
-			Bucket->BucketFill();
-		}
-	}
-	else if (OtherActor->IsA(ABarrelActor::StaticClass())) {
-		ABarrelActor* UBarrel = Cast<ABarrelActor>(OtherActor);
-		UE_LOG(LogTemp,Warning,TEXT("its a barrel"));
-		Barrel = UBarrel;
-		if(!UBarrel->IsLaying && bHoldingBucket)
-		{
-			if (Barrel->bBarrelFilled == false && Bucket->bBucketFilled == true) {
-				Barrel->BarrelFill();
-				Bucket->BucketEmpty();
+			else if(Barrel->IsRotateble)
+			{
+				Barrel->RotateBarrel();
 			}
 		}
-		else if(Barrel->IsRotateble)
-		{
-			Barrel->RotateBarrel();
+		else if (OtherActor->IsA(ASecretChestActor::StaticClass())) {//If it is a brazier
+			ASecretChestActor* Chest = Cast<ASecretChestActor>(OtherActor);
+			Chest->OpenChest();
 		}
-	}
-	else if (OtherActor->IsA(ASecretChestActor::StaticClass())) {//If it is a brazier
-	ASecretChestActor* Chest = Cast<ASecretChestActor>(OtherActor);
-	Chest->OpenChest();
 	}
 }
 
@@ -442,7 +445,6 @@ void AMainCharacter::IsPushing()
 {
 	if (Pushing == 1)
 	{
-		HitBox->SetGenerateOverlapEvents(false);
 		UE_LOG(LogTemp, Warning, TEXT("Started Pushing"));
 		Pushing++;
 		GetCharacterMovement()->bOrientRotationToMovement = false;
@@ -452,8 +454,11 @@ void AMainCharacter::IsPushing()
 	}
 	else if (Pushing == 2)
 	{
+<<<<<<< HEAD
 		PushingBarrelSound->Stop();
 		HitBox->SetGenerateOverlapEvents(true);
+=======
+>>>>>>> parent of 66df772 (Revert "Merge branch 'Espen' into Minor-Main")
 		UE_LOG(LogTemp, Warning, TEXT("Stopped Pushing"));
 		Pushing--;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
