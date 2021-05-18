@@ -63,20 +63,4 @@ public:
 
 	//UFUNCTION(BlueprintCallable)
 	//	int GetChestActor(int Secret);
-
-
-	/*
-	secrets = 3
-	if openchest
-		check which chest
-		that chest secret = found
-		secretsfoundcounter ++
-	
-	
-	
-	
-	
-	*/
-
-
 };

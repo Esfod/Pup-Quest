@@ -14,6 +14,7 @@ ALevelEndTrigger::ALevelEndTrigger()
 void ALevelEndTrigger::ChangeLevel() {
 	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
 	GameInstance->NewSpawn = false;
+	GameInstance->bGameStarted = true;
 	UGameplayStatics::OpenLevel(this, NextLevel, false);
 }
 
