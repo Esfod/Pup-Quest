@@ -15,7 +15,14 @@ public:
 	UPROPERTY()
 		FVector RespawnPoint;
 
+	UPROPERTY(BlueprintReadWrite)
 	bool NewSpawn = false;
+
+	UPROPERTY(BlueprintReadWrite)
+		bool bIntroPlayed = false;
+
+	UPROPERTY(BlueprintReadWrite)
+		bool bGameRestarted = false;
 
 	UPROPERTY(BlueprintReadWrite)
 	bool bGameStarted = false;
