@@ -112,6 +112,12 @@ void AMainCharacter::BeginPlay()
 	//UE_LOG(LogTemp, Warning, TEXT("Game started is %s"), GameInstance->bGameStarted ? TEXT("true") : TEXT("false"));
 	if (GameInstance->NewSpawn == true) {
 		SetActorLocation(FVector(GameInstance->RespawnPoint));
+		if (*GetWorld()->GetName() == FName("TestMap")) {
+			UGameplayStatics::PlaySoundAtLocation(this, MusicLevel1, GetActorLocation());
+		}
+		if (*GetWorld()->GetName() == FName("Level2")) {
+			UGameplayStatics::PlaySoundAtLocation(this, MusicLevel2, GetActorLocation());
+		}
 	}
 	
 	NormalWalkMaxSpeed = GetMovementComponent()->GetMaxSpeed();

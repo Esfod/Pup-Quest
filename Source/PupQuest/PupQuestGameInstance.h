@@ -18,6 +18,12 @@ public:
 	bool NewSpawn = false;
 
 	UPROPERTY(BlueprintReadWrite)
+		bool bIntroPlayed = false;
+
+	UPROPERTY(BlueprintReadWrite)
+		bool bGameRestarted = false;
+
+	UPROPERTY(BlueprintReadWrite)
 	bool bGameStarted = false;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)

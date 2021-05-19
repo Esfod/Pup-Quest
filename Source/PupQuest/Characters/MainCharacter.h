@@ -49,6 +49,12 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 
 	//sounds
 	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* MusicLevel1;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* MusicLevel2;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
 	USoundBase* PlaceItem;
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
