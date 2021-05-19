@@ -15,6 +15,7 @@ public:
 	UPROPERTY()
 		FVector RespawnPoint;
 
+	UPROPERTY(BlueprintReadWrite)
 	bool NewSpawn = false;
 
 	UPROPERTY(BlueprintReadWrite)

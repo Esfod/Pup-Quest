@@ -109,7 +109,13 @@ void AMainCharacter::BeginPlay()
 	//(3001) If the player has passed through a checkpoint, the player will instantly teleport to that location when respawning
 	//=========================
 	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
-	//UE_LOG(LogTemp, Warning, TEXT("Game started is %s"), GameInstance->bGameStarted ? TEXT("true") : TEXT("false"));
+
+
+	UE_LOG(LogTemp, Warning, TEXT("Game started is %s"), GameInstance->bGameStarted ? TEXT("true") : TEXT("false"));
+	UE_LOG(LogTemp, Warning, TEXT("Game started is %s"), GameInstance->bGameRestarted ? TEXT("true") : TEXT("false"));
+	UE_LOG(LogTemp, Warning, TEXT("Game started is %s"), GameInstance->NewSpawn ? TEXT("true") : TEXT("false"));
+
+
 	if (GameInstance->NewSpawn == true) {
 		SetActorLocation(FVector(GameInstance->RespawnPoint));
 		if (*GetWorld()->GetName() == FName("TestMap")) {
