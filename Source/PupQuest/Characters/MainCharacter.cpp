@@ -321,11 +321,19 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 			AttachItem(Bucket);
 			}
 		else if (OtherActor->IsA(ATorchHolderActor::StaticClass()))//If it is a torch holder
-			{
+		{
 			ATorchHolderActor* TorchHolder = Cast<ATorchHolderActor>(OtherActor);
-
-			if (bHoldingTorch == true) {//If the character is holding a torch
-				if (Torch->bTorchActorLit == true) {//If torch is lit
+			if (TorchHolder->GetTorchActor() != nullptr && !bHoldingTorch)		//checks if the torchholder is full, and that the player dose not hold a torch
+				{
+				Torch = TorchHolder->GetTorchActor();							//gets the reference to the torchholder's torch and saves it
+				TorchHolder->SetTorchActor(nullptr);							//removes the refrence from the torchholder
+				UE_LOG(LogTemp, Warning, TEXT("%s"), *Torch->GetName());
+				AttachItem(Torch);												//attaches the torch from the torch holder to the player's hand
+				UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
+				}
+			else if (bHoldingTorch == true && Torch->bTorchActorLit == true)
+			{
+				//If the character is holding a torch and If torch is lit
 					Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach torch fra main character
 					Torch->SetActorEnableCollision(false);//Turns on collision
 					Torch->SetActorLocation(TorchHolder->GetTorchPlacementPoint().GetLocation());//Sets torch in the right location
@@ -337,18 +345,9 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 					UE_LOG(LogTemp, Warning, TEXT("%s"), *Torch->GetName());
 					bHoldingTorch = false;
 					//Torch->TorchFlameOn();//There was a bug here where the torch will turn off if you place it in a torch holder, so we just turn it on again here
-				}
-				else UE_LOG(LogTemp, Warning, TEXT("Door will not open because the torch is not lit"));
 			}
-			else if (TorchHolder->GetTorchActor() != nullptr)
-			{
-				Torch = TorchHolder->GetTorchActor();
-				TorchHolder->SetTorchActor(nullptr);
-				UE_LOG(LogTemp, Warning, TEXT("%s"), *Torch->GetName());
-				AttachItem(Torch);
-				UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
-			}
-			}
+			else UE_LOG(LogTemp, Warning, TEXT("Door will not open because the torch is not lit"));
+		}
 		else if (OtherActor->IsA(ASpiderWebActor::StaticClass()) && bHoldingTorch == true)//If it is a spider web
 			{
 			if (Torch->bTorchActorLit == true)

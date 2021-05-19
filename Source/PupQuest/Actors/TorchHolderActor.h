@@ -12,7 +12,6 @@ class PUPQUEST_API ATorchHolderActor : public AActor
 {
 	GENERATED_BODY()
 	
-private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* StaticMeshComp { nullptr };
 
@@ -24,20 +23,18 @@ private:
 
 
 protected:
-	virtual void BeginPlay() override;
 	
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bHasATorch {false};
 
 public:
 	ATorchHolderActor(); 
 
-	ATorchActor* GetTorchActor();
+	ATorchActor* GetTorchActor() const;
 
-	bool HasATorch();
+	bool HasATorch() const;
 	
 	void SetTorchActor(ATorchActor* TorchActor);
 	
-	FTransform GetTorchPlacementPoint();
+	FTransform GetTorchPlacementPoint() const;
 };

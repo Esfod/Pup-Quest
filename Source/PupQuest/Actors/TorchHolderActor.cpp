@@ -14,31 +14,27 @@ ATorchHolderActor::ATorchHolderActor()
 	TorchPlacementPoint->SetupAttachment(RootComponent);
 }
 
-void ATorchHolderActor::BeginPlay()
+
+ATorchActor* ATorchHolderActor::GetTorchActor() const
 {
-	Super::BeginPlay();
+	return TorchActor;          //returns the reference torch
 }
 
-ATorchActor* ATorchHolderActor::GetTorchActor()
+bool ATorchHolderActor::HasATorch()const
 {
-	return TorchActor;
-}
-
-bool ATorchHolderActor::HasATorch()
-{
-	return bHasATorch;
+	return bHasATorch;			//returns the bool variable to tell if this torchholder has a torch
 }
 
 void ATorchHolderActor::SetTorchActor(ATorchActor* NewTorchActor)
 {
-	TorchActor = NewTorchActor;
-	if(TorchActor)
-		bHasATorch = true;
-	else
-		bHasATorch = false;
+	TorchActor = NewTorchActor; //set the reference to a torch
+	if(TorchActor)              //if it gets a valid torch the torchholder will 
+		bHasATorch = true;      //update the bool so say it have a torch
+	else                        //if it gets a nullptr the torch will have been picked up    
+		bHasATorch = false;		//update the bool so say it does NOT have a torch     
 }
 
-FTransform ATorchHolderActor::GetTorchPlacementPoint() 
+FTransform ATorchHolderActor::GetTorchPlacementPoint() const 
 {
-	return TorchPlacementPoint->GetComponentTransform();
+	return TorchPlacementPoint->GetComponentTransform(); //returns the transform of this scenecomponent
 }

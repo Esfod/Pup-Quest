@@ -11,28 +11,18 @@ UCLASS()
 class PUPQUEST_API APressurePlate_Actor : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+		UStaticMeshComponent* StaticMeshComp { nullptr };
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+		ABarrelActor* BarrelActor {nullptr};
+
+	public:	
 	// Sets default values for this actor's properties
 	APressurePlate_Actor();
-	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 	ABarrelActor* GetBarrelActor() const;
 
 	void PlaceBarrelRight(ABarrelActor* a);
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-
-private:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* StaticMeshComp { nullptr };
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	ABarrelActor* BarrelActor {nullptr};
-
 };
