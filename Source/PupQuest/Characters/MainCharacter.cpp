@@ -88,7 +88,7 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AMainCharacter::StopInteract);
 
 	PlayerInputComponent->BindAction("Attack",IE_Pressed,this, &AMainCharacter::AttackStart);
-	PlayerInputComponent->BindAction("Attack",IE_Released,this, &AMainCharacter::AttackEnd);
+	//PlayerInputComponent->BindAction("Attack",IE_Released,this, &AMainCharacter::AttackEnd);
 	
 	PlayerInputComponent->BindAction("Drop", IE_Pressed, this, &AMainCharacter::DropHoldingItem);
 	PlayerInputComponent->BindAction("Place", IE_Pressed, this, &AMainCharacter::PlacePlank);
@@ -149,17 +149,9 @@ void AMainCharacter::Tick(float DeltaTime)
 		DroppedItem = nullptr;
 	}
 	
-	if(Health != MaxHealth)
-	{
-		if(RegainHealthTimer == 0.0f)
-			RegainHealthTimer = GetWorld()->GetTimeSeconds();
-		if(RegainHealthTimer + TimeToRegain <= GetWorld()->GetTimeSeconds())
-		{
-			RegainHealth(DeltaTime);
-			if(Health > MaxHealth) Health = MaxHealth;
-		}
-	}
-	else RegainHealthTimer = 0.f;
+	RegainHealth(DeltaTime);
+	if(AttackCounter != 0.f)
+		Attack();
 	//UE_LOG(LogTemp,Warning,TEXT("%f Health"), Health);
 }
 
@@ -468,15 +460,33 @@ void AMainCharacter::IsPushing()
 
 void AMainCharacter::AttackStart()
 {
+	if(!bHoldingTorch && !bHoldingPlank && !bHoldingBucket || bHoldingTorch )
+		AttackCounter = MeleeAndTorchAttackTimer;
+	else if(bHoldingBucket && Bucket->bBucketFilled)
+		AttackCounter = BucketAttackTimer;
+	AttackTimer = GetWorld()->TimeSeconds;
 	AttackBoxComponent->SetGenerateOverlapEvents(true);
-	bIsAttacking = true;
 }
 
+void AMainCharacter::Attack()
+{
+	bIsAttacking = true;
+	if(AttackTimer + AttackCounter <= GetWorld()->GetTimeSeconds())
+	{
+		UE_LOG(LogTemp,Warning,TEXT("attack"));
+		AttackCounter = 0.f;
+		AttackTimer = 0.f;
+		bIsAttacking = false;
+		AttackBoxComponent->SetGenerateOverlapEvents(false);
+	}
+}
+/*
 void AMainCharacter::AttackEnd()
 {
 	AttackBoxComponent->SetGenerateOverlapEvents(false);
 	bIsAttacking = false;
 }
+*/
 
 void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -540,7 +550,17 @@ void AMainCharacter::PlayerTakeDamage(float DamageTaken)
 
 void AMainCharacter::RegainHealth(float DeltaTime)
 {
-	Health += AmountOfHealthRegain * DeltaTime;
+	if(Health != MaxHealth)
+	{
+		if(RegainHealthTimer == 0.0f)
+			RegainHealthTimer = GetWorld()->GetTimeSeconds();
+		if(RegainHealthTimer + TimeToRegain <= GetWorld()->GetTimeSeconds())
+		{
+			Health += AmountOfHealthRegain * DeltaTime;
+			if(Health > MaxHealth) Health = MaxHealth;
+		}
+	}
+	else RegainHealthTimer = 0.f;
 }
 
 void AMainCharacter::HandleDeath()
