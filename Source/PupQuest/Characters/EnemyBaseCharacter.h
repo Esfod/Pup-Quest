@@ -13,7 +13,7 @@ UCLASS()
 class PUPQUEST_API AEnemyBaseCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
-	
+
 	public:
 	AEnemyBaseCharacter();
 	
@@ -36,10 +36,8 @@ class PUPQUEST_API AEnemyBaseCharacter : public ABaseCharacter
 	float SphereRadius {90.f};
 	
 	UPROPERTY(EditAnywhere, Category = "Effects")
-		USoundBase* IdleInsect;
+	USoundBase* IdleInsect;
 
-	private:
-	
-	UPROPERTY(EditAnywhere,Category = "Nest")
-		TArray<AEnemyNestActor*> NestActors {nullptr};
+	UPROPERTY(EditAnywhere,Category = "Nest", meta = (AllowPrivateAccess = "true"))
+	TArray<AEnemyNestActor*> NestActors {nullptr};
 };
