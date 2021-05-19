@@ -18,5 +18,5 @@ void UBTService_UpdateKnockOutBool::TickNode(UBehaviorTreeComponent& OwnerComp, 
 	{
 		UE_LOG(LogTemp,Warning, TEXT("Spider Cast Failed, i UBTService_UpdateKnockOutBool()"))
 	}
-	OwnerComp.GetBlackboardComponent()->SetValueAsBool(GetSelectedBlackboardKey(), OwnerCharacter->bIsEnemyKnockedOut);
+	OwnerComp.GetBlackboardComponent()->SetValueAsBool(GetSelectedBlackboardKey(), OwnerCharacter->bIsEnemyKnockedOut); //gets the bool variable from the owner to check if it's knocked out
 }

@@ -15,14 +15,13 @@ void AAntCharacter::Tick(float DeltaSeconds)
 
 void AAntCharacter::AntGettingHit()
 {
-	HandleDeath();
+	HandleDeath(); //runs handle death
+	
 	bCharacterDead = true;
 	UE_LOG(LogTemp,Warning,TEXT("Ant Dead"));
 }
 
-void AAntCharacter::Attack(float OwnerDamage)
+void AAntCharacter::Attack()
 {
-	Super::Attack(OwnerDamage);
-
-	
+	Super::Attack(); //calls super to do it's code before it does this
 }

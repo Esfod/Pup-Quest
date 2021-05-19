@@ -24,8 +24,10 @@ public:
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Bools")
 		bool bBarrelFilled;
+	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Bools")
 		bool IsLaying {true};
+	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Bools")
 		bool IsRotateble {false};
 	
@@ -52,9 +54,4 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 };

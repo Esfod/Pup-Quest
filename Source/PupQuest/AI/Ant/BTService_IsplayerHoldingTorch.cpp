@@ -17,19 +17,19 @@ UBTService_IsplayerHoldingTorch::UBTService_IsplayerHoldingTorch()
 void UBTService_IsplayerHoldingTorch::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
-	AMainCharacter* MainCharacter = Cast<AMainCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(),0));
+	AMainCharacter* MainCharacter = Cast<AMainCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(),0)); //cast's the main character
 
-	if(MainCharacter== nullptr)
+	if(MainCharacter== nullptr) //checks for nullptr
 	{
 		UE_LOG(LogTemp,Warning,TEXT("UBTService_IsplayerHoldingTorch fail cast Maincharacter"));
-		OwnerComp.GetBlackboardComponent()->ClearValue(BlackboardKey.SelectedKeyName);
+		OwnerComp.GetBlackboardComponent()->ClearValue(BlackboardKey.SelectedKeyName); //clears the value
 	}
-	else if(MainCharacter->bHoldingTorch && MainCharacter->GetTorchActor()->bTorchActorLit)
+	else if(MainCharacter->bHoldingTorch && MainCharacter->GetTorchActor()->bTorchActorLit) //checks if the player holds a lit torch
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsBool(BlackboardKey.SelectedKeyName, true);
+		OwnerComp.GetBlackboardComponent()->SetValueAsBool(BlackboardKey.SelectedKeyName, true); //returns a true to the blackboard
 	}
 	else
-		OwnerComp.GetBlackboardComponent()->SetValueAsBool(BlackboardKey.SelectedKeyName, false);
+		OwnerComp.GetBlackboardComponent()->SetValueAsBool(BlackboardKey.SelectedKeyName, false); //returns a false to the blackboard
 
 	
 	

@@ -18,12 +18,12 @@ void UBTService_PlayerLocationIfSeen::TickNode(UBehaviorTreeComponent& OwnerComp
 	
 	if(PlayerPawn == nullptr || OwnerComp.GetAIOwner() == nullptr) return;
 	
-	if(OwnerComp.GetAIOwner()->LineOfSightTo(PlayerPawn))
+	if(OwnerComp.GetAIOwner()->LineOfSightTo(PlayerPawn)) //Checks if the enemy has Line Of Sight To the main character
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(),PlayerPawn->GetActorLocation());
+		OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(),PlayerPawn->GetActorLocation()); //updates the value of the location of the main character
 	}
 	else
 	{
-		OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
+		OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey()); //clears value of the location of the main character
 	}
 }

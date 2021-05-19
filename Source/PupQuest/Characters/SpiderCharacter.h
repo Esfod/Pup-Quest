@@ -16,7 +16,7 @@ class PUPQUEST_API ASpiderCharacter : public AEnemyBaseCharacter
 public:
 	ASpiderCharacter();
 
-	virtual void Attack(float OwnerDamage) override;
+	virtual void Attack() override;
 
 	virtual void SpiderGettingHit(int32 ObjectInHand) ;
 

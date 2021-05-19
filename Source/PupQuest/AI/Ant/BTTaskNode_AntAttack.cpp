@@ -18,8 +18,8 @@ EBTNodeResult::Type UBTTaskNode_AntAttack::ExecuteTask(UBehaviorTreeComponent& O
 	if(AntCharacter == nullptr)
 	{
 		UE_LOG(LogTemp,Warning,TEXT("cast failed"));
-		return EBTNodeResult::Failed;
+		return EBTNodeResult::Failed; //tells the behaviorthree that the task was a fail
 	}
-	AntCharacter->Attack(AntCharacter->Damage); 
-	return EBTNodeResult::Succeeded;
+	AntCharacter->Attack(); //runs attack from ant character class, and get's damage
+	return EBTNodeResult::Succeeded; //tells the behaviorthree that the task was a success
 }

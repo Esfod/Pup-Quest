@@ -8,7 +8,7 @@
 
 UBTService_UpdatePlayerLocation::UBTService_UpdatePlayerLocation()
 {
-	NodeName = TEXT("Updatye Player Location");
+	NodeName = TEXT("Update Player Location");
 }
 
 void UBTService_UpdatePlayerLocation::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
@@ -24,5 +24,4 @@ void UBTService_UpdatePlayerLocation::TickNode(UBehaviorTreeComponent& OwnerComp
 	}
 	else
 	OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
-
 }

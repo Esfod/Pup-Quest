@@ -25,7 +25,6 @@ void ABaseCharacter::Tick(float DeltaTime)
 void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	
 }
 
 void ABaseCharacter::HandleDeath()
@@ -33,4 +32,5 @@ void ABaseCharacter::HandleDeath()
 	//unviersal death and sound
 	DetachFromControllerPendingDestroy();
     GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//all dead characters will DetachFromController and stop the Collision of them
 }

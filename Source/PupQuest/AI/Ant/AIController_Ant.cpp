@@ -6,5 +6,5 @@
 void AAIController_Ant::BeginPlay()
 {
 	Super::BeginPlay(); 
-	if(AIBehavior != nullptr) RunBehaviorTree(AIBehavior);
+	if(AIBehavior != nullptr) RunBehaviorTree(AIBehavior); //runs the behavior three that is selected
 }

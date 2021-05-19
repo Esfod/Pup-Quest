@@ -23,13 +23,13 @@ void UBTService_DistanceToAttackPlayer::TickNode(UBehaviorTreeComponent& OwnerCo
 		return;
 	}
 
-	if(OwnerComp.GetAIOwner()->LineOfSightTo(PlayerPawn))
+	if(OwnerComp.GetAIOwner()->LineOfSightTo(PlayerPawn)) //Checks if the enemy has Line Of Sight To the main character
 	{
-		DistanceBetween = FVector(OwnerPawn->GetActorLocation() - PlayerPawn->GetActorLocation()).Size();
+		DistanceBetween = FVector(OwnerPawn->GetActorLocation() - PlayerPawn->GetActorLocation()).Size(); //big vector math
         
         UE_LOG(LogTemp,Warning,TEXT("DistanceBetween = %f"),DistanceBetween);	
-        OwnerComp.GetBlackboardComponent()->SetValueAsFloat(GetSelectedBlackboardKey(), DistanceBetween);
+        OwnerComp.GetBlackboardComponent()->SetValueAsFloat(GetSelectedBlackboardKey(), DistanceBetween); //return the distance to the player
 	}
 	else
-		OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
+		OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey()); //clears the value if the enemy dose not see the main character
 }
