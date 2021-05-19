@@ -12,40 +12,40 @@ void ABridgeActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Initial = GetActorRotation().Roll;
-	Current = Initial;
-	TotalMoveLength += Initial;
+	Initial = GetActorRotation().Roll;	//get's the start value of the bridge
+	Current = Initial;					//set's the current value equal to start value
+	TotalMoveLength += Initial;			//sets the distance to move to equal. to the Length to move + start value
 }
 
 void ABridgeActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime); 
-	
-	OpenDoor(DeltaTime);
+
+	OpenDoor(DeltaTime); //open door
 }
 
 void ABridgeActor::OpenDoor(float DeltaTime)
 {
 	Super::OpenDoor(DeltaTime);
-	if(bOpenDoor && !CloseDoorOverride)
+	if(bOpenDoor && !CloseDoorOverride) //checks of the door is suppose to open. and the override is false
 	{
-		if(!IsDoorOpen)
+		if(!IsDoorOpen)//if it just came from that the bridge was closing ("else")
 		{
-			UGameplayStatics::PlaySoundAtLocation(this, OpenDoorSound, GetActorLocation());
-			IsDoorOpen = true;
+			UGameplayStatics::PlaySoundAtLocation(this, OpenDoorSound, GetActorLocation()); //plays open door sound
+			IsDoorOpen = true; //sets that the door is opening, so it dose not repeat opening sound
 		}
-		Current = FMath::Lerp(Current, TotalMoveLength, DeltaTime * DoorOpenSpeed); //Open Door
+		Current = FMath::Lerp(Current, TotalMoveLength, DeltaTime * DoorOpenSpeed); //gets a value between current and the location to move to //this makes the animation smooth
 	}
-	else
+	else //Close door
 	{
 		if(IsDoorOpen)
 		{
-			UGameplayStatics::PlaySoundAtLocation(this, CloseDoorSound, GetActorLocation());
+			UGameplayStatics::PlaySoundAtLocation(this, CloseDoorSound, GetActorLocation()); //plays close bridge sound
 			IsDoorOpen = false;
 		}
-		Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Open Door
+		Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Close Door
 	}
-	FRotator DoorRotator = GetActorRotation();
-	DoorRotator.Roll = Current;
-	SetActorRotation(DoorRotator);
+	FRotator DoorRotator = GetActorRotation();	//gets the door rotator
+	DoorRotator.Roll = Current;					//updates the door rotation's roll to the new current value
+	SetActorRotation(DoorRotator);				//puts the new rotator in the to the bride
 }

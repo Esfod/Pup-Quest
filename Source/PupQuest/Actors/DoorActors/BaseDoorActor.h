@@ -21,49 +21,55 @@ class PUPQUEST_API ABaseDoorActor : public AActor
 	UPROPERTY(EditAnywhere, Category= "Variables",meta = (AllowPrivateAccess = "true"))
 	bool bTorchHolder { true }; 
 
+	//private functions
 	bool CheckTorchHolder(ATorchHolderActor* a);
+	
 	bool CheckTorchHolder(ATorchHolderActor* a, ATorchHolderActor* b);
+	
 	bool CheckPressurePlate(APressurePlate_Actor* a);
 
-	
 protected:
-	UPROPERTY(EditAnywhere, Category = "TorchHolder")
+	virtual void BeginPlay() override;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "TorchHolder")
 	ATorchHolderActor* TorchHolder1 { nullptr };
 
-	UPROPERTY(EditAnywhere, Category = "TorchHolder")
+	UPROPERTY(EditDefaultsOnly, Category = "TorchHolder")
 	ATorchHolderActor* TorchHolder2 { nullptr };
 
-	UPROPERTY(EditAnywhere, Category = "TorchHolder")
+	UPROPERTY(EditDefaultsOnly, Category = "TorchHolder")
 	APressurePlate_Actor* PressurePlate_Actor { nullptr };
 	
-	UPROPERTY(EditAnywhere,Category = "Variables")
-	float TotalMoveLength{90.f};
+	UPROPERTY(EditDefaultsOnly, Category = "Variables")
+	float TotalMoveLength{90.f}; //the length the door moves/rotate
 
-	UPROPERTY(EditAnywhere,Category="Variables")
-	float DoorOpenSpeed{5.f};
+	UPROPERTY(EditDefaultsOnly, Category="Variables")
+	float DoorOpenSpeed{5.f}; //
 	
-	UPROPERTY(EditAnywhere,Category="Variables")
+	UPROPERTY(EditDefaultsOnly, Category="Variables")
 	float DoorCloseSpeed{7.5f};
 
 	float Current;
-	float Initial;
 	
-	UPROPERTY(EditAnywhere,Category="Variables")
-	bool IsDoorOpen {false};
+	float Initial;
 
 	bool CloseDoorOverride {false};
 
 	bool bOpenDoor;
+	
+	UPROPERTY(EditAnywhere,Category="Variables")
+	bool IsDoorOpen {false};
+	
 	int32 TypeOfDoor { 0 };
 
-	virtual void BeginPlay() override;
-	
 	virtual void OpenDoor(float DeltaTime);
 
 	UPROPERTY(EditAnywhere, Category="Sound")
 		USoundBase* OpenDoorSound {nullptr};
+	
 	UPROPERTY(EditAnywhere, Category="Sound")
 		USoundBase* CloseDoorSound {nullptr};
+
 	public:
 	ABaseDoorActor();
 	

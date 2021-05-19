@@ -14,10 +14,20 @@ class PUPQUEST_API AEnemyBaseCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 	
-public:
-	AEnemyBaseCharacter(); 
+	public:
+	AEnemyBaseCharacter();
+	
+	virtual void Attack();
+	
+	UPROPERTY(EditAnywhere)
+		float Damage {50.f};
 
-protected:
+	TArray<AActor*> GetOverLappingActorsFromSphere();
+	
+	TArray<AEnemyNestActor*> GetEnemyNestActors() const;
+
+	protected:
+	
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void BeginPlay() override;
@@ -27,17 +37,9 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* IdleInsect;
-public:
-	virtual void Attack(float OwnerDamage);
-	
-	UPROPERTY(EditAnywhere)
-	float Damage {50.f};
 
-	TArray<AActor*> GetOverLappingActorsFromSphere();
+	private:
 	
-	TArray<AEnemyNestActor*> GetEnemyNestActors() const;
-private:
-
 	UPROPERTY(EditAnywhere,Category = "Nest")
-	TArray<AEnemyNestActor*> NestActors {nullptr};
+		TArray<AEnemyNestActor*> NestActors {nullptr};
 };

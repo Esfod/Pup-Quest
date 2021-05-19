@@ -13,6 +13,7 @@ UCLASS()
 class PUPQUEST_API ADoorActor : public ABaseDoorActor
 {
 	GENERATED_BODY()
+	
 protected:
 	ADoorActor();
 	

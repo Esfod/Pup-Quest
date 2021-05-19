@@ -6,5 +6,5 @@
 void AAIController_Spider::BeginPlay()
 {
 	Super::BeginPlay(); 
-	if(AIBehavior != nullptr) RunBehaviorTree(AIBehavior);
+	if(AIBehavior != nullptr) RunBehaviorTree(AIBehavior); //runs the BehaviorTree of the spider
 }
