@@ -328,11 +328,11 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 				AttachItem(Torch);												//attaches the torch from the torch holder to the player's hand
 				//UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
 				}
-			else if (bHoldingTorch == true && Torch->bTorchActorLit == true)
+			else if (TorchHolder->GetTorchActor() == nullptr && bHoldingTorch && Torch->bTorchActorLit)
 			{
 					//If the character is holding a torch and If torch is lit
 					Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach torch fra main character
-					Torch->SetActorEnableCollision(false);//Turns on collision
+					Torch->SetActorEnableCollision(false);//Turns off collision
 					Torch->SetActorLocation(TorchHolder->GetTorchPlacementPoint().GetLocation());//Sets torch in the right location
 					Torch->SetActorRotation(TorchHolder->GetTorchPlacementPoint().GetRotation());//Gives torch the right rotation
 
@@ -528,7 +528,7 @@ void AMainCharacter::PlayerTakeDamage(float DamageTaken)
 
 void AMainCharacter::RegainHealth(float DeltaTime)
 {
-		Health += AmountOfHealthRegain * DeltaTime;
+	Health += AmountOfHealthRegain * DeltaTime;
 }
 
 void AMainCharacter::HandleDeath()
