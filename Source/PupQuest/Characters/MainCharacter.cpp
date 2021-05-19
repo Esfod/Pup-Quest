@@ -58,6 +58,7 @@ AMainCharacter::AMainCharacter()
 	AttackBoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AMainCharacter::OnOverlapAttackBox);
 	AttackBoxComponent->SetGenerateOverlapEvents(false);
 
+	//3001==============
 	PushingBarrelSound = CreateDefaultSubobject<UAudioComponent>(TEXT("PushingBarrelSound"));
 	PushingBarrelSound->SetupAttachment(RootComponent);
 	PushingBarrelSound->SetSound(PushingBarrelSoundBase);
@@ -73,6 +74,7 @@ AMainCharacter::AMainCharacter()
 	CutsceneSound = CreateDefaultSubobject<UAudioComponent>(TEXT("CutsceneSound"));
 	CutsceneSound->SetupAttachment(RootComponent);
 	CutsceneSound->SetSound(CutsceneSoundBase);
+    //==================
 }
 
 void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -101,28 +103,28 @@ void AMainCharacter::BeginPlay()
 	Super::BeginPlay();
 	Health = MaxHealth;
 
-	//(F.M)If the player has passed through a checkpoint, the player will instantly teleport to that location when respawning
-	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
+	AttackBoxComponent->SetGenerateOverlapEvents(false);
+	HitBox->SetGenerateOverlapEvents(false);
 
-	UE_LOG(LogTemp, Warning, TEXT("Game started is %s"), GameInstance->bGameStarted ? TEXT("true") : TEXT("false"));
+	//(3001)If the player has passed through a checkpoint, the player will instantly teleport to that location when respawning
+	//=========================
+	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
+	//UE_LOG(LogTemp, Warning, TEXT("Game started is %s"), GameInstance->bGameStarted ? TEXT("true") : TEXT("false"));
 	if (GameInstance->NewSpawn == true) {
 		SetActorLocation(FVector(GameInstance->RespawnPoint));
 	}
 
-	AttackBoxComponent->SetGenerateOverlapEvents(false);
-	HitBox->SetGenerateOverlapEvents(false);
-
 	UGameplayStatics::PlaySoundAtLocation(this, NolanBarking, GetActorLocation());
 	UGameplayStatics::PlaySoundAtLocation(this, AmbienceSound, GetActorLocation());
 
-	PushingBarrelSound->Stop();//The sound started playing when the game started for some reason, so i just decided to stop the sound in begin play
-
+	PushingBarrelSound->Stop();//The sound for these started playing when the game started for some reason, so i just decided to stop the sound in begin play
 	IntroSound->Stop();
 	CutsceneSound->Stop();
 
 	if (GameInstance->bGameStarted == true) {
 		MenuMusic->Stop();
 	}
+	//=========================
 }
 
 void AMainCharacter::Tick(float DeltaTime)
@@ -174,41 +176,37 @@ void AMainCharacter::MoveRight(float Value)
 	}
 }
 
-void AMainCharacter::AttachItem(AActor* Item)//(F.M) Attaches the given item in the hand of the player
+void AMainCharacter::AttachItem(AActor* Item)//(3001) Attaches the given item in the hand of the player
 {
-		
-		DropHoldingItem();
+	DropHoldingItem();//Player drops an item if he holds one
+	Item->SetActorEnableCollision(false);//Turns off collision
+	Jump();
+	UGameplayStatics::PlaySoundAtLocation(this, PickUpItem, GetActorLocation());
+	//UE_LOG(LogTemp, Warning, TEXT("Dropped item is %s"), *DroppedItem->GetName());
 
-		Item->SetActorEnableCollision(false);//Turns off collision
-
-		Jump();
-		UGameplayStatics::PlaySoundAtLocation(this, PickUpItem, GetActorLocation());
-		//UE_LOG(LogTemp, Warning, TEXT("Dropped item is %s"), *DroppedItem->GetName());
-
-		if (Item == Torch && DroppedItem != Torch) {
-			ATorchActor* TorchActor = Cast<ATorchActor>(Item);
-			Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("TorchSocket"));//Attach torch til main character
-			bHoldingTorch = true;
-			UE_LOG(LogTemp, Warning, TEXT("Torch picked up"));
-			if(TorchActor == nullptr) return;
-			bTorchLit = TorchActor->bTorchActorLit;
-		}
-		else if (Item == Plank && DroppedItem != Plank) {
-			Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("PlankSocket"));//Attach plank til main character
-			bHoldingPlank = true;
-			UE_LOG(LogTemp, Warning, TEXT("Plank picked up"));
-		}
-		else if (Item == Bucket && DroppedItem != Bucket) {
-			ABucketActor* BucketActor = Cast<ABucketActor>(Item);
-			Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("BucketSocket"));//Attach bucket til main character
-			bHoldingBucket = true;
-			UE_LOG(LogTemp, Warning, TEXT("Bucket picked up"));
-		}
-		//DroppedItem = nullptr;
-
+	if (Item == Torch && DroppedItem != Torch) {
+		ATorchActor* TorchActor = Cast<ATorchActor>(Item);
+		ItemSocket = FName("TorchSocket");
+		bHoldingTorch = true;
+		UE_LOG(LogTemp, Warning, TEXT("Torch picked up"));
+		if (TorchActor == nullptr) return;
+		bTorchLit = TorchActor->bTorchActorLit;
+	}
+	else if (Item == Plank && DroppedItem != Plank) {
+		ItemSocket = FName("PlankSocket");
+		bHoldingPlank = true;
+		UE_LOG(LogTemp, Warning, TEXT("Plank picked up"));
+	}
+	else if (Item == Bucket && DroppedItem != Bucket) {
+		ABucketActor* BucketActor = Cast<ABucketActor>(Item);
+		ItemSocket = FName("BucketSocket");
+		bHoldingBucket = true;
+		UE_LOG(LogTemp, Warning, TEXT("Bucket picked up"));
+	}
+	Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, ItemSocket);//Attach item to main character
 }
 
-void AMainCharacter::DropHoldingItem()//(F.M)If the player is holding one of these items the player will drop it
+void AMainCharacter::DropHoldingItem()//(3001)If the player is holding one of these items the player will drop it
 {
 	if (bHoldingPlank == true) {
 		DropItem(Plank);
@@ -221,7 +219,7 @@ void AMainCharacter::DropHoldingItem()//(F.M)If the player is holding one of the
 	}
 }
 
-void AMainCharacter::DropItem(AActor* Item)//F.M
+void AMainCharacter::DropItem(AActor* Item)//3001
 {
 	if (Item) {
 		UGameplayStatics::PlaySoundAtLocation(this, PlaceItem, GetActorLocation());
@@ -234,38 +232,31 @@ void AMainCharacter::DropItem(AActor* Item)//F.M
 			DropRotation = FRotator(0.f, GetActorRotation().Yaw + 90.f, 270.f);
 			ItemLocationAdjustment = FVector(0.f, 0.f, -10.f);//Adjusts the height of the plank when it gets dropped
 			bHoldingPlank = false;
-			UE_LOG(LogTemp, Warning, TEXT("Plank dropped"));
-			Plank->SetActorEnableCollision(true);
-			DroppedItem = Plank;
+			//UE_LOG(LogTemp, Warning, TEXT("Plank dropped"));
 		}
 		else if (Item == Torch) {
 			DropRotation = FRotator(-85.f, GetActorRotation().Yaw + 45.f, 0.f);// Sets the rotation of the torch when it is dropped
 			ItemLocationAdjustment = FVector(0.f, 0.f, -9.f) + GetMesh()->GetRightVector() * 40;//Adjusts the height of the torch when it gets dropped
 			bHoldingTorch = false;
 			Torch->TorchFlameOff();
-			UE_LOG(LogTemp, Warning, TEXT("Torch dropped"));
-			Torch->SetActorEnableCollision(true);
-			DroppedItem = Torch;
+			//UE_LOG(LogTemp, Warning, TEXT("Torch dropped"));
 		}
 		else if (Item == Bucket) {
 			DropRotation = FRotator(0.f, GetActorRotation().Yaw, 0.f);// Sets the rotation of the bucket when it is dropped
 			ItemLocationAdjustment = FVector(0.f, 0.f, -3.f) + GetMesh()->GetRightVector() * 50;//Adjusts the height of the bucket when it gets dropped
 			bHoldingBucket = false;
-			UE_LOG(LogTemp, Warning, TEXT("Bucket dropped"));
-			Bucket->SetActorEnableCollision(true);
-			DroppedItem = Bucket;
+			//UE_LOG(LogTemp, Warning, TEXT("Bucket dropped"));
 		}
-
-
+		Item->SetActorEnableCollision(true);
+		DroppedItem = Item;
 
 		FVector DropLocation = CharacterLocation + (GetMesh()->GetForwardVector() * 30.f) + ItemLocationAdjustment;//Sets the location where the item will get dropped
-
 		Item->SetActorRotation(FQuat(DropRotation));
 		Item->SetActorLocation(DropLocation);
 	}
 }
 
-void AMainCharacter::PlacePlank()//F.M 
+void AMainCharacter::PlacePlank()//3001
 {
 	if (bHoldingPlank == true && InPlankTriggerBox == true) {
 		UGameplayStatics::PlaySoundAtLocation(this, PlaceItem, GetActorLocation());
@@ -282,13 +273,13 @@ void AMainCharacter::PlacePlank()//F.M
 	}
 }
 
-void AMainCharacter::StartInteract() {//F.M
+void AMainCharacter::StartInteract()//3001
+{
 	//UE_LOG(LogTemp, Warning, TEXT("Interact!"));
 	HitBox->SetGenerateOverlapEvents(true);//Turns on the hitbox to see if something is in it
-	//Interacting = true;
 }
 
-void AMainCharacter::StopInteract()//F.M
+void AMainCharacter::StopInteract()//3001
 {
 	//UE_LOG(LogTemp, Warning, TEXT("Stop Interact!"));
 	HitBox->SetGenerateOverlapEvents(false);//Turns off the hitbox
@@ -296,17 +287,17 @@ void AMainCharacter::StopInteract()//F.M
 
 void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
-	bool bFromSweep, const FHitResult& SweepResult) //(F.M)A box component that uses overlap event to detect items you can interact with
+	bool bFromSweep, const FHitResult& SweepResult) //(3001)A box component that uses overlap event to detect items you can interact with
 {
 	if (Pushing == 1)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
+		//UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
 		if (OtherActor->IsA(ATorchActor::StaticClass()) && !bHoldingTorch)//If it is a torch
 			{
 			ATorchActor* TorchHit = Cast<ATorchActor>(OtherActor);
 			Torch = TorchHit;
 			AttachItem(Torch);
-			UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
+			//UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
 			}
 		else if (OtherActor->IsA(APlankActor::StaticClass()) && !bHoldingPlank)//If it is a plank
 			{
@@ -327,13 +318,13 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 				{
 				Torch = TorchHolder->GetTorchActor();							//gets the reference to the torchholder's torch and saves it
 				TorchHolder->SetTorchActor(nullptr);							//removes the refrence from the torchholder
-				UE_LOG(LogTemp, Warning, TEXT("%s"), *Torch->GetName());
+				//UE_LOG(LogTemp, Warning, TEXT("%s"), *Torch->GetName());
 				AttachItem(Torch);												//attaches the torch from the torch holder to the player's hand
-				UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
+				//UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
 				}
 			else if (bHoldingTorch == true && Torch->bTorchActorLit == true)
 			{
-				//If the character is holding a torch and If torch is lit
+					//If the character is holding a torch and If torch is lit
 					Torch->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);//Detach torch fra main character
 					Torch->SetActorEnableCollision(false);//Turns on collision
 					Torch->SetActorLocation(TorchHolder->GetTorchPlacementPoint().GetLocation());//Sets torch in the right location
@@ -352,48 +343,41 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 			{
 			if (Torch->bTorchActorLit == true)
 			{
-				if (Torch->bTorchActorLit == true) {//If the torch is lit
+				if (Torch->bTorchActorLit == true)//If the torch is lit
+				{
 					ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
-					if (Web->bBurning == false) {//If the web is not already burning
+					if (Web->bBurning == false) //If the web is not already burning
 						Web->StartBurnWeb();
-					}
 				}
 			}
-			}
-		else if (OtherActor->IsA(ABrazierActor::StaticClass()) && bHoldingTorch == true) {//If it is a brazier
+		}
+		else if (OtherActor->IsA(ABrazierActor::StaticClass()) && bHoldingTorch == true)//If it is a brazier
+		{
 			ABrazierActor* UBrazier = Cast<ABrazierActor>(OtherActor);
 			Brazier = UBrazier;
-			UE_LOG(LogTemp, Warning, TEXT("Brazier lit is %s"), Brazier->bBrazierLit ? TEXT("true") : TEXT("false"));
-			UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
 
-			if (Brazier->bBrazierLit == true) {//If brazier is lit
-				if (Torch->bTorchActorLit == true) {//If torch is lit
-					UE_LOG(LogTemp, Warning, TEXT("Brazier and torch is already lit"));
-				}
-				else {//If torch is not lit
-					Torch->TorchFlameOn();
-				}
-			}
-			else {//If brazier is not lit
-				if (Torch->bTorchActorLit == true) {//If torch is lit
-					Brazier->BrazierFlameOn();
-					UGameplayStatics::PlaySoundAtLocation(this, LightBrazier, GetActorLocation());
-				}
-				else {//If torch is not lit
-					UE_LOG(LogTemp, Warning, TEXT("Your Torch has to be lit to light the brazier"));
-				}
+			//UE_LOG(LogTemp, Warning, TEXT("Brazier lit is %s"), Brazier->bBrazierLit ? TEXT("true") : TEXT("false"));
+			//UE_LOG(LogTemp, Warning, TEXT("Torch lit is %s"), Torch->bTorchActorLit ? TEXT("true") : TEXT("false"));
+			
+			if (Brazier->bBrazierLit == true && Torch->bTorchActorLit == false)//If brazier is lit and torch is not lit
+				Torch->TorchFlameOn();
+
+			else if (Brazier->bBrazierLit == false && Torch->bTorchActorLit == true)//If brazier is not lit and if torch is lit
+			{
+				Brazier->BrazierFlameOn();
+				UGameplayStatics::PlaySoundAtLocation(this, LightBrazier, GetActorLocation());
 			}
 		}
 		else if (OtherActor->IsA(AWellActor::StaticClass()) && bHoldingBucket == true) {//If it is a well
 			AWellActor* UWell = Cast<AWellActor>(OtherActor);
 			Well = UWell;
-			if (Bucket->bBucketFilled == false) {
+			if (Bucket->bBucketFilled == false)
 				Bucket->BucketFill();
-			}
+
 		}
 		else if (OtherActor->IsA(ABarrelActor::StaticClass())) {
 			ABarrelActor* UBarrel = Cast<ABarrelActor>(OtherActor);
-			UE_LOG(LogTemp,Warning,TEXT("its a barrel"));
+			//UE_LOG(LogTemp,Warning,TEXT("its a barrel"));
 			Barrel = UBarrel;
 			if(!UBarrel->IsLaying && bHoldingBucket)
 			{
@@ -407,7 +391,8 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 				Barrel->RotateBarrel();
 			}
 		}
-		else if (OtherActor->IsA(ASecretChestActor::StaticClass())) {//If it is a brazier
+		else if (OtherActor->IsA(ASecretChestActor::StaticClass()))//If it is a brazier
+		{
 			ASecretChestActor* Chest = Cast<ASecretChestActor>(OtherActor);
 			Chest->OpenChest();
 		}
@@ -448,7 +433,6 @@ void AMainCharacter::IsPushing()
 		Pushing++;
 		GetCharacterMovement()->bOrientRotationToMovement = false;
 		GetCharacterMovement()->bUseControllerDesiredRotation = false;
-		//UGameplayStatics::PlaySoundAtLocation(this, PushingBarrelSound, GetActorLocation());
 		PushingBarrelSound->Play(0.f);
 	}
 	else if (Pushing == 2)
@@ -465,8 +449,6 @@ void AMainCharacter::AttackStart()
 {
 	AttackBoxComponent->SetGenerateOverlapEvents(true);
 	bIsAttacking = true;
-	//UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
-
 }
 
 void AMainCharacter::AttackEnd()
@@ -486,12 +468,12 @@ void AMainCharacter::OnOverlapAttackBox(UPrimitiveComponent* OverlappedComponent
 			UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
 			if (bTorchLit) { //torch on fire
 				SpiderHit->SpiderGettingHit(2);
-
 			}
 			else //torch not on fire
 				SpiderHit->SpiderGettingHit(1);
 		}
-		else if (bHoldingPlank) { //plank
+		else if (bHoldingPlank)//plank
+		{
 			UGameplayStatics::PlaySoundAtLocation(this, AttackTorch, GetActorLocation());
 			SpiderHit->SpiderGettingHit(3);
 		}
@@ -563,7 +545,7 @@ void AMainCharacter::UnlimtedHealth()
 	Health = 1000000000.f;
 }
 
-void AMainCharacter::StopMenuMusic() 
+void AMainCharacter::StopMenuMusic()//3001
 {
 	MenuMusic->Stop();
 }

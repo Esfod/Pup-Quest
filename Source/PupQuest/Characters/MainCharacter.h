@@ -166,6 +166,8 @@ public:
 
 	void PlayerTakeDamage(float DamageTaken);
 	
+	FName ItemSocket;
+
 protected:
 	virtual void BeginPlay() override;
 
