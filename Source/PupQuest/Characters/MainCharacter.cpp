@@ -454,11 +454,7 @@ void AMainCharacter::IsPushing()
 	}
 	else if (Pushing == 2)
 	{
-<<<<<<< HEAD
 		PushingBarrelSound->Stop();
-		HitBox->SetGenerateOverlapEvents(true);
-=======
->>>>>>> parent of 66df772 (Revert "Merge branch 'Espen' into Minor-Main")
 		UE_LOG(LogTemp, Warning, TEXT("Stopped Pushing"));
 		Pushing--;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -568,6 +564,7 @@ void AMainCharacter::UnlimtedHealth()
 	Health = 1000000000.f;
 }
 
-void AMainCharacter::StopMenuMusic() {
+void AMainCharacter::StopMenuMusic() 
+{
 	MenuMusic->Stop();
 }
