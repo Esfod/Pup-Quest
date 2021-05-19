@@ -16,25 +16,38 @@ class ABucketActor;
 class AWellActor;
 class ABarrelActor;
 class UPupQuestGameInstance;
-
+class UAudioComponent;
 UCLASS()
 class PUPQUEST_API AMainCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
-
-private:
+	//components
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm { nullptr };
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComp { nullptr };
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "BoxComponents", meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* AttackBoxComponent {nullptr};
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "BoxComponents", meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* HitBox { nullptr };
+
+	AActor* DroppedItem = nullptr;//This is used to see what the latest dropped item was
+
+	UPROPERTY(EditAnywhere)
+	float RotateSpeed = 30.f;
+	//funtions
+	void AttackStart();
+
+	void AttackEnd();
+
+	void UnlimtedHealth();
 	
+	void RegainHealth(float DeltaTime);
+
+	//sounds
 	UPROPERTY(EditAnywhere, Category = "Effects")
 	USoundBase* PlaceItem;
 
@@ -43,18 +56,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
 	USoundBase* AmbienceSound;
-
-	AActor* DroppedItem = nullptr;//This is used to see what the latest dropped item was
-
-	UPROPERTY(EditAnywhere)
-	float RotateSpeed = 30.f;
-
-	void AttackStart();
-
-	void AttackEnd();
-
-	void UnlimtedHealth();
-
+	
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* PickUpItem;
 
@@ -68,57 +70,44 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* PushingBarrelSoundBase;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
-	class UAudioComponent* PushingBarrelSound;
+		UAudioComponent* PushingBarrelSound;
 
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* MenuMusicBase;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
-		class UAudioComponent* MenuMusic;
+		UAudioComponent* MenuMusic;
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* IntroSoundBase;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
-		class UAudioComponent* IntroSound;
+		UAudioComponent* IntroSound;
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* CutsceneSoundBase;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
-		class UAudioComponent* CutsceneSound;
+		UAudioComponent* CutsceneSound;
 
-	void RegainHealth(float DeltaTime);
 public:
 	AMainCharacter();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float Health {0.f};
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
-	bool bPushingBarrel = true;
-
 	float RegainHealthTimer{0.f};
-	
-	FRotator DropRotation;//Used to set the dropping rotation of dropped items
-
-	FVector ItemLocationAdjustment;//Small adjustments for each dropped item, so they get the right location
-
-	UFUNCTION(BlueprintCallable)
-	ATorchActor* GetTorchActor();
-
-	UFUNCTION(BlueprintCallable)
-	ABucketActor* GetBucketActor();
-
-	UFUNCTION(BlueprintCallable)
-		UPupQuestGameInstance* GetChestActor();
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
-	bool bTorchLit {false};//See if the torch is lit or not
 	
 	bool InPlankTriggerBox = false;
 
 	bool OnTopOff = false;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
+	bool bTorchLit {false};//See if the torch is lit or not
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
+	bool bPushingBarrel = true;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bHoldingTorch = false;
 
@@ -137,6 +126,10 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Variables")
 	int Pushing = 1;
 
+	FRotator DropRotation;//Used to set the dropping rotation of dropped items
+
+	FVector ItemLocationAdjustment;//Small adjustments for each dropped item, so they get the right location
+	
 	FVector PlacePlankLocation;
 
 	FRotator PlacePlankRotation;
@@ -153,7 +146,7 @@ public:
 	void IsPushing();
 
 	UFUNCTION(BlueprintCallable)
-		void StopMenuMusic();
+	void StopMenuMusic();
 	
 	UFUNCTION()
 	void AttachItem(AActor* Item);
@@ -165,10 +158,48 @@ public:
     void DropItem(AActor* Item);
 
 	void PlayerTakeDamage(float DamageTaken);
-	
+
+	UFUNCTION(BlueprintCallable)
+	ATorchActor* GetTorchActor();
+
+	UFUNCTION(BlueprintCallable)
+	ABucketActor* GetBucketActor();
+
+	UFUNCTION(BlueprintCallable)
+	UPupQuestGameInstance* GetChestActor();
+
 	FName ItemSocket;
 
-protected:
+	protected:
+	
+	APlankActor* Plank;
+
+	ATorchActor* Torch;
+
+	ABarrelActor* Barrel;
+
+	ABucketActor* Bucket;
+
+	ABrazierActor* Brazier;
+
+	AWellActor* Well;
+
+	UPROPERTY(EditAnywhere,Category="HealthRegain")
+	float TimeToRegain{5.f};
+	
+	UPROPERTY(EditAnywhere,Category="HealthRegain")
+	float AmountOfHealthRegain {20.f};
+
+	UPROPERTY(EditAnywhere, Category="Speed")
+	float NormalWalkMaxSpeed{400.f};
+	
+	UPROPERTY(EditAnywhere, Category="Speed")
+	float HoldingPlankSpeed{150.f};
+
+	bool bBrazierLit;
+
+	bool Interacting = false;//So you don't pick up something you just dropped
+	
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
@@ -181,32 +212,7 @@ protected:
 	
 	void StopInteract();
 
-	UPROPERTY()
-		APlankActor* Plank;
-
-	UPROPERTY()
-		ATorchActor* Torch;
-
-	UPROPERTY()
-		ABarrelActor* Barrel;
-
-	UPROPERTY()
-		ABucketActor* Bucket;
-
-	UPROPERTY()
-		ABrazierActor* Brazier;
-
-	UPROPERTY()
-		AWellActor* Well;
-
-	UPROPERTY(EditAnywhere,Category="HealthRegain")
-		float TimeToRegain{5.f};
-	UPROPERTY(EditAnywhere,Category="HealthRegain")
-		float AmountOfHealthRegain {20.f};
-
-	bool bBrazierLit;
-
-	bool Interacting = false;//So you don't pick up something you just dropped
+	
 
 	UFUNCTION()
 		void OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,

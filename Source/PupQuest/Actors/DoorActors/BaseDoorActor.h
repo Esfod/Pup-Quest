@@ -31,22 +31,22 @@ class PUPQUEST_API ABaseDoorActor : public AActor
 protected:
 	virtual void BeginPlay() override;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "TorchHolder")
+	UPROPERTY(EditAnywhere, Category = "TorchHolder")
 	ATorchHolderActor* TorchHolder1 { nullptr };
 
-	UPROPERTY(EditDefaultsOnly, Category = "TorchHolder")
+	UPROPERTY(EditAnywhere, Category = "TorchHolder")
 	ATorchHolderActor* TorchHolder2 { nullptr };
 
-	UPROPERTY(EditDefaultsOnly, Category = "TorchHolder")
+	UPROPERTY(EditAnywhere, Category = "TorchHolder")
 	APressurePlate_Actor* PressurePlate_Actor { nullptr };
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Variables")
+	UPROPERTY(EditAnywhere, Category = "Variables")
 	float TotalMoveLength{90.f}; //the length the door moves/rotate
 
-	UPROPERTY(EditDefaultsOnly, Category="Variables")
+	UPROPERTY(EditAnywhere, Category="Variables")
 	float DoorOpenSpeed{5.f}; //
 	
-	UPROPERTY(EditDefaultsOnly, Category="Variables")
+	UPROPERTY(EditAnywhere, Category="Variables")
 	float DoorCloseSpeed{7.5f};
 
 	float Current;

@@ -106,14 +106,15 @@ void AMainCharacter::BeginPlay()
 	AttackBoxComponent->SetGenerateOverlapEvents(false);
 	HitBox->SetGenerateOverlapEvents(false);
 
-	//(3001)If the player has passed through a checkpoint, the player will instantly teleport to that location when respawning
+	//(3001) If the player has passed through a checkpoint, the player will instantly teleport to that location when respawning
 	//=========================
 	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
 	//UE_LOG(LogTemp, Warning, TEXT("Game started is %s"), GameInstance->bGameStarted ? TEXT("true") : TEXT("false"));
 	if (GameInstance->NewSpawn == true) {
 		SetActorLocation(FVector(GameInstance->RespawnPoint));
 	}
-
+	
+	NormalWalkMaxSpeed = GetMovementComponent()->GetMaxSpeed();
 	UGameplayStatics::PlaySoundAtLocation(this, NolanBarking, GetActorLocation());
 	UGameplayStatics::PlaySoundAtLocation(this, AmbienceSound, GetActorLocation());
 
@@ -125,6 +126,8 @@ void AMainCharacter::BeginPlay()
 		MenuMusic->Stop();
 	}
 	//=========================
+
+	SetActorRotation(GetActorRotation()+FRotator(0.f,180.f,0.f));
 }
 
 void AMainCharacter::Tick(float DeltaTime)
@@ -232,6 +235,7 @@ void AMainCharacter::DropItem(AActor* Item)//3001
 			DropRotation = FRotator(0.f, GetActorRotation().Yaw + 90.f, 270.f);
 			ItemLocationAdjustment = FVector(0.f, 0.f, -10.f);//Adjusts the height of the plank when it gets dropped
 			bHoldingPlank = false;
+			GetCharacterMovement()->MaxWalkSpeed = NormalWalkMaxSpeed;
 			//UE_LOG(LogTemp, Warning, TEXT("Plank dropped"));
 		}
 		else if (Item == Torch) {
@@ -270,6 +274,7 @@ void AMainCharacter::PlacePlank()//3001
 		Plank->SetActorEnableCollision(true);//Turns on collision
 		bHoldingPlank = false;
 		UE_LOG(LogTemp, Warning, TEXT("Plank placed"));
+		GetCharacterMovement()->MaxWalkSpeed = NormalWalkMaxSpeed;
 	}
 }
 
@@ -303,6 +308,7 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 			{
 			APlankActor* PlankHit = Cast<APlankActor>(OtherActor);
 			Plank = PlankHit;
+			GetCharacterMovement()->MaxWalkSpeed = HoldingPlankSpeed;
 			AttachItem(Plank);
 			}
 		else if (OtherActor->IsA(ABucketActor::StaticClass()) && !bHoldingBucket)//If it is a bucket
@@ -340,7 +346,7 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 			else UE_LOG(LogTemp, Warning, TEXT("Door will not open because the torch is not lit"));
 		}
 		else if (OtherActor->IsA(ASpiderWebActor::StaticClass()) && bHoldingTorch == true)//If it is a spider web
-			{
+		{
 			if (Torch->bTorchActorLit == true)
 			{
 				if (Torch->bTorchActorLit == true)//If the torch is lit
@@ -368,20 +374,23 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 				UGameplayStatics::PlaySoundAtLocation(this, LightBrazier, GetActorLocation());
 			}
 		}
-		else if (OtherActor->IsA(AWellActor::StaticClass()) && bHoldingBucket == true) {//If it is a well
+		else if (OtherActor->IsA(AWellActor::StaticClass()) && bHoldingBucket == true) //If it is a well
+		{
 			AWellActor* UWell = Cast<AWellActor>(OtherActor);
 			Well = UWell;
 			if (Bucket->bBucketFilled == false)
 				Bucket->BucketFill();
 
 		}
-		else if (OtherActor->IsA(ABarrelActor::StaticClass())) {
+		else if (OtherActor->IsA(ABarrelActor::StaticClass()))
+		{
 			ABarrelActor* UBarrel = Cast<ABarrelActor>(OtherActor);
 			//UE_LOG(LogTemp,Warning,TEXT("its a barrel"));
 			Barrel = UBarrel;
 			if(!UBarrel->IsLaying && bHoldingBucket)
 			{
-				if (Barrel->bBarrelFilled == false && Bucket->bBucketFilled == true) {
+				if (Barrel->bBarrelFilled == false && Bucket->bBucketFilled == true) 
+				{
 					Barrel->BarrelFill();
 					Bucket->BucketEmpty();
 				}
