@@ -17,6 +17,7 @@ class AWellActor;
 class ABarrelActor;
 class UPupQuestGameInstance;
 class UAudioComponent;
+
 UCLASS()
 class PUPQUEST_API AMainCharacter : public ABaseCharacter
 {
@@ -38,10 +39,23 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 
 	UPROPERTY(EditAnywhere)
 	float RotateSpeed = 30.f;
+
+	UPROPERTY(EditAnywhere,Category="Attack",meta = (AllowPrivateAccess = "true"))
+	float BucketAttackTimer{1.5f};
+	
+	UPROPERTY(EditAnywhere,Category="Attack",meta = (AllowPrivateAccess = "true"))
+	float MeleeAndTorchAttackTimer{1.0f};
+
+	float AttackTimer{0.f}; //saves world timer
+
+	float AttackCounter{0.f}; //the attack variable that attack() check up to attack timer and worldtime
+	
 	//funtions
 	void AttackStart();
 
-	void AttackEnd();
+	void Attack();
+
+	//void AttackEnd();
 
 	void UnlimtedHealth();
 	
@@ -82,11 +96,14 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
 		UAudioComponent* PushingBarrelSound;
 
+	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* MenuMusicBase;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
 		UAudioComponent* MenuMusic;
 
 		USoundBase* IntroSoundBase;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
 		UAudioComponent* IntroSound;
 
@@ -121,7 +138,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bHoldingBucket = false;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Bools")
 	bool bIsAttacking = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
@@ -215,8 +232,6 @@ public:
 	void StartInteract();
 	
 	void StopInteract();
-
-	
 
 	UFUNCTION()
 		void OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
