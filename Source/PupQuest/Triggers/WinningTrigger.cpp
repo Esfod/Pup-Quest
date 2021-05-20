@@ -3,6 +3,8 @@
 
 #include "WinningTrigger.h"
 #include "PupQuest/Characters/MainCharacter.h"
+#include <Runtime/Engine/Classes/Kismet/GameplayStatics.h>
+#include "PupQuest/PupQuestGameInstance.h"
 
 AWinningTrigger::AWinningTrigger()
 {
@@ -13,5 +15,10 @@ void AWinningTrigger::OnOverlap(class AActor* OverlappedActor, class AActor* Oth
 	if (OtherActor->IsA(AMainCharacter::StaticClass())) {
 		AMainCharacter* Main = Cast<AMainCharacter>(OtherActor);
 		UE_LOG(LogTemp, Warning, TEXT("You Won"));
+		/*UGameplayStatics::OpenLevel(this, RestartLevel, false);
+
+		UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
+		GameInstance->NewSpawn = false;
+		GameInstance->bGameStarted = true;*/
 	}
 }

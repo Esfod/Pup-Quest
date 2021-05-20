@@ -15,7 +15,6 @@ public:
 	// Sets default values for this actor's properties
 	ABarrelActor();
 
-
 	//UFUNCTION(BlueprintCallable)
 	//	void FindClosestPush();
 	//

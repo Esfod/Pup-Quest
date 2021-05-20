@@ -22,7 +22,7 @@ void ABaseDoorActor::BeginPlay()
 	Super::BeginPlay();
 
 	//checks what the door opening mechanism is
-	if(!bTorchHolder && PressurePlate_Actor) 
+	if(PressurePlate_Actor) 
 	{
 		UE_LOG(LogTemp,Warning,TEXT("One pressurePlate yet"));
 		TypeOfDoor = 0; //gives the door a type
@@ -42,17 +42,17 @@ void ABaseDoorActor::BeginPlay()
 void ABaseDoorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if(TypeOfDoor == 0)
+	switch(TypeOfDoor)
 	{
+	case 0:
 		bOpenDoor = CheckPressurePlate(PressurePlate_Actor); //checks if the pressureplate has meet requirement to open the door
-	}
-	else if(TypeOfDoor == 1)
-	{
+		break;
+	case 1:
 		bOpenDoor = CheckTorchHolder(TorchHolder1, TorchHolder2); //checks if the torchholder's has meet requirement to open the door
-	}
-	else if (TypeOfDoor == 2)
-	{
-		bOpenDoor = CheckTorchHolder(TorchHolder1);	
+		break;
+	case 2:
+		bOpenDoor = CheckTorchHolder(TorchHolder1);
+		break;
 	}
 }
 
@@ -76,9 +76,6 @@ bool ABaseDoorActor::CheckPressurePlate(APressurePlate_Actor* a)
 
 	if(a->GetBarrelActor()->bBarrelFilled)//checks if barrel if full
 		return true;
-
-
-
 	return false;
 }
 
