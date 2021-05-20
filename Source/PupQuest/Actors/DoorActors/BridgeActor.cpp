@@ -45,6 +45,7 @@ void ABridgeActor::OpenDoor(float DeltaTime)
 		}
 		Current = FMath::Lerp(Current, Initial, DeltaTime * DoorCloseSpeed); //Close Door
 	}
+	
 	FRotator DoorRotator = GetActorRotation();	//gets the door rotator
 	DoorRotator.Roll = Current;					//updates the door rotation's roll to the new current value
 	SetActorRotation(DoorRotator);				//puts the new rotator in the to the bride

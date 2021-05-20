@@ -29,7 +29,7 @@ void ADoorActor::Tick(float DeltaTime)
 
 void ADoorActor::OpenDoor(float DeltaTime)
 {
-	Super::OpenDoor(DeltaTime);
+	//Super::OpenDoor(DeltaTime);
 
 	if(bOpenDoor && !CloseDoorOverride) //checks of the door is suppose to open. and the override is false
 	{
