@@ -464,7 +464,7 @@ void AMainCharacter::AttackStart()
 {
 	if(!bHoldingTorch && !bHoldingPlank && !bHoldingBucket || bHoldingTorch )
 		AttackCounter = MeleeAndTorchAttackTimer;
-	else if(bHoldingBucket && Bucket->bBucketFilled)
+	else if(bHoldingBucket)
 		AttackCounter = BucketAttackTimer;
 	AttackTimer = GetWorld()->TimeSeconds;
 	AttackBoxComponent->SetGenerateOverlapEvents(true);
