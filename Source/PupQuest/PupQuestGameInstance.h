@@ -29,4 +29,13 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		int32 SecretsFound = 0;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool BeetrootFound = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool CarrotFound = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool PotatoFound = false;
 };
