@@ -133,6 +133,12 @@ void AMainCharacter::BeginPlay()
 	PushingBarrelSound->Stop();//The sound for these started playing when the game started for some reason, so i just decided to stop the sound in begin play
 	IntroSound->Stop();
 	CutsceneSound->Stop();
+
+	if (GameInstance->bGameStarted == true)
+		MenuMusic->Stop();
+
+
+
 	//=========================
 
 	SetActorRotation(GetActorRotation()+FRotator(0.f,180.f,0.f));
