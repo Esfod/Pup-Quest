@@ -19,7 +19,7 @@ public:
 	bool NewSpawn = false;
 
 	UPROPERTY(BlueprintReadWrite)
-		bool bIntroPlayed = true;
+		bool bIntroPlayed = false;
 
 	UPROPERTY(BlueprintReadWrite)
 		bool bGameRestarted = false;
