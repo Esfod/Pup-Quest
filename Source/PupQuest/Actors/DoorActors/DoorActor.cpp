@@ -31,7 +31,7 @@ void ADoorActor::OpenDoor(float DeltaTime)
 {
 	//Super::OpenDoor(DeltaTime);
 
-	if(bOpenDoor && !CloseDoorOverride) //checks of the door is suppose to open. and the override is false
+	if(bOpenDoor && !CloseDoorOverride) //open door
 	{
 		if(!IsDoorOpen)//if it just came from that the door was closing ("else")
 		{
@@ -40,7 +40,7 @@ void ADoorActor::OpenDoor(float DeltaTime)
 		}
 		Current = FMath::Lerp(Current, TotalMoveLength, DeltaTime * DoorOpenSpeed); //gets a value between current and the location to move to //this makes the animation smooth
 	}
-	else
+	else //close door
 	{
 		if(IsDoorOpen)
 		{

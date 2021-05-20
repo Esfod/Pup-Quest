@@ -21,20 +21,18 @@ class PUPQUEST_API ATorchHolderActor : public AActor
 	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category = "Components", meta =(AllowPrivateAccess = "true"))
 	ATorchActor* TorchActor {nullptr};
 
-
-protected:
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category = "Bool", meta =(AllowPrivateAccess = "true"))
 	bool bHasATorch {false};
 
-public:
+	public:
+	
 	ATorchHolderActor(); 
 
 	ATorchActor* GetTorchActor() const;
-
-	bool HasATorch() const;
 	
 	void SetTorchActor(ATorchActor* TorchActor);
+	
+	bool HasATorch() const;
 	
 	FTransform GetTorchPlacementPoint() const;
 };

@@ -46,9 +46,20 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 	UPROPERTY(EditAnywhere,Category="Attack",meta = (AllowPrivateAccess = "true"))
 	float MeleeAndTorchAttackTimer{1.0f};
 
+	UPROPERTY(VisibleAnywhere,Category="Attack",meta = (AllowPrivateAccess = "true"))
 	float AttackTimer{0.f}; //saves world timer
-
+	
+	UPROPERTY(VisibleAnywhere,Category="Attack",meta = (AllowPrivateAccess = "true"))
 	float AttackCounter{0.f}; //the attack variable that attack() check up to attack timer and worldtime
+
+	UPROPERTY(EditDefaultsOnly,Category="Health",meta = (AllowPrivateAccess = "true"))
+	float MaxHealth {100.0f};
+	
+	UPROPERTY(EditAnywhere,Category="Health",meta = (AllowPrivateAccess = "true"))
+	float TimeToRegain{5.f};
+	
+	UPROPERTY(EditAnywhere,Category="Health",meta = (AllowPrivateAccess = "true"))
+	float AmountOfHealthRegain {20.f};
 	
 	//funtions
 	void AttackStart();
@@ -102,19 +113,20 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
 		UAudioComponent* MenuMusic;
 
-		USoundBase* IntroSoundBase;
+	USoundBase* IntroSoundBase;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
 		UAudioComponent* IntroSound;
 
-		USoundBase* CutsceneSoundBase;
+	USoundBase* CutsceneSoundBase;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
 		UAudioComponent* CutsceneSound;
 
 public:
 	AMainCharacter();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,Category="Health")
 	float Health {0.f};
 
 	float RegainHealthTimer{0.f};
@@ -138,7 +150,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
 	bool bHoldingBucket = false;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Bools")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Attack")//============================================
 	bool bIsAttacking = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Bools")
@@ -205,17 +217,11 @@ public:
 
 	AWellActor* Well;
 
-	UPROPERTY(EditAnywhere,Category="HealthRegain")
-	float TimeToRegain{5.f};
-	
-	UPROPERTY(EditAnywhere,Category="HealthRegain")
-	float AmountOfHealthRegain {20.f};
-
 	UPROPERTY(EditAnywhere, Category="Speed")
-	float NormalWalkMaxSpeed{400.f};
+	float NormalWalkMaxSpeed {400.f};
 	
 	UPROPERTY(EditAnywhere, Category="Speed")
-	float HoldingPlankSpeed{150.f};
+	float HoldingPlankSpeed {150.f};
 
 	bool bBrazierLit;
 

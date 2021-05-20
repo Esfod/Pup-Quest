@@ -20,7 +20,7 @@ ATorchActor* ATorchHolderActor::GetTorchActor() const
 	return TorchActor;          //returns the reference torch
 }
 
-bool ATorchHolderActor::HasATorch()const
+bool ATorchHolderActor::HasATorch() const
 {
 	return bHasATorch;			//returns the bool variable to tell if this torchholder has a torch
 }
