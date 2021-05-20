@@ -38,6 +38,8 @@ class PUPQUEST_API AEnemyBaseCharacter : public ABaseCharacter
 	UPROPERTY(EditAnywhere, Category = "Effects")
 	USoundBase* IdleInsect;
 
+	FVector SoundLocation = FVector(624.f, 625.f, -884.f);
+
 	UPROPERTY(EditAnywhere,Category = "Nest", meta = (AllowPrivateAccess = "true"))
 	TArray<AEnemyNestActor*> NestActors {nullptr};
 };

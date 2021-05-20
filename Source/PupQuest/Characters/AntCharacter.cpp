@@ -16,7 +16,7 @@ void AAntCharacter::Tick(float DeltaSeconds)
 void AAntCharacter::AntGettingHit()
 {
 	HandleDeath(); //runs handle death
-	
+	SoundLocation = FVector(0.f);
 	bCharacterDead = true;
 	UE_LOG(LogTemp,Warning,TEXT("Ant Dead"));
 }

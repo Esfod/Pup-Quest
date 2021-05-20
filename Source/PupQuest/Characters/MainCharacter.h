@@ -71,27 +71,25 @@ class PUPQUEST_API AMainCharacter : public ABaseCharacter
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* LightBrazier;
+
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* TakingDamage;
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
+		USoundBase* AntTakingDamage;
+
 		USoundBase* PushingBarrelSoundBase;
-	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
 		UAudioComponent* PushingBarrelSound;
 
-
-	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* MenuMusicBase;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
 		UAudioComponent* MenuMusic;
 
-	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* IntroSoundBase;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
 		UAudioComponent* IntroSound;
 
-	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* CutsceneSoundBase;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects", meta = (AllowPrivateAccess = "true"))
 		UAudioComponent* CutsceneSound;
