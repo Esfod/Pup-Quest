@@ -17,9 +17,6 @@ protected:
 	virtual void BeginPlay() override;
 	
 	virtual void HandleDeath();                                         
-
-	UPROPERTY(EditDefaultsOnly)
-	float MaxHealth {100.0f};
 	
 public:
 	ABaseCharacter();

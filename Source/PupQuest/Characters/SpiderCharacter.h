@@ -18,13 +18,14 @@ public:
 
 	virtual void Attack() override;
 
-	virtual void SpiderGettingHit(int32 ObjectInHand) ;
+	void SpiderGettingHit(int32 ObjectInHand);
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsEnemyKnockedOut {false};
 	
 protected:
 	virtual void BeginPlay() override;
+	
 	virtual void Tick(float DeltaSeconds) override;
 
 	UPROPERTY(EditAnywhere, Category = "KnockOut Times")
