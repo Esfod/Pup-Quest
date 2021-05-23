@@ -111,9 +111,9 @@ void AMainCharacter::BeginPlay()
 	UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
 
 
-	UE_LOG(LogTemp, Warning, TEXT("Game started is %s"), GameInstance->bGameStarted ? TEXT("true") : TEXT("false"));
-	UE_LOG(LogTemp, Warning, TEXT("Game started is %s"), GameInstance->bGameRestarted ? TEXT("true") : TEXT("false"));
-	UE_LOG(LogTemp, Warning, TEXT("Game started is %s"), GameInstance->NewSpawn ? TEXT("true") : TEXT("false"));
+	//UE_LOG(LogTemp, Warning, TEXT("Game started is %s"), GameInstance->bGameStarted ? TEXT("true") : TEXT("false"));
+	//UE_LOG(LogTemp, Warning, TEXT("Game started is %s"), GameInstance->bGameRestarted ? TEXT("true") : TEXT("false"));
+	//UE_LOG(LogTemp, Warning, TEXT("Game started is %s"), GameInstance->NewSpawn ? TEXT("true") : TEXT("false"));
 
 
 	if (GameInstance->NewSpawn == true) {
@@ -197,20 +197,20 @@ void AMainCharacter::AttachItem(AActor* Item)//(3001) Attaches the given item in
 		ATorchActor* TorchActor = Cast<ATorchActor>(Item);
 		ItemSocket = FName("TorchSocket");
 		bHoldingTorch = true;
-		UE_LOG(LogTemp, Warning, TEXT("Torch picked up"));
+		//UE_LOG(LogTemp, Warning, TEXT("Torch picked up"));
 		if (TorchActor == nullptr) return;
 		bTorchLit = TorchActor->bTorchActorLit;
 	}
 	else if (Item == Plank && DroppedItem != Plank) {
 		ItemSocket = FName("PlankSocket");
 		bHoldingPlank = true;
-		UE_LOG(LogTemp, Warning, TEXT("Plank picked up"));
+		//UE_LOG(LogTemp, Warning, TEXT("Plank picked up"));
 	}
 	else if (Item == Bucket && DroppedItem != Bucket) {
 		ABucketActor* BucketActor = Cast<ABucketActor>(Item);
 		ItemSocket = FName("BucketSocket");
 		bHoldingBucket = true;
-		UE_LOG(LogTemp, Warning, TEXT("Bucket picked up"));
+		//UE_LOG(LogTemp, Warning, TEXT("Bucket picked up"));
 	}
 	Item->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, ItemSocket);//Attach item to main character
 }
@@ -257,7 +257,6 @@ void AMainCharacter::DropItem(AActor* Item)//3001
 			bHoldingBucket = false;
 			//UE_LOG(LogTemp, Warning, TEXT("Bucket dropped"));
 		}
-		Item->SetActorEnableCollision(true);
 		DroppedItem = Item;
 
 		FVector DropLocation = CharacterLocation + (GetMesh()->GetForwardVector() * 30.f) + ItemLocationAdjustment;//Sets the location where the item will get dropped
@@ -279,7 +278,7 @@ void AMainCharacter::PlacePlank()//3001
 
 		Plank->SetActorEnableCollision(true);//Turns on collision
 		bHoldingPlank = false;
-		UE_LOG(LogTemp, Warning, TEXT("Plank placed"));
+		//UE_LOG(LogTemp, Warning, TEXT("Plank placed"));
 		GetCharacterMovement()->MaxWalkSpeed = NormalWalkMaxSpeed;
 	}
 }
@@ -353,14 +352,11 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 		}
 		else if (OtherActor->IsA(ASpiderWebActor::StaticClass()) && bHoldingTorch == true)//If it is a spider web
 		{
-			if (Torch->bTorchActorLit == true)
+			if (Torch->bTorchActorLit == true)//If the torch is lit
 			{
-				if (Torch->bTorchActorLit == true)//If the torch is lit
-				{
-					ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
-					if (Web->bBurning == false) //If the web is not already burning
-						Web->StartBurnWeb();
-				}
+				ASpiderWebActor* Web = Cast<ASpiderWebActor>(OtherActor);
+				if (Web->bBurning == false) //If the web is not already burning
+					Web->StartBurnWeb();
 			}
 		}
 		else if (OtherActor->IsA(ABrazierActor::StaticClass()) && bHoldingTorch == true)//If it is a brazier
@@ -386,7 +382,6 @@ void AMainCharacter::OnOverlapHitBox(UPrimitiveComponent* OverlappedComponent, A
 			Well = UWell;
 			if (Bucket->bBucketFilled == false)
 				Bucket->BucketFill();
-
 		}
 		else if (OtherActor->IsA(ABarrelActor::StaticClass()))
 		{

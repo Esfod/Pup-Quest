@@ -17,6 +17,6 @@ void ACheckpointHitBox::OnOverlap(class AActor* OverlappedActor, class AActor* O
 		UPupQuestGameInstance* GameInstance = Cast<UPupQuestGameInstance>(GetGameInstance());
 		GameInstance->RespawnPoint = FVector(Location);//The players respawn point is the given location in the editor
 		GameInstance->NewSpawn = true;//This makes sure 
-		UE_LOG(LogTemp, Warning, TEXT("New spawn point"));
+		//UE_LOG(LogTemp, Warning, TEXT("New spawn point"));
 	}
 }

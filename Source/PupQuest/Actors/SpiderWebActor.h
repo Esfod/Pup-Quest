@@ -39,8 +39,6 @@ private:
 
 	FTimerHandle TimeGone;
 
-	//FVector Scale = FVector(1.f);
-
 
 protected:
 	// Called when the game starts or when spawned
@@ -53,9 +51,5 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 		UParticleSystemComponent* Flame { nullptr };
-	
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 };

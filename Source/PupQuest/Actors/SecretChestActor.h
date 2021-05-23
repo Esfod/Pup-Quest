@@ -17,8 +17,6 @@ public:
 
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* ChestBottom;
@@ -27,23 +25,13 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		int32 SecretsFound = 0;
 
-	//virtual void OpenChest(float DeltaTime) override;
-
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
 		UStaticMeshComponent* GetChestTopMesh();
 
 	UPROPERTY(EditAnywhere, Category = "Name of secret")
 		FName SecretName;
-
-	//UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	//int SecretsFound;
-
-	UFUNCTION(BlueprintCallable)
-		int GetChestActor();
 
 	void OpenChest();
 
@@ -53,14 +41,5 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		USoundBase* Angelic;
 
-	bool bPotatoFound = false;
-
-	bool bBeetrootFound = false;
-
-	bool bCarrotFound = false;
-
 	bool bOpened = false;
-
-	//UFUNCTION(BlueprintCallable)
-	//	int GetChestActor(int Secret);
 };

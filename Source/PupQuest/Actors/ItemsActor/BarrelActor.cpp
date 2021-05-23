@@ -23,6 +23,7 @@ ABarrelActor::ABarrelActor()
 
 
 // Called when the game starts or when spawned
+//=====3001=======
 void ABarrelActor::BeginPlay()
 {
 	Super::BeginPlay();
@@ -47,6 +48,7 @@ void ABarrelActor::BarrelEmpty() {
 	Water->SetVisibility(false);
 	bBarrelFilled = false;
 }
+//=====3001=====
 //=====3016=====
 void ABarrelActor::CheckIfOnPressurePlate() // runs when the player is done with pushing the barrel, This is called from Blueprint
 {

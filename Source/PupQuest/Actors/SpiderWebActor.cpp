@@ -43,18 +43,10 @@ void ASpiderWebActor::BeginPlay()
 	HitBoxWeb->SetGenerateOverlapEvents(false);
 }
 
-// Called every frame
-void ASpiderWebActor::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-
-	//DrawDebugBox(GetWorld(), GetActorLocation(), GetComponentsBoundingBox().GetExtent(), FColor::Red, true, -1, 0, 5);
-}
 void ASpiderWebActor::StartBurnWeb() {
 	bBurning = true;
-	SetActorScale3D(FVector(0.15));//Krymper Web
-	HitBoxWeb->SetRelativeScale3D(FVector(24.f));//N�r Web krymper krymper ogs� Hitbox, s� Hitbox m� bli st�rre igjen for � fange opp 
+	SetActorScale3D(FVector(0.15));//Shrink Web
+	HitBoxWeb->SetRelativeScale3D(FVector(24.f));//When Web shrinks, the box component also shrinks, so we also have to make the boxcomponent bigger at the same time
 
 	UE_LOG(LogTemp, Warning, TEXT("Burn web"));
 
@@ -69,7 +61,6 @@ void ASpiderWebActor::EndBurnWeb() {
 	HitBoxWeb->SetGenerateOverlapEvents(true);
 	HitBoxWeb->SetRelativeLocation(HitBoxWeb->GetRelativeLocation() + 1.f);
 	SetActorEnableCollision(false);
-
 
 	HitBoxWeb->SetGenerateOverlapEvents(false);
 	HitBoxWeb->SetRelativeLocation(HitBoxWeb->GetRelativeLocation() - 1.f);

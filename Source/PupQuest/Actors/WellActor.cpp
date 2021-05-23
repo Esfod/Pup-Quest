@@ -13,17 +13,3 @@ AWellActor::AWellActor()
 	RootComponent = MeshComp;
 }
 
-// Called when the game starts or when spawned
-void AWellActor::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void AWellActor::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-

@@ -15,15 +15,4 @@ class PUPQUEST_API ACutSceneTrigger : public ATriggerBox
 public:
 	ACutSceneTrigger();
 
-	UFUNCTION()
-		void OnOverlap(class AActor* OverlappedActor, class AActor* OtherActor);
-
-	//Play video
-
-	//UMediaPlayer* Test;
-
-	UPROPERTY(EditAnywhere, Category = "Effects")
-		class UMediaPlayer* Video;
-
-	bool bVideoPlayed = false;
 };
