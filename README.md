@@ -10,4 +10,4 @@ The Group 4 is:\
   Animators:\
     Joachim Erga\
     Elinor Karlsen\
-    Kristian Hilstad\
+    Kristian Hilstad
