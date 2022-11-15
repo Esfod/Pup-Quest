@@ -1,6 +1,6 @@
 # Pup-Quest
 \
-This a Dungeon-Crawler from Gruppe 4 AS\
+This a Dungeon-Crawler from Gruppe 4\
 \
 The Group 4 is:\
   Programmers:\
