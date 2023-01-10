@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Runtime/Engine/Classes/Particles/ParticleSystemComponent.h"
-#include "../../../../../../UE_4.26/Engine/Plugins/Media/MediaPlayerEditor/Source/MediaPlayerEditor/Private/Widgets/SMediaPlayerEditorOutput.h"
+#include "../../../../../../UE_4.27/Engine/Plugins/Media/MediaPlayerEditor/Source/MediaPlayerEditor/Private/Widgets/SMediaPlayerEditorOutput.h"
 #include "BrazierActor.generated.h"
 
 class UPointLightComponent;
